@@ -1,0 +1,8 @@
+secondary: "楼盘营销推介"
+document_type_label: "楼盘营销推介"
+reading_hints: |
+  楼盘营销推介通常包含：项目区位与规划、产品与户型卖点、配套与价值点、
+  价格与优惠策略、客群与去化策略。关注卖点与策略（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:均价|单价|总价)\\s*(?:约|为|达)?\\s*\\d+(?:\\.\\d+)?\\s*(?:元|万|万元)"
+    label: "楼盘价格数值"

@@ -1,0 +1,31 @@
+config_id: repair1_sft_C
+model_architecture: dense_27b
+repair_round: 1
+category: C
+data_manifest: data/manifests/rre_repair_sampling_manifest.csv
+parameters:
+  template: qwen3_5
+  stage: sft
+  finetuning_type: full
+  per_device_train_batch_size: 1
+  gradient_accumulation_steps: 16
+  lr_scheduler_type: cosine
+  max_steps: 180
+  warmup_ratio: 0.05
+  max_grad_norm: 1.0
+  weight_decay: 0.01
+  learning_rate: 5.0e-06
+  cutoff_len: 131072
+  seed: 42
+  recompute_granularity: full
+  recompute_method: uniform
+  recompute_num_layers: 1
+  optimizer: adam
+  tensor_model_parallel_size: 1
+  context_parallel_size: 8
+  pipeline_model_parallel_size: 4
+  transformer_impl: transformer_engine
+  bf16: true
+  sequence_parallel: true
+  use_distributed_optimizer: true
+  overlap_grad_reduce: true

@@ -1,0 +1,5 @@
+secondary: "生产与运营计划"
+document_type_label: "生产/运营计划"
+reading_hints: |
+  生产/运营计划通常包含：需求预测、产能与排产、物料与工序、瓶颈与平衡、
+  交付与应急。关注排产逻辑与约束（具体数值只进入key_numbers）。

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Stratified balanced RL training record manifest row",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["anon_record_id", "anon_instance_id", "routing_group", "training_phase", "source_subset"],
+  "properties": {
+    "anon_record_id": {"type": "string", "pattern": "^REC-[0-9A-F]{16}$"},
+    "anon_instance_id": {"type": "string", "pattern": "^TRN-[0-9A-F]{16}$"},
+    "routing_group": {"type": "string", "enum": ["A", "B", "C"]},
+    "training_phase": {"type": "string", "const": "stratified_balanced_rl"},
+    "source_subset": {"type": "string", "const": "initial_rl"}
+  }
+}

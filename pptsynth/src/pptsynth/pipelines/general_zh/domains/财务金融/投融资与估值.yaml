@@ -1,0 +1,8 @@
+secondary: "投融资与估值"
+document_type_label: "投融资/估值报告"
+reading_hints: |
+  投融资/估值文档通常包含：交易背景、标的概况、估值方法（DCF/可比公司/可比交易）、
+  关键假设、投资建议与风险。关注估值方法与假设（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:融资|投资|募集|交易)\\s*(?:金额|规模)?\\s*(?:约|为|达)?\\s*\\d+(?:\\.\\d+)?\\s*(?:万|亿|万元|亿元)"
+    label: "投融资交易金额"

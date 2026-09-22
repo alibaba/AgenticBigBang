@@ -1,0 +1,220 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PaperCard",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "title",
+    "authors",
+    "affiliation",
+    "conference",
+    "pdf_pages",
+    "page_count_range",
+    "central_thesis",
+    "ordered_sections",
+    "key_numbers",
+    "key_figures",
+    "key_terms",
+    "traps"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 5,
+      "description": "Paper title exactly as it appears on the title page."
+    },
+    "authors": {
+      "type": "string",
+      "minLength": 5,
+      "description": "Comma-separated author list. Use '*' to mark equal contribution if the paper does. Do not invent affiliations."
+    },
+    "affiliation": {
+      "type": "string",
+      "minLength": 3,
+      "description": "Comma-separated affiliations as listed in the paper."
+    },
+    "conference": {
+      "type": "string",
+      "minLength": 3,
+      "description": "Full conference name + year, e.g. 'International Conference on Learning Representations (ICLR) 2026'. If the paper appears to be an ICLR 2026 submission, write that."
+    },
+    "pdf_pages": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Total page count of the PDF including references and appendix."
+    },
+    "page_count_range": {
+      "type": "array",
+      "items": {"type": "integer", "minimum": 8, "maximum": 30},
+      "minItems": 2,
+      "maxItems": 2,
+      "description": "[min, max] slide count, typically [16, 20] for an oral presentation. Pick a range appropriate to the paper's depth."
+    },
+    "central_thesis": {
+      "type": "string",
+      "minLength": 80,
+      "description": "One sentence: problem the paper addresses, the method/approach, and the headline result or tradeoff. Avoid vague verbs like 'studies' or 'investigates'."
+    },
+    "ordered_sections": {
+      "type": "array",
+      "minItems": 11,
+      "maxItems": 14,
+      "description": "Ordered slide sections that will become Section 1 of instructions.md. Must include title, outline, intro/background, limitations of existing methods, method overview, methodology, key algorithm or training details, datasets, experimental setup, results, takeaways/limitations, and conclusion. May include one or more visual_analysis sections.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "kind", "bullets"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 3,
+            "description": "Section heading as it should appear, e.g. 'Methodology: Camera-Ray Conversion'. Make it paper-specific, not 'Methodology'."
+          },
+          "kind": {
+            "enum": [
+              "title",
+              "outline",
+              "background",
+              "limitations",
+              "method_overview",
+              "methodology",
+              "algorithm",
+              "datasets",
+              "setup",
+              "results",
+              "visual_analysis",
+              "takeaways_limitations",
+              "conclusion"
+            ]
+          },
+          "bullets": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 8},
+            "description": "For non-title sections: 2-5 short bullets in 'Label: qualitative claim' form, each <=25 words, describing WHAT TOPIC the slide must cover and the qualitative framing to highlight (e.g. 'Core Idea: Recast pose inference as patch-wise ray prediction, treating a camera as a bundle of rays represented in Plücker coordinates.'). Bullets must be paper-specific at the topic / mechanism / dataset / baseline-name level so they cannot be swapped into another paper unchanged. Bullets must NOT include: specific numerical results (accuracy %, mAP, EM, CIDEr, BLEU, F1, ROUGE, METEOR, scores, ratios); baseline-vs-baseline numerical rankings; '+/-Δ' improvement values; module dimensions paired with their effect; '±std' noise; the verbatim 'correct_form' of any trap. Those values live exclusively in key_numbers / key_terms / traps and flow only to the Stage 3 rubric — the slide-generating model is supposed to retrieve them from the PDF and earn credit for putting them on the slides. For title section: provide four bullets exactly: 'Paper Title: ...', 'Author Team: ...', 'Affiliation: ...', 'Conference: ...'. For outline section: empty array."
+          },
+          "design_constraint": {
+            "type": "string",
+            "description": "Optional. Cite WHICH figure/table the slide must display and WHAT TOPIC it shows — never a specific value. Form: 'Display <Fig X> showing <topical description>' or 'Include <Table Y> comparing <baselines/metrics topically>' (e.g. 'Display the conversion process diagram (refer to Fig 2) showing the flow between traditional camera parameters and Plücker rays.'). Do NOT embed specific numerical results, accuracy values, or '+/-Δ' improvements in this line — those are answers the slide-generation model must retrieve from the PDF. Methodology, results, and visual analysis sections SHOULD include one. At least 3 sections in the deck must carry a design_constraint."
+          }
+        }
+      }
+    },
+    "key_numbers": {
+      "type": "array",
+      "minItems": 6,
+      "description": "Quantities the deck must report accurately. Each entry is a self-contained anchor for a correctness checklist item.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["claim"],
+        "properties": {
+          "claim": {
+            "type": "string",
+            "minLength": 15,
+            "description": "Full claim including value, unit, and condition, e.g. 'rotation accuracy below 15° on unseen CO3D categories with 8 input views'."
+          },
+          "paper_anchor": {
+            "type": "string",
+            "description": "Where this came from, e.g. 'Table 2', 'Section 4.2', 'page 7'."
+          }
+        }
+      }
+    },
+    "key_figures": {
+      "type": "array",
+      "minItems": 4,
+      "description": "Figures or tables that must be reproduced or cited in the deck.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "what"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "As labeled in the paper, e.g. 'Fig 2', 'Table 1'."
+          },
+          "page": {"type": "integer", "minimum": 1},
+          "what": {
+            "type": "string",
+            "minLength": 10,
+            "description": "What the figure or table shows."
+          },
+          "intended_slide": {
+            "type": "string",
+            "description": "Which ordered_section this figure should appear on, by its title or kind."
+          }
+        }
+      }
+    },
+    "key_terms": {
+      "type": "array",
+      "minItems": 5,
+      "description": "Defined terms or concepts the paper introduces that the deck must define correctly. Each anchors a correctness checklist item.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["term", "definition"],
+        "properties": {
+          "term": {"type": "string", "minLength": 2},
+          "definition": {
+            "type": "string",
+            "minLength": 15,
+            "description": "Concise paper-faithful definition."
+          },
+          "common_confusion": {
+            "type": "string",
+            "description": "Optional. The plausible-but-wrong claim a careless deck might make."
+          }
+        }
+      }
+    },
+    "traps": {
+      "type": "array",
+      "minItems": 4,
+      "description": "Specific risks of inaccurate framing the deck must avoid. Used to generate the most discriminative correctness checklist items.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["claim_to_avoid", "correct_form", "kind"],
+        "properties": {
+          "claim_to_avoid": {
+            "type": "string",
+            "minLength": 15,
+            "description": "The wrong claim to flag, in concrete words."
+          },
+          "correct_form": {
+            "type": "string",
+            "minLength": 15,
+            "description": "The faithful form supported by the paper."
+          },
+          "kind": {
+            "enum": [
+              "fabrication",
+              "metric_misread",
+              "non_monotone_flattened",
+              "method_level_confusion",
+              "scope_overclaim",
+              "unit_or_definition_error",
+              "trend_direction_error",
+              "ablation_misattribution"
+            ]
+          }
+        }
+      }
+    },
+    "language_note": {
+      "type": "string",
+      "description": "Optional one-line note on language, e.g. 'paper is in English'. The output task is always English regardless."
+    },
+    "_provenance": {
+      "type": "object",
+      "description": "Optional self-report for auditability.",
+      "additionalProperties": false,
+      "properties": {
+        "pages_read": {"type": "string", "description": "Which pages were read, e.g. '1-12 (full)' or '1-6, 9-11'."},
+        "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
+        "notes": {"type": "string"}
+      }
+    }
+  }
+}

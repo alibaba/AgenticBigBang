@@ -1,0 +1,6 @@
+# Python >= 3.10
+jsonschema>=4.0
+json-repair>=0.30
+pypdf>=6,<7
+pypinyin>=0.51
+PyYAML>=6.0

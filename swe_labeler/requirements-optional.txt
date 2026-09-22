@@ -1,0 +1,3 @@
+# Optional loaders for Hugging Face Arrow datasets.
+datasets>=2.18
+pyarrow>=15

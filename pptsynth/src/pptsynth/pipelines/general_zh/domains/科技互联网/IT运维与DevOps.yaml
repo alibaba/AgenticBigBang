@@ -1,0 +1,6 @@
+secondary: "IT运维与DevOps"
+document_type_label: "IT运维与DevOps方案/PPT"
+reading_hints: |
+  IT运维/DevOps文档通常包含：基础设施架构、监控告警体系、
+  CI/CD流水线、容器化与编排、故障应急预案、SLA/SLO。
+  关注：可用性指标、MTTR/MTBF（具体数值只进入key_numbers）。

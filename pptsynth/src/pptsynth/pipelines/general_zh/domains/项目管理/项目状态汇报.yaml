@@ -1,0 +1,5 @@
+secondary: "项目状态汇报"
+document_type_label: "项目状态汇报"
+reading_hints: |
+  项目状态汇报通常包含：整体健康度、进度/成本/范围/质量现状、
+  已完成与计划、问题与风险、需决策事项。关注偏差与行动项（具体数值只进入key_numbers）。

@@ -1,0 +1,28 @@
+llm:
+  # Replace with an OpenAI-compatible chat-completions endpoint and model.
+  base_url: "https://api.example.com/v1"
+  api_key: "${LLM_API_KEY}"
+  model: "your-model-name"
+  max_concurrent: 4
+  requests_per_minute: 30
+  timeout: 120
+  max_retries: 3
+  ssl_verify: true
+
+github:
+  # Optional. Keep real tokens only in a gitignored local configuration.
+  tokens: []
+  max_concurrent: 2
+  cache_dir: "./cache/github"
+  ssl_verify: true
+
+datasets:
+  - name: "synthetic_tasks"
+    path: "./examples/task_instances"
+    format: "generic_swe_jsonl"
+
+pipeline:
+  output_dir: "./output/instances"
+  prompt_version: "default"
+  batch_size: 4
+  log_level: "INFO"

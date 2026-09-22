@@ -1,0 +1,9 @@
+secondary: "技术方案汇报"
+document_type_label: "技术方案/解决方案汇报"
+reading_hints: |
+  技术方案文档通常包含：背景痛点、方案总体设计、技术选型理由、
+  关键技术难点与解决思路、实施计划与里程碑、资源投入估算、风险评估。
+  关注：方案的核心架构选择与其他选型的对比依据（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:人力|工期|工时|人天|人月)\\s*(?:约|合计|共)\\s*\\d+"
+    label: "项目投入数值"

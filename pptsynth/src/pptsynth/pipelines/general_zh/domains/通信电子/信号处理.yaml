@@ -1,0 +1,9 @@
+secondary: "信号处理"
+document_type_label: "信号处理技术材料"
+reading_hints: |
+  信号处理文档通常包含：信号特征与处理目标、算法原理与流程（FFT/滤波/压缩感知等）、
+  处理性能指标（信噪比改善/误码率等）、应用场景、实现复杂度分析。
+  关注：不同算法/方法之间的性能权衡（数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:SNR|信噪比)\\s*(?:提升|改善|增加)?\\s*\\d+(?:\\.\\d+)?\\s*(?:dB)"
+    label: "信噪比改善量"

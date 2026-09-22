@@ -1,0 +1,8 @@
+secondary: "酒店民宿运营方案"
+document_type_label: "酒店/民宿运营方案"
+reading_hints: |
+  酒旅运营方案通常包含：定位与客群、产品与服务、渠道与定价、
+  运营与服务标准、营销与口碑、财务与目标。关注定位与运营策略（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:入住率|出租率|RevPAR|ADR)\\s*(?:约|为|达)?\\s*\\d+(?:\\.\\d+)?\\s*(?:%|元)?"
+    label: "酒旅运营指标"

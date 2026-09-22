@@ -1,0 +1,6 @@
+secondary: "算法与AI工程"
+document_type_label: "算法与AI工程汇报/PPT"
+reading_hints: |
+  算法/AI工程文档通常包含：模型架构、训练数据与预处理、
+  评估指标(accuracy/F1/AUC等)、消融实验、推理优化与部署方案。
+  关注：模型创新点与baseline对比（具体数值只进入key_numbers）。

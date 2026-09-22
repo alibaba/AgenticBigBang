@@ -1,0 +1,8 @@
+secondary: "采购与供应商管理"
+document_type_label: "采购/供应商管理报告"
+reading_hints: |
+  采购/供应商文档通常包含：采购需求与策略、供应商评估与准入、比价与谈判、
+  绩效考核、风险与备份。关注评估维度与策略（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:降本|节约|议价)\\s*(?:约|为|达)?\\s*\\d+(?:\\.\\d+)?\\s*(?:%|万|万元|元)"
+    label: "采购降本数值"

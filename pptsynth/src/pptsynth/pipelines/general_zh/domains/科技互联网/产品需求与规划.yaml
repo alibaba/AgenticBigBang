@@ -1,0 +1,6 @@
+secondary: "产品需求与规划"
+document_type_label: "产品需求与规划文档/PPT"
+reading_hints: |
+  产品需求/规划文档通常包含：用户需求分析、PRD功能规格、
+  产品路线图、优先级排序、竞品功能对比、用户反馈汇总。
+  关注：需求优先级框架、版本规划（具体数值只进入key_numbers）。

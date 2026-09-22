@@ -1,0 +1,8 @@
+secondary: "销售业绩复盘"
+document_type_label: "销售业绩复盘报告"
+reading_hints: |
+  销售复盘文档通常包含：目标达成、区域/产品/渠道拆解、赢单/丢单分析、
+  问题归因、下一阶段策略。关注拆解口径与归因（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:达成率|完成率|目标完成)\\s*(?:为|达|约)?\\s*\\d+(?:\\.\\d+)?\\s*%"
+    label: "业绩达成率数值"

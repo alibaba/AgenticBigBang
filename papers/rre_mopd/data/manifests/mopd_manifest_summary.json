@@ -1,0 +1,31 @@
+{
+  "records": 4956,
+  "unique_instances": 2768,
+  "unique_source_records": 2769,
+  "categories": {
+    "A": {
+      "records": 1652,
+      "unique_instances": 601,
+      "source_record_multiplicity": {
+        "2": 151,
+        "3": 450
+      }
+    },
+    "B": {
+      "records": 1652,
+      "unique_instances": 516,
+      "source_record_multiplicity": {
+        "3": 412,
+        "4": 104
+      }
+    },
+    "C": {
+      "records": 1652,
+      "unique_instances": 1651,
+      "source_record_multiplicity": {
+        "1": 1652
+      }
+    }
+  },
+  "manifest_sha256": "565a5ca05c229f5b7aa8ad22a351a855f679ed1c45eab22d0a69feee6e6c5fed"
+}

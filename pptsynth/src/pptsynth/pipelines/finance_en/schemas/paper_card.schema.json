@@ -1,0 +1,243 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FinanceDocCard",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "title",
+    "issuer",
+    "family",
+    "sub_genre",
+    "reporting_period",
+    "pdf_pages",
+    "page_count_range",
+    "central_thesis",
+    "ordered_sections",
+    "key_numbers",
+    "key_figures",
+    "key_terms",
+    "traps"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 5,
+      "description": "Document title exactly as it appears on the cover/first page (e.g. 'Microsoft Fiscal Year 2024 Second Quarter Results' or 'IMF Article IV Consultation — Staff Report: Japan 2024')."
+    },
+    "issuer": {
+      "type": "string",
+      "minLength": 2,
+      "description": "For Family A: the issuing company (e.g. 'JPMorgan Chase & Co.'). For Family B: the issuing institution (e.g. 'International Monetary Fund', 'European Central Bank')."
+    },
+    "family": {
+      "enum": ["A", "B"],
+      "description": "A = corporate disclosure; B = macro flagship. Copy from ./_case_meta.json."
+    },
+    "sub_genre": {
+      "type": "string",
+      "minLength": 3,
+      "description": "e.g. 'earnings_release', 'interim_report', 'update_letter', 'macro_flagship'. Copy from ./_case_meta.json where possible."
+    },
+    "reporting_period": {
+      "type": "string",
+      "minLength": 2,
+      "description": "For Family A: the fiscal period (e.g. '1Q20', 'FY2024 Q2'). For Family B: the edition/date (e.g. 'April 2024', 'Vol 2025 Issue 1')."
+    },
+    "pdf_pages": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Total page count of the source PDF."
+    },
+    "page_count_range": {
+      "type": "array",
+      "items": {"type": "integer", "minimum": 10, "maximum": 24},
+      "minItems": 2,
+      "maxItems": 2,
+      "description": "[min, max] target slide count for the deck. Default [15, 20] to match PPTSynth economics gold; pick within [10,24] based on document depth."
+    },
+    "central_thesis": {
+      "type": "string",
+      "minLength": 80,
+      "description": "One or two sentences: what the document reports and its headline message. For A: the quarter's performance narrative and its main driver. For B: the growth/inflation assessment and its main policy implication. Avoid vague verbs like 'discusses'."
+    },
+    "ordered_sections": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 16,
+      "description": "Ordered slide sections that become Section 1 of instructions.md. Follow the family section template from the Domain Context, adapted to the actual document. Must start with a title section and end with a closing/conclusion section.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "kind", "bullets"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 3,
+            "description": "Document-specific heading, e.g. 'Segment Performance: Intelligent Cloud' — not the generic word 'Segments'."
+          },
+          "kind": {
+            "enum": [
+              "title",
+              "outline",
+              "executive_summary",
+              "management_commentary",
+              "income_statement",
+              "segment_performance",
+              "balance_sheet_capital",
+              "cash_flow",
+              "guidance_outlook",
+              "risk_disclosures",
+              "global_outlook",
+              "growth_forecasts",
+              "inflation_forecasts",
+              "regional_breakdown",
+              "policy_analysis",
+              "risk_scenarios",
+              "exhibits",
+              "closing",
+              "conclusion"
+            ]
+          },
+          "bullets": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 8},
+            "description": "For non-title sections: 2-5 short bullets in 'Label: qualitative claim' form, each <=25 words, describing WHAT TOPIC the slide must cover and the qualitative framing — NOT the answer values. Bullets must be document-specific at the metric-name / segment / region / theme level so they cannot be swapped into another document unchanged. Bullets must NOT include: specific monetary values ($X billion/million), percentages, growth rates, basis points, EPS/ratio values, or the verbatim correct_form of any trap. Those live exclusively in key_numbers / key_terms / traps and flow only to the Stage 3 rubric — the slide-generating model must retrieve them from the PDF. For the title section: provide exactly four bullets 'Report Title: ...', 'Issuer: ...', 'Reporting Period: ...', 'Publication Date: ...'. For an outline section: empty array."
+          },
+          "design_constraint": {
+            "type": "string",
+            "description": "Optional. Name WHICH table/chart/exhibit the slide must present and WHAT TOPIC it shows — never a specific value. Form: 'Present a table comparing <segments/regions> on <metrics topically>' or 'Include the <named exhibit> showing <topical description>'. Do NOT embed specific monetary values, percentages, or growth rates — those are answers the slide model must retrieve. At least 3 sections in the deck must carry a design_constraint."
+          }
+        }
+      }
+    },
+    "key_numbers": {
+      "type": "array",
+      "minItems": 6,
+      "description": "Quantities the deck must report accurately. Each is a self-contained anchor for a correctness checklist item. Number-dense finance documents should yield many.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["claim"],
+        "properties": {
+          "claim": {
+            "type": "string",
+            "minLength": 15,
+            "description": "Full claim WITH value, unit, GAAP/non-GAAP or real/nominal label where relevant, and period/region, e.g. 'GAAP revenue of $62.0 billion for FY2024 Q2, up 18% year-over-year' or 'real GDP growth projected at 1.7% for 2024 (baseline)'."
+          },
+          "paper_anchor": {
+            "type": "string",
+            "description": "Where this came from, e.g. 'income statement, page 3', 'Table 1', 'Exhibit 4'."
+          }
+        }
+      }
+    },
+    "key_figures": {
+      "type": "array",
+      "minItems": 3,
+      "description": "Tables, charts, or numbered exhibits that must be reproduced or cited in the deck.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "what"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "As labeled in the document, e.g. 'Exhibit 3', 'Segment Table', 'GDP Projections Table', 'page 4 chart'."
+          },
+          "page": {"type": "integer", "minimum": 1},
+          "what": {
+            "type": "string",
+            "minLength": 10,
+            "description": "What the table/chart/exhibit shows."
+          },
+          "intended_slide": {
+            "type": "string",
+            "description": "Which ordered_section this should appear on, by title or kind."
+          }
+        }
+      }
+    },
+    "key_terms": {
+      "type": "array",
+      "minItems": 4,
+      "description": "Finance/econ terms the deck must use correctly (e.g. non-GAAP, constant currency, CET1, core inflation, baseline scenario). Each anchors a correctness item.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["term", "definition"],
+        "properties": {
+          "term": {"type": "string", "minLength": 2},
+          "definition": {
+            "type": "string",
+            "minLength": 15,
+            "description": "Concise source-faithful definition."
+          },
+          "common_confusion": {
+            "type": "string",
+            "description": "Optional. The plausible-but-wrong claim a careless deck might make (e.g. 'treats non-GAAP operating income as GAAP')."
+          }
+        }
+      }
+    },
+    "traps": {
+      "type": "array",
+      "minItems": 4,
+      "description": "Specific risks of inaccurate finance framing the deck must avoid. Used to generate the most discriminative correctness items. Choose kinds from the family trap catalogue in the Domain Context.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["claim_to_avoid", "correct_form", "kind"],
+        "properties": {
+          "claim_to_avoid": {
+            "type": "string",
+            "minLength": 15,
+            "description": "The wrong claim to flag, in concrete words."
+          },
+          "correct_form": {
+            "type": "string",
+            "minLength": 15,
+            "description": "The faithful form supported by the document."
+          },
+          "kind": {
+            "enum": [
+              "gaap_vs_nongaap",
+              "yoy_vs_qoq",
+              "net_vs_attributable_income",
+              "gross_vs_net_margin",
+              "constant_currency_confusion",
+              "nominal_vs_real_growth",
+              "headline_vs_core_inflation",
+              "basis_points_vs_percent",
+              "percentage_points_vs_percent",
+              "forecast_vs_historical",
+              "baseline_vs_scenario",
+              "guidance_vs_actual",
+              "segment_misattribution",
+              "region_misattribution",
+              "horizon_mismatch",
+              "period_mismatch",
+              "unit_scale_error",
+              "metric_misread",
+              "scope_overclaim",
+              "fabrication"
+            ]
+          }
+        }
+      }
+    },
+    "language_note": {
+      "type": "string",
+      "description": "Optional one-line note. The corpus is English; the output task is always English."
+    },
+    "_provenance": {
+      "type": "object",
+      "description": "Optional self-report for auditability.",
+      "additionalProperties": false,
+      "properties": {
+        "pages_read": {"type": "string", "description": "Which pages were read, e.g. '1-12 + projection tables' or '1-6, 30-35'."},
+        "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
+        "notes": {"type": "string"}
+      }
+    }
+  }
+}

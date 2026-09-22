@@ -1,0 +1,16 @@
+llm:
+  base_url: "https://api.example.com/v1"
+  api_key: "${LLM_API_KEY}"
+  model: "your-model-name"
+  max_concurrent: 4
+  requests_per_minute: 30
+  timeout: 300
+  max_retries: 3
+  ssl_verify: true
+
+input:
+  path: "./examples/trajectories/l1_labeled_trajectory.jsonl"
+
+pipeline:
+  output_dir: "./output/trajectory_l2"
+  log_level: "INFO"

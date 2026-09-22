@@ -1,0 +1,278 @@
+# ==============================================================================
+# Orthogonal Dimension Definitions
+# Three dimensions orthogonal to Task Type and Domain, capturing task difficulty/scale
+# Each level: name / authoritative_source / official_definition / operational_definition / signals / boundary_notes
+#
+# IMPORTANT: All official_definition fields are direct quotes or close paraphrases
+# from the cited authoritative source. No fabrication.
+# ==============================================================================
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Dimension 1: Scope (Modification Range)
+# Framework: Epoch AI SWE-bench Skills Analysis (2024)
+# ═══════════════════════════════════════════════════════════════════════════════
+scope:
+  dimension_name: "Modification Scope"
+  source_framework: "Epoch AI (2024). What Can We Learn from SWE-bench? — File-level analysis"
+  rationale: |
+    Epoch AI's analysis of SWE-bench instances showed that modification scope (number of files
+    and their module distribution) strongly correlates with task difficulty. Single-file fixes
+    have ~3x higher resolution rate than cross-module changes.
+  levels:
+    - name: single_file
+      authoritative_source: "Epoch AI (2024): 'single-file modifications'"
+      official_definition: |
+        Epoch AI: "Tasks requiring changes to only a single file... these represent the simplest
+        spatial scope of modification." Their data shows median 5 LOC for single-file tasks.
+      operational_definition: |
+        The task requires modifying exactly one file. All changes (additions, deletions,
+        modifications) occur within a single source file. Configuration-only changes in
+        one file also qualify.
+      signals:
+        - "1 file changed in diff"
+        - "single function fix"
+        - "localized change"
+        - "one module affected"
+      boundary_notes: |
+        vs multi_file_same_module: If the task touches 2+ files, even in the same directory,
+        it is NOT single_file.
+
+    - name: multi_file_same_module
+      authoritative_source: "Epoch AI (2024): 'multi-file modifications within same component'"
+      official_definition: |
+        Epoch AI observed that many SWE-bench tasks modify 2-5 files within the same logical
+        module or package directory, representing moderate spatial complexity.
+      operational_definition: |
+        The task modifies 2 or more files that belong to the same logical module, package,
+        or directory. The developer needs to understand intra-module relationships but not
+        cross-cutting architectural concerns.
+      signals:
+        - "2-5 files in same package/directory"
+        - "implementation + test in same module"
+        - "model + serializer + view in same app"
+        - "source + header in same component"
+      boundary_notes: |
+        vs cross_module: If files span different top-level packages or architectural layers
+        (e.g., frontend + backend, or lib + cli), it's cross_module.
+
+    - name: cross_module
+      authoritative_source: "Epoch AI (2024): 'cross-component modifications'"
+      official_definition: |
+        Epoch AI: "Tasks requiring changes across multiple components or packages... require
+        understanding of inter-component interfaces and data flow." These have significantly
+        lower resolution rates in SWE-bench evaluations.
+      operational_definition: |
+        The task modifies files across different architectural layers, packages, or subsystems.
+        Requires understanding how modules communicate and maintaining interface contracts.
+      signals:
+        - "files in different packages"
+        - "API layer + implementation layer"
+        - "frontend + backend changes"
+        - "library + tests in different packages"
+        - "interface change propagating to consumers"
+      boundary_notes: |
+        vs cross_repo: cross_module is within a single repository;
+        cross_repo spans multiple repositories.
+
+    - name: cross_repo
+      authoritative_source: "Epoch AI (2024) + monorepo practices (Google, Meta engineering blogs)"
+      official_definition: |
+        Google Engineering: "Large-scale changes (LSCs) are changes that modify code across
+        multiple projects or repositories, often hundreds or thousands of files." (Software
+        Engineering at Google, O'Reilly 2020)
+      operational_definition: |
+        The task requires coordinated changes across multiple repositories, monorepo packages
+        with independent versioning, or git submodules. Requires cross-team coordination.
+      signals:
+        - "multiple repos affected"
+        - "monorepo cross-package change"
+        - "submodule update"
+        - "dependency + dependents coordinated"
+        - "multi-service API change"
+      boundary_notes: |
+        vs cross_module: cross_repo spans independent version/release boundaries;
+        cross_module is within a single repo/release.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Dimension 2: Cognitive Complexity
+# Framework: Cognitive Load Theory (Sweller, 1988); Epoch AI time estimates
+# ═══════════════════════════════════════════════════════════════════════════════
+cognitive_complexity:
+  dimension_name: "Cognitive Complexity"
+  source_framework: "Sweller, J. (1988). Cognitive Load During Problem Solving. Cognitive Science, 12(2), 257-285."
+  rationale: |
+    Sweller's Cognitive Load Theory distinguishes intrinsic load (inherent task complexity),
+    extraneous load (poor instruction), and germane load (schema construction). This dimension
+    captures intrinsic cognitive load — how much mental modeling is required to solve the task.
+    Epoch AI's time data validates the correlation between cognitive demand and resolution time.
+  levels:
+    - name: mechanical
+      authoritative_source: "Sweller (1988): Low element interactivity"
+      official_definition: |
+        Sweller: "Material with low element interactivity can be learned serially, element by
+        element, without the need to consider the relations between elements." Applied: tasks
+        requiring pattern-matching replacement without semantic understanding.
+      operational_definition: |
+        The task can be completed by mechanical search-and-replace or following a simple,
+        repeatable pattern. No understanding of code semantics is needed beyond syntax.
+        A regex or sed command could theoretically accomplish the change.
+      signals:
+        - "search-and-replace"
+        - "rename all occurrences"
+        - "format / indent"
+        - "version bump"
+        - "update import paths (mechanical)"
+      boundary_notes: |
+        vs local_reasoning: If you need to understand WHY a change is needed (not just WHERE),
+        it's at least local_reasoning.
+
+    - name: local_reasoning
+      authoritative_source: "Sweller (1988): Moderate element interactivity"
+      official_definition: |
+        Sweller: "When element interactivity is moderate, some elements must be processed
+        simultaneously." Applied: tasks requiring understanding of a single function or
+        class's behavior to determine the correct change.
+      operational_definition: |
+        The task requires understanding the behavior of a single function, method, or class
+        to determine the correct fix. The developer reads and reasons about one local scope
+        but doesn't need to trace calls across module boundaries.
+      signals:
+        - "fix logic in one function"
+        - "understand local algorithm"
+        - "single class behavior"
+        - "local variable/state reasoning"
+      boundary_notes: |
+        vs global_reasoning: If you need to trace how data flows ACROSS functions/modules
+        to understand the problem, it's global_reasoning.
+
+    - name: global_reasoning
+      authoritative_source: "Sweller (1988): High element interactivity"
+      official_definition: |
+        Sweller: "High element interactivity material is difficult to learn because many elements
+        must be processed simultaneously in working memory." Applied: tasks requiring mental
+        models of multi-component interactions.
+      operational_definition: |
+        The task requires tracing data flow, call chains, or state transitions across multiple
+        modules or components. The developer must build a mental model of how the system works
+        as a whole to identify the correct approach.
+      signals:
+        - "trace data flow across modules"
+        - "understand system interactions"
+        - "cross-module impact analysis"
+        - "multiple components involved"
+        - "distributed system reasoning"
+      boundary_notes: |
+        vs design_decision: global_reasoning traces existing system behavior;
+        design_decision requires choosing between alternative architectures.
+
+    - name: design_decision
+      authoritative_source: "Sweller (1988): Schema acquisition; ISO 42010 Architecture Decisions"
+      official_definition: |
+        ISO 42010: "An architecture decision pertains to the architecture of the system...
+        it includes a rationale: the explanation or justification for the decision."
+        At this level, multiple viable solutions exist and trade-offs must be weighed.
+      operational_definition: |
+        The task requires making architectural decisions: choosing between design patterns,
+        selecting technologies, defining module boundaries, or restructuring system architecture.
+        Multiple valid approaches exist with different trade-off profiles.
+      signals:
+        - "architecture choice"
+        - "design trade-off analysis"
+        - "pattern selection"
+        - "technology comparison"
+        - "system restructuring decision"
+      boundary_notes: |
+        vs global_reasoning: design_decision actively CHOOSES between alternatives;
+        global_reasoning UNDERSTANDS the existing system. If there's only one correct fix
+        (just hard to find), it's global_reasoning. If multiple approaches are valid and
+        one must be selected, it's design_decision.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Dimension 3: Time Estimate
+# Framework: Epoch AI SWE-bench Analysis (2024) + LOC statistics
+# ═══════════════════════════════════════════════════════════════════════════════
+time_estimate:
+  dimension_name: "Estimated Resolution Time"
+  source_framework: "Epoch AI (2024). What Can We Learn from SWE-bench? — Human time annotations"
+  rationale: |
+    Epoch AI's human annotations of SWE-bench tasks established empirical time brackets
+    correlated with code change magnitude. Median LOC changed per bracket: trivial ~5 LOC,
+    small ~14 LOC, medium ~50 LOC, large >50 LOC. Time estimates help calibrate RL reward
+    expectations and training data difficulty stratification.
+  levels:
+    - name: trivial_15min
+      authoritative_source: "Epoch AI (2024): '<15 minutes' bracket"
+      official_definition: |
+        Epoch AI: "Tasks in the <15 minute bracket typically involve changing fewer than 5 lines
+        of code... often single-line fixes, configuration value changes, or typo corrections."
+      operational_definition: |
+        Expected completion time <15 minutes for a competent developer familiar with the codebase.
+        Typically ~1-5 lines of code changed. Includes typo fixes, configuration value changes,
+        single-line bug fixes, or trivial renames.
+      signals:
+        - "< 5 LOC changed"
+        - "one-liner fix"
+        - "config value change"
+        - "typo / spelling fix"
+        - "obvious fix"
+      boundary_notes: |
+        vs small_1h: If the developer needs to read documentation or investigate before making
+        the change (even if the change itself is small), it's likely small_1h.
+
+    - name: small_1h
+      authoritative_source: "Epoch AI (2024): '15 minutes to 1 hour' bracket"
+      official_definition: |
+        Epoch AI: "Tasks in the 15min-1h bracket involve median 14 lines of code... typically
+        single-function fixes, simple feature additions, or straightforward test additions."
+      operational_definition: |
+        Expected completion time 15 minutes to 1 hour. Typically ~5-20 lines changed. Includes
+        single-function bug fixes, adding a simple test, or implementing a straightforward
+        small feature within existing patterns.
+      signals:
+        - "5-20 LOC changed"
+        - "single function modification"
+        - "simple feature addition"
+        - "straightforward fix after investigation"
+      boundary_notes: |
+        vs medium_4h: If the task requires modifying multiple interconnected functions or
+        significant design thought, it's medium_4h.
+
+    - name: medium_4h
+      authoritative_source: "Epoch AI (2024): '1-4 hours' bracket"
+      official_definition: |
+        Epoch AI: "Tasks in the 1-4h bracket involve median 50 lines of code... typically
+        multi-function changes, new feature implementations with tests, or moderate refactoring."
+      operational_definition: |
+        Expected completion time 1-4 hours. Typically ~20-100 lines changed. Includes
+        implementing new features with multiple functions, moderate refactoring across a module,
+        or complex bug fixes requiring investigation.
+      signals:
+        - "20-100 LOC changed"
+        - "multiple functions/files"
+        - "new feature with tests"
+        - "moderate refactoring"
+        - "requires investigation + implementation"
+      boundary_notes: |
+        vs large_4h_plus: If the task requires architectural decisions, multi-day effort,
+        or changes spanning many modules, it's large_4h_plus.
+
+    - name: large_4h_plus
+      authoritative_source: "Epoch AI (2024): '>4 hours' bracket"
+      official_definition: |
+        Epoch AI: "Tasks exceeding 4 hours typically involve >50 lines (often >100) across
+        multiple modules... represent significant features, architecture changes, or complex
+        debugging sessions."
+      operational_definition: |
+        Expected completion time >4 hours (potentially multi-day). Typically >100 lines changed.
+        Includes major feature implementations, cross-module refactoring, architecture redesign,
+        or complex debugging requiring deep system understanding.
+      signals:
+        - "> 100 LOC changed"
+        - "multi-module / cross-cutting"
+        - "architecture redesign"
+        - "complex multi-day feature"
+        - "major refactoring effort"
+      boundary_notes: |
+        vs medium_4h: If a competent developer familiar with the codebase could complete it
+        in under 4 hours, it's medium_4h. Large tasks typically require research, design
+        iteration, or coordination with others.

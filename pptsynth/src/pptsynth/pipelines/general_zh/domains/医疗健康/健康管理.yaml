@@ -1,0 +1,15 @@
+secondary: "健康管理"
+document_type_label: "健康管理/健康科普材料"
+reading_hints: |
+  健康管理文档通常包含：健康风险识别（如慢病风险因素）、
+  科学的健康干预建议、生活方式改善方案、健康监测指标与目标范围、
+  预防保健措施。
+  关注：健康指标的正常范围与临界值（数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:血糖|血压|血脂|BMI|体重)\\s*(?:正常|目标|控制在)\\s*\\d+"
+    label: "健康指标参考值"
+title_slide_fields:
+  - "主题:"
+  - "讲师:"
+  - "机构:"
+  - "日期:"

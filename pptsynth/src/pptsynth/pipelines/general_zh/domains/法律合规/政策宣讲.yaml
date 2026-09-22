@@ -1,0 +1,9 @@
+secondary: "政策宣讲"
+document_type_label: "法规政策宣讲材料"
+reading_hints: |
+  政策宣讲文档通常包含：政策背景与出台原因、主要内容与核心要求、
+  适用范围与对象、执行时间节点、企业/个人合规要点与行动建议。
+  关注：新旧政策的对比变化点（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:自|从|于)\\s*\\d{4}\\s*年\\s*\\d+\\s*月\\s*\\d+\\s*日\\s*(?:起|开始|施行)"
+    label: "政策施行具体日期"

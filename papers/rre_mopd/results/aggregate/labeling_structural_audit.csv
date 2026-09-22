@@ -1,0 +1,15 @@
+metric,count,denominator,percentage
+task_type_l1_inventory,26,,
+task_type_l2_inventory,119,,
+task_type_l2_unspecified,70,1531,4.572175
+domain_l1_inventory,21,,
+domain_l2_inventory,108,,
+domain_l2_unspecified,35,1531,2.286088
+tasks,1531,,
+empty_domain_l1,1,,
+repository_consistent_nonempty_domain_l1,58,64,90.625
+repository_multiple_nonempty_domain_l1,6,,
+illegal_concrete_l1_l2_assignments,0,,
+orthogonal_dimensions,3,,
+orthogonal_levels,12,,
+evaluation_task_category_matches,918,918,100.0

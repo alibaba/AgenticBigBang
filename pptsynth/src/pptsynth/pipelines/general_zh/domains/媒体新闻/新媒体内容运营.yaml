@@ -1,0 +1,8 @@
+secondary: "新媒体内容运营"
+document_type_label: "新媒体内容运营方案"
+reading_hints: |
+  新媒体运营方案通常包含：账号定位与人设、内容选题与栏目、生产与排期、
+  分发与互动、增长与转化、数据复盘。关注选题体系与增长策略（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:粉丝|阅读|播放|涨粉|互动率)\\s*(?:约|为|达|增长)?\\s*\\d+(?:\\.\\d+)?\\s*(?:万|亿|%|次)?"
+    label: "新媒体运营数值"

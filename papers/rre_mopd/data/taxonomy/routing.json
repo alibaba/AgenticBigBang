@@ -1,0 +1,11 @@
+{
+  "routing_axis": "domain_l1",
+  "source": "Full manuscript, Repository-Domain L1 mapping table",
+  "routes": {
+    "A": ["web_backend", "database_storage", "data_engineering", "data_science", "cms_ecommerce", "security_auth", "blockchain_web3"],
+    "B": ["web_frontend", "desktop_gui", "mobile_dev", "media_graphics", "game_dev"],
+    "C": ["devops_infra", "devtools_test", "pkg_manager_cli", "os_system", "iot_embedded", "lang_runtime"]
+  },
+  "unassigned_domain_l1": ["docs_knowledge", "non_coding", "other"],
+  "unassigned_category": "UNASSIGNED"
+}

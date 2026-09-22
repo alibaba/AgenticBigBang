@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VerifyRefineReport",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["verified", "revision_round", "trigger_axes", "item_scores", "traps_coverage", "revisions", "dedup_actions", "spot_check", "summary"],
+  "properties": {
+    "verified": {"type": "boolean"},
+    "revision_round": {"type": "integer", "minimum": 1},
+    "trigger_axes": {"type": "array", "items": {"type": "string"}},
+    "item_scores": {
+      "type": "object",
+      "required": ["completeness", "correctness"],
+      "properties": {
+        "completeness": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["index", "score", "rationale"],
+            "properties": {
+              "index": {"type": "integer", "minimum": 0},
+              "score": {"type": "integer", "minimum": 1, "maximum": 5},
+              "rationale": {"type": "string", "minLength": 5}
+            },
+            "additionalProperties": false
+          }
+        },
+        "correctness": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["index", "score", "rationale"],
+            "properties": {
+              "index": {"type": "integer", "minimum": 0},
+              "score": {"type": "integer", "minimum": 1, "maximum": 5},
+              "rationale": {"type": "string", "minLength": 5}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "traps_coverage": {
+      "type": "object",
+      "required": ["total_traps", "covered_before", "covered_after", "uncovered_traps"],
+      "properties": {
+        "total_traps": {"type": "integer", "minimum": 0},
+        "covered_before": {"type": "integer", "minimum": 0},
+        "covered_after": {"type": "integer", "minimum": 0},
+        "uncovered_traps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["kind", "correct_form"],
+            "properties": {
+              "kind": {"type": "string"},
+              "correct_form": {"type": "string"},
+              "claim_to_avoid": {"type": "string"}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "revisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["checklist", "action", "reason"],
+        "properties": {
+          "checklist": {"enum": ["completeness", "correctness"]},
+          "index": {"type": "integer", "minimum": 0},
+          "action": {"enum": ["remove", "rewrite", "split", "add"]},
+          "reason": {"type": "string", "minLength": 5},
+          "before": {"type": "string"},
+          "after": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "dedup_actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["overlap_reason", "removed"],
+        "properties": {
+          "item_a_index": {"type": "integer"},
+          "item_b_index": {"type": "integer"},
+          "item_a_checklist": {"enum": ["completeness", "correctness"]},
+          "item_b_checklist": {"enum": ["completeness", "correctness"]},
+          "overlap_reason": {"type": "string", "minLength": 5},
+          "removed": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "spot_check": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["checklist", "anchor_accurate", "if_no_specific"],
+        "properties": {
+          "index": {"type": "integer", "minimum": 0},
+          "checklist": {"enum": ["completeness", "correctness"]},
+          "anchor_accurate": {"type": "boolean"},
+          "if_no_specific": {"type": "boolean"},
+          "issues": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 20
+    }
+  }
+}

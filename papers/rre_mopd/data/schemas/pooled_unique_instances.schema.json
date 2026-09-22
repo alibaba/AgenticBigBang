@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pooled joint RL unique instance manifest row",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["anon_instance_id", "routing_group", "source_subset", "pooled_record_count"],
+  "properties": {
+    "anon_instance_id": {"type": "string", "pattern": "^TRN-[0-9A-F]{16}$"},
+    "routing_group": {"type": "string", "enum": ["A", "B", "C", "U"]},
+    "source_subset": {"type": "string", "enum": ["initial_rl", "rest_3954"]},
+    "pooled_record_count": {"type": "integer", "minimum": 1}
+  }
+}

@@ -1,0 +1,14 @@
+secondary: "新车发布"
+document_type_label: "新车发布/产品上市材料"
+reading_hints: |
+  新车发布文档通常包含：产品定位与目标市场、核心卖点与技术亮点、
+  关键配置与参数、设计语言与造型特点、价格与版本矩阵、
+  竞品对标分析。
+  关注：区分不同配置版本的差异化特点（数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:指导价|起售价|售价)\\s*(?:为|约|从)\\s*\\d+(?:\\.\\d+)?\\s*(?:万元|元)"
+    label: "车辆售价"
+title_slide_fields:
+  - "车型名称:"
+  - "品牌/厂商:"
+  - "发布日期:"

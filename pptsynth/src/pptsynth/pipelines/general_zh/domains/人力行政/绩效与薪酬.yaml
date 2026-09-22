@@ -1,0 +1,8 @@
+secondary: "绩效与薪酬"
+document_type_label: "绩效/薪酬方案"
+reading_hints: |
+  绩效/薪酬文档通常包含：绩效体系与指标（如KPI/OKR）、考核周期与流程、
+  薪酬结构与档级、激励与调薪机制、结果应用。关注指标设计与分配逻辑（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:绩效系数|完成率|达成率)\\s*(?:为|达|约)?\\s*\\d+(?:\\.\\d+)?\\s*%"
+    label: "绩效达成率数值"

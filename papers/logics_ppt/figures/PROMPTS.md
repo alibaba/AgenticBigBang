@@ -1,0 +1,17 @@
+# Illustration prompts
+
+The following are the exact prompts used with the built-in imagegen tool for
+the three transparent illustration components. The diagram labels and arrows
+were added later in SVG.
+
+## Data synthesis
+
+> Use case: infographic-diagram. Asset type: one standalone illustration component for an academic research README about slide-generation agents. Generate ONLY the illustration for stage 1, data synthesis: an open source PDF/document stack on the left, a small structured source card in the middle with abstract lines and chart glyphs, and a paired task sheet plus checklist rubric on the right. A small cheerful cream-colored robotic research assistant inspects the cards. Hand-drawn technical infographic with subtle watercolor texture, crisp dark-navy ink outlines, warm white/transparent background, restrained teal/coral/amber accents, publication-quality ML-paper aesthetic. Clean, professional, expressive but not childish. Wide 16:9 component with generous clear margin all around; all objects fully visible. No readable text, no letters, no numbers, no arrows, no panel frame, no logo, no watermark. This is an isolated visual asset to place inside an SVG diagram with externally authored labels and connectors. Request genuinely transparent background and preserve alpha.
+
+## Guided distillation
+
+> Use case: infographic-diagram. Asset type: standalone illustration component for stage 2 of an academic research README method diagram about slide-generation agents. Scene: a small cream-colored robotic research assistant at an open workstation, examining two distinct stacks of presentation trajectories from complementary teacher sources, selecting well-rendered slide cards and passing them into a compact student-model training console. Show abstract slide thumbnails with colored blocks but no readable writing. Hand-drawn technical infographic with subtle watercolor texture, crisp dark-navy ink outlines, restrained teal/coral/amber accents, professional publication-quality ML-paper aesthetic. Wide 16:9 composition, genuinely transparent background, generous clear margin, all objects fully visible. No readable text, no letters, no numbers, no arrows, no panel frame, no logo, no watermark. Visual asset only; labels and connectors will be authored separately in SVG.
+
+## Verifiable rewards
+
+> Use case: infographic-diagram. Asset type: standalone illustration component for stage 3 of an academic research README method diagram about slide-generation agents. Scene: a small cream-colored robotic research assistant inspecting a browser-rendered widescreen slide on a monitor. Nearby, five small visual check indicators communicate 16:9 canvas geometry, balanced content density, no overlapping elements, harmonious layout balance, and readable font size using simple pictograms only. A curved visual feedback loop within the scene suggests reinforcement learning, but do not draw any arrows. Hand-drawn technical infographic with subtle watercolor texture, crisp dark-navy ink outlines, warm white/transparent background, restrained teal/coral/amber accents, professional publication-quality ML-paper aesthetic. Wide 16:9 composition, genuinely transparent background, generous clear margin, all objects fully visible. No readable text, no letters, no numbers, no arrows, no panel frame, no logo, no watermark. This is an illustration asset; all labels and directional connectors will be authored separately in SVG.

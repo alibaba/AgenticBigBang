@@ -1,0 +1,119 @@
+# =============================================================================
+# L2 Tag Prompt — FAST version (no rationale, minimal output)
+# Optimized for speed: output only labels, no explanations
+# =============================================================================
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 1: L1 Classification (minimal output)
+# ─────────────────────────────────────────────────────────────────────────────
+phase1_system_prompt: |
+  You are an Expert Software Engineering Analyst. Classify the given SWE task instance.
+  Output ONLY the JSON label — no explanation, no reasoning, no markdown.
+
+phase1_user_prompt_template: |
+  Classify this instance. Output ONLY a JSON object in <label></label> tags. No reasoning.
+
+  **Repo:** {repo}
+  {repo_info_section}
+
+  **Problem:**
+  {problem_statement}
+
+  **Patch:**
+  ```diff
+  {patch}
+  ```
+
+  **Test Patch:**
+  ```diff
+  {test_patch}
+  ```
+
+  ---
+
+  Classify into these dimensions:
+
+  **Language:** go, c, c++, python, java, js/ts, php, shell, c#, html/css, sql, rust, kotlin, swift, ruby, lua, dart, scala, r, other, unknown
+
+  **Task Type L1:**
+  Fix: bug-fix, performance-fix, compatibility-fix
+  Implementation: feature, enhancement, backward-compatibility, from_scratch
+  Testing: test-add, test-fix, coverage, debug-support
+  Refactoring: refactor, style, deprecation
+  Build: build-fix, ci-fix, deployment, packaging, config
+  Docs: user-docs, design-spec, diagram, code-explanation
+  Security: security-fix, auth, privacy
+
+  **Domain L1:** (REPO-CENTRIC: judge by repo description+topics, NOT by what code this PR touches; same repo → same domain across PRs)
+  - web_frontend: Web front-end / any JS UI framework (React, Vue, Angular, Svelte, Mithril, Solid, HTML/CSS)
+  - mobile_dev: Mobile apps (Swift, Kotlin, Flutter, React Native)
+  - desktop_gui: Desktop GUI (Electron, Tauri, Qt, WPF)
+  - web_backend: Web back-end/API frameworks (Django, Flask, Spring, FastAPI, Express, Axum, Gin, Rails, custom frameworks)
+  - database_storage: Database/ORM/cache/MQ (PostgreSQL, Redis, SQLAlchemy, Kafka)
+  - data_science: Data science / scientific / numerical / symbolic computing / ML / DL (NumPy, SciPy, SymPy, AstroPy, xarray, PyTorch, scikit-learn)
+  - data_engineering: ETL/pipelines/big data (Spark, Airflow, dbt)
+  - os_system: OS core/filesystems/drivers (Linux kernel, systemd)
+  - iot_embedded: Embedded/firmware/IoT (Arduino, RTOS)
+  - devops_infra: IT-automation / CI-CD / monitoring / vuln-scanner / feature-flag platforms (Ansible, Vuls, Prometheus, K8s, Terraform, Flipt)
+  - media_graphics: Image/audio/video/3D (FFmpeg, Three.js, OpenCV)
+  - game_dev: Game engines (Unity, Godot, Unreal)
+  - devtools_test: Repos whose product IS a dev tool — build tools, test frameworks, linters, formatters, test data generators (Webpack, Jest, ESLint, Faker). NOT for ops platforms (Ansible/Teleport are devops_infra/security_auth).
+  - lang_runtime: Compilers/interpreters/VMs/foundational language ecosystem libraries (CPython, LLVM, Tokio, fmtlib, Gson, Carbon, immutable-js, requests/httpx/axios)
+  - pkg_manager_cli: Package managers/CLI tools/TUI frameworks (npm, pip, ripgrep, Textual, termenv)
+  - cms_ecommerce: CMS/e-commerce (WordPress, Shopify)
+  - blockchain_web3: Blockchain/smart contracts (Solidity, Web3.js)
+  - security_auth: Identity/auth/access-mgmt/crypto platforms (OAuth, OpenSSL, Keycloak, Teleport, Vault)
+  - docs_knowledge: Doc generators/wikis (Docusaurus, MkDocs)
+  - non_coding: Pure discussion/planning
+  - other: None of the above
+
+  **Spec Type:** fuzzy / specific
+  **Dependency:** codebase / env / codebase+env / none
+
+  <label>
+  {{"code_language":"...","task_type_l1":"...","domain_l1":"...","task_spec_type":"...","dependency_context":"..."}}
+  </label>
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 2: L2 Refinement + Orthogonal (minimal output)
+# ─────────────────────────────────────────────────────────────────────────────
+phase2_system_prompt: |
+  You are an Expert Software Engineering Analyst. Refine the L2 classification.
+  Output ONLY the JSON label — no explanation, no reasoning, no markdown.
+
+phase2_user_prompt_template: |
+  L1 result: task_type=`{task_type_l1}`, domain=`{domain_l1}`
+
+  Refine to L2. Output ONLY a JSON object in <label></label> tags. No reasoning.
+
+  **Repo:** {repo}
+  {repo_info_section}
+
+  **Problem:**
+  {problem_statement}
+
+  **Patch:**
+  ```diff
+  {patch}
+  ```
+
+  **Test Patch:**
+  ```diff
+  {test_patch}
+  ```
+
+  ---
+
+  **Task Type L2 options under `{task_type_l1}`:**
+  {task_type_l2_section}
+
+  **Domain L2 options under `{domain_l1}`:**
+  {domain_l2_section}
+
+  **Scope:** single_file / multi_file_same_module / cross_module / cross_repo
+  **Cognitive Complexity:** mechanical / local_reasoning / global_reasoning / design_decision
+  **Time Estimate:** trivial_15min / small_1h / medium_4h / large_4h_plus
+
+  <label>
+  {{"task_type_l2":["..."],"domain_l2":["..."],"scope":"...","cognitive_complexity":"...","time_estimate":"..."}}
+  </label>

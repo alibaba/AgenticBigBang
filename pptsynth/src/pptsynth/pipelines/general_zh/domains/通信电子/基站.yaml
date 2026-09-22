@@ -1,0 +1,10 @@
+secondary: "基站"
+document_type_label: "基站建设/运维技术材料"
+reading_hints: |
+  基站文档通常包含：基站类型与技术规格（宏站/小站/室分等）、
+  站址选择与覆盖规划、天线配置与参数调优、干扰分析与解决方案、
+  施工规范与验收要求。
+  关注：不同基站类型的应用场景区分（数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:发射功率|EIRP)\\s*(?:约|为|最大)?\\s*\\d+(?:\\.\\d+)?\\s*(?:dBm|W|瓦)"
+    label: "基站发射功率数值"

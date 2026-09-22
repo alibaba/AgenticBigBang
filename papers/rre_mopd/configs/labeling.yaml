@@ -1,0 +1,5 @@
+artifact_type: annotation_model_metadata
+model: qwen3.7-max
+model_identity_source: author_confirmed
+scope: all_labeling
+benchmark_annotation_file: data/labeling/benchmark_labels.jsonl

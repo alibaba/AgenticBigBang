@@ -1,0 +1,16 @@
+secondary: "ERP信息化"
+document_type_label: "ERP/信息化系统规划或实施汇报"
+reading_hints: |
+  ERP信息化文档通常包含：企业现状与痛点、信息化规划目标、
+  选型对比（SAP/Oracle/金蝶/用友等）、实施范围与模块、
+  关键里程碑、预期效益与ROI分析、变更管理方案。
+  关注：选型决策依据、实施阶段划分（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:项目|实施|建设)\\s*(?:投资|预算|费用)\\s*(?:约|共|合计)?\\s*\\d+"
+    label: "项目投资预算数值"
+  - pattern: "ROI\\s*(?:约|预计|达到)?\\s*\\d+(?:\\.\\d+)?%"
+    label: "ROI数值"
+title_slide_fields:
+  - "项目名称:"
+  - "汇报单位:"
+  - "汇报日期:"

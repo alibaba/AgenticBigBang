@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1800" height="680" viewBox="0 0 1800 680" role="img" aria-labelledby="title desc">
+  <title id="title">Logics-PPT presentation intelligence pipeline</title>
+  <desc id="desc">Three stages: source-grounded task and rubric synthesis, guided trajectory distillation, and reinforcement learning with five verifiable rewards computed on rendered slides.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="13" markerHeight="13" refX="10" refY="6.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M 1 1 L 11 6.5 L 1 12" fill="none" stroke="#26415d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <rect x="1" y="1" width="1798" height="678" rx="26" fill="#fffdfa" stroke="#ecdccf" stroke-width="2"/>
+  <text x="900" y="59" text-anchor="middle" fill="#1c3552" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">From documents to presentation intelligence</text>
+  <text x="900" y="95" text-anchor="middle" fill="#536b80" font-family="Arial, Helvetica, sans-serif" font-size="18">Data synthesis · guided distillation · verifiable visual rewards</text>
+
+  <rect x="55" y="139" width="530" height="476" rx="22" fill="#fff7f3" stroke="#ef8a76" stroke-width="2"/>
+  <rect x="635" y="139" width="530" height="476" rx="22" fill="#f4fbfa" stroke="#62aaa4" stroke-width="2"/>
+  <rect x="1215" y="139" width="530" height="476" rx="22" fill="#fffaf0" stroke="#d6a854" stroke-width="2"/>
+
+  <text x="85" y="187" fill="#d75647" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">01  DATA SYNTHESIS</text>
+  <text x="665" y="187" fill="#247f7c" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">02  GUIDED DISTILLATION</text>
+  <text x="1245" y="187" fill="#a57420" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">03  VERIFIABLE REWARDS</text>
+
+  <image x="83" y="214" width="475" height="268" xlink:href="components/data-synthesis.png"/>
+  <image x="663" y="214" width="475" height="268" xlink:href="components/guided-distillation.png"/>
+  <image x="1243" y="214" width="475" height="268" xlink:href="components/verifiable-rewards.png"/>
+
+  <text x="320" y="514" text-anchor="middle" fill="#1c3552" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700">Grounded tasks + binary rubrics</text>
+  <text x="320" y="546" text-anchor="middle" fill="#536b80" font-family="Arial, Helvetica, sans-serif" font-size="16">Source cards · audit · targeted refinement</text>
+
+  <text x="900" y="514" text-anchor="middle" fill="#1c3552" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700">Teacher trajectories → student SFT</text>
+  <text x="900" y="546" text-anchor="middle" fill="#536b80" font-family="Arial, Helvetica, sans-serif" font-size="16">Explicit guidance · mixed supervision · filtering</text>
+
+  <text x="1480" y="514" text-anchor="middle" fill="#1c3552" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700">Rendered slides → GRPO</text>
+  <text x="1480" y="546" text-anchor="middle" fill="#536b80" font-family="Arial, Helvetica, sans-serif" font-size="16">Ratio · whitespace · overlap · balance · fonts</text>
+
+  <path d="M 590 377 L 627 377" stroke="#26415d" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M 1170 377 L 1207 377" stroke="#26415d" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="900" y="650" text-anchor="middle" fill="#536b80" font-family="Arial, Helvetica, sans-serif" font-size="16">The public PPTSynth package implements task and rubric synthesis; the released SFT and RL checkpoints are available separately.</text>
+</svg>

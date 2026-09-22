@@ -1,0 +1,17 @@
+{
+  "counts": {
+    "by_routing_group": {
+      "A": 516,
+      "B": 516,
+      "C": 516
+    },
+    "training_records": 1548,
+    "unique_instances": 1548
+  },
+  "output_sha256": {
+    "balanced_rl_training_records.csv": "2ff21668579836b28ec248c8c212547dbb8fdaf02142092568db2789b9f88f7a"
+  },
+  "relationship": "all balanced records are an exact subset of the Initial-RL record mapping",
+  "schema_version": "1.0",
+  "training_phase": "stratified_balanced_rl"
+}

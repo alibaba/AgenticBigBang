@@ -1,0 +1,5 @@
+secondary: "物联网(IoT)方案"
+document_type_label: "物联网(IoT)解决方案"
+reading_hints: |
+  IoT方案通常包含：场景与痛点、端-管-边-云架构、感知与通信协议、
+  平台与数据、典型应用、安全与实施。关注架构与协议选型（具体数值只进入key_numbers）。

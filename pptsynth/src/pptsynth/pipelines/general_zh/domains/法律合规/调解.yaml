@@ -1,0 +1,9 @@
+secondary: "调解"
+document_type_label: "纠纷调解程序/案例材料"
+reading_hints: |
+  调解文档通常包含：纠纷背景与争议焦点、各方主张与证据梳理、
+  调解原则与程序、调解方案与协议要点、调解结果与执行安排。
+  关注：争议事实的认定依据与各方责任划分逻辑。
+extra_anti_leakage_patterns:
+  - pattern: "调解金额\\s*(?:共|合计|约)?\\s*(?:人民币)?\\s*\\d+"
+    label: "调解金额"

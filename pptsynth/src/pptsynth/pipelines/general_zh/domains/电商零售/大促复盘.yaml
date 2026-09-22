@@ -1,0 +1,10 @@
+secondary: "大促复盘"
+document_type_label: "大促活动复盘报告"
+reading_hints: |
+  大促复盘文档通常包含：活动目标与实际结果对比、各渠道/品类表现、
+  关键节点进展、超预期/不及预期的原因分析、经验总结与改进建议、
+  下次大促优化方向。
+  关注：不同渠道/品类之间的表现差异原因（不含具体数值）（数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:目标|计划|预算)\\s*(?:GMV|销售额)\\s*(?:为|约)?\\s*\\d+"
+    label: "大促目标数值"

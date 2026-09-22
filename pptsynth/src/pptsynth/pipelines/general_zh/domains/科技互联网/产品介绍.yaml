@@ -1,0 +1,16 @@
+secondary: "产品介绍"
+document_type_label: "产品介绍文档/PPT"
+reading_hints: |
+  产品介绍文档通常包含：产品定位与价值主张、核心功能模块、目标用户画像、
+  竞品对比、价格/套餐方案、成功案例/客户背书。
+  关注：产品的差异化卖点（具体功能名称）、定价体系（具体数值只进入key_numbers）、
+  客户数量/规模（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:功能|模块|特性)\\s*[共有含]\\s*\\d+\\s*[个项]"
+    label: "产品功能数量"
+  - pattern: "(?:客户|企业|用户)\\s*(?:超过|达到|突破)\\s*\\d+"
+    label: "客户数量"
+title_slide_fields:
+  - "产品名称:"
+  - "出品方:"
+  - "版本/日期:"

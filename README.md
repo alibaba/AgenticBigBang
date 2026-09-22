@@ -1,3 +1,5 @@
+![Agentic Bigbang: SWE Agents and Cowork Agents](assets/agentic-bigbang-banner.png)
+
 # Agentic Bigbang
 
 **Data, evaluation, and post-training for agents that work.**
@@ -17,6 +19,7 @@ artifacts, and release scope; reusable tools live alongside the paper packages.
 | --- | --- | --- |
 | SWE | **RRE–MOPD:** category-aware expert development and policy integration | [📄 Paper](https://arxiv.org/abs/2609.23377) · [Research artifacts](papers/rre_mopd/README.md) · [🤗 Model](https://huggingface.co/Logics-MLLM/Logics-SWE-Qwen3.6-27B) · [🤗 Data & environments](https://huggingface.co/datasets/Logics-MLLM/Logics-SWE-Env-2.5K) · [Model card](papers/rre_mopd/MODEL_CARD.md) |
 | SWE | **SWE Labeler:** hierarchical task and trajectory annotation | [Code and usage](swe_labeler/README.md) |
+| Cowork | **Logics-PPT:** data synthesis, guided distillation, and verifiable rewards for presentation generation | [Research overview](papers/logics_ppt/README.md) · [🤗 SFT & RL models](#released-logics-ppt-models) · [ModelScope](#released-logics-ppt-models) |
 | Cowork | **PPTSynth:** document-grounded slide-task and rubric synthesis | [Code and usage](pptsynth/README.md) |
 
 ## SWE Research: RRE-MOPD
@@ -137,36 +140,94 @@ for the underlying table.
 
 ## Cowork Research
 
-The Cowork direction focuses on agents for knowledge work and productivity
-tasks. The current tool entry point is **[PPTSynth](pptsynth/README.md)**, which
-creates slide-generation tasks and instance-specific binary rubrics from
-source PDFs, using profiles for different document types and languages.
+### Towards Presentation Intelligence: High-Quality Data Synthesis, Guided Distillation and Verifiable Rewards
 
-PPTSynth is currently a **code-only package**: source documents, generated
-tasks, and execution logs are not included. See its
-[data policy](pptsynth/DATA_POLICY.md) for input and output boundaries.
-Further Cowork research descriptions and paper artifacts will be added here
-as they become available.
+**Technical report: arXiv preprint coming very soon.**
+[Research overview & case studies](papers/logics_ppt/README.md) ·
+[PPTSynth code](pptsynth/README.md) ·
+[Released models](#released-logics-ppt-models)
+
+**TL;DR:** Logics-PPT develops agents that turn source material into complete,
+visually coherent presentations. The training recipe combines grounded task and
+rubric synthesis, guided trajectory distillation, and reinforcement learning
+with rewards measured on rendered slides.
+
+Presentation generation asks an agent to understand source documents, organize
+faithful content across a deck, and make each slide readable and well composed.
+An attractive slide can still omit key facts; a faithful slide can still have
+colliding elements or unreadable text. Our work treats these as connected
+training problems, from constructing supervision to checking the final render.
+
+![Logics-PPT pipeline: data synthesis, guided distillation, and verifiable visual rewards](papers/logics_ppt/figures/presentation-intelligence-overview.png)
+
+*The illustrated pipeline connects three research stages. The released
+[PPTSynth](pptsynth/README.md) package covers task and rubric synthesis;
+the SFT and RL model checkpoints are linked below.*
+
+#### How it works
+
+1. **Ground training tasks in documents.** Build source cards, slide-generation
+   instructions, and instance-specific binary rubrics for material completeness
+   and correctness. Audit weak items and refine them against source evidence.
+2. **Teach the agent through guided distillation.** Use explicit content and
+   design guidance, complementary teacher trajectories, and rendering-based
+   filtering to train dense and mixture-of-experts student models.
+3. **Refine what people see.** Render generated HTML slides and use five
+   verifiable rewards—aspect ratio, whitespace, element collision, visual
+   balance, and font readability—to guide reinforcement learning.
+
+#### See the difference
+
+The technical report includes representative, unaltered slide outputs from
+before and after training. These examples illustrate changes in deck structure
+and slide layout; they are not a substitute for benchmark results.
+
+| Training stage | Before | After |
+| --- | --- | --- |
+| SFT: more structured slide content | ![Research presentation slide before SFT](papers/logics_ppt/figures/cases/sft-diversity-before.png) | ![Research presentation slide after SFT](papers/logics_ppt/figures/cases/sft-diversity-after.png) |
+| RL: resolve element collisions | ![Slide with overlapping title before RL](papers/logics_ppt/figures/cases/rl-collision-before.png) | ![Slide with clean title layout after RL](papers/logics_ppt/figures/cases/rl-collision-after.png) |
+
+[Explore all six before/after comparisons and the method](papers/logics_ppt/README.md).
+
+#### Released Logics-PPT models
+
+Four research checkpoints are available for **slide-wise HTML presentation
+generation**. SFT models focus on the full presentation-generation task; RL
+models further target post-render visual quality. Full generation depends on
+the agent and rendering setup described in each model card.
+
+| Backbone | Stage | Hugging Face | ModelScope |
+| --- | --- | --- | --- |
+| Qwen3.6-35B-A3B (MoE) | RL | [Logics-PPT-Qwen3.6-35B-A3B-RL](https://huggingface.co/Logics-MLLM/Logics-PPT-Qwen3.6-35B-A3B-RL) | [Download](https://www.modelscope.ai/models/Alibaba-DT/Logics-PPT-Qwen-3.6-35B-A3B-RL) |
+| Qwen3.6-35B-A3B (MoE) | SFT | [Logics-PPT-Qwen3.6-35B-A3B-SFT](https://huggingface.co/Logics-MLLM/Logics-PPT-Qwen3.6-35B-A3B-SFT) | [Download](https://www.modelscope.ai/models/Alibaba-DT/Logics-PPT-Qwen-3.6-35B-A3B-SFT) |
+| Qwen3.6-27B (dense) | RL | [Logics-PPT-Qwen3.6-27B-RL](https://huggingface.co/Logics-MLLM/Logics-PPT-Qwen3.6-27B-RL) | [Download](https://www.modelscope.ai/models/Alibaba-DT/Logics-PPT-Qwen3.6-27B-RL) |
+| Qwen3.6-27B (dense) | SFT | [Logics-PPT-Qwen3.6-27B-SFT](https://huggingface.co/Logics-MLLM/Logics-PPT-Qwen3.6-27B-SFT) | [Download](https://www.modelscope.ai/models/Alibaba-DT/Logics-PPT-Qwen3.6-27B-SFT) |
+
+**PPTSynth** is the released code entry point for grounded task and rubric
+construction. It supports English and Chinese academic papers, English
+finance/economics reports, and Chinese general-domain documents. See the
+[quick start](pptsynth/README.md) and [data policy](pptsynth/DATA_POLICY.md).
 
 ## Release Status
 
-- **In this repository:** SWE Labeler and PPTSynth code, plus the RRE–MOPD
-  research package containing anonymous training manifests, benchmark data
-  and results, configuration specifications, analysis scripts, and figures.
-- **Released model:** [Logics-SWE-Qwen3.6-27B](https://huggingface.co/Logics-MLLM/Logics-SWE-Qwen3.6-27B)
-  is available on Hugging Face under Apache-2.0.
-- **Released data and environments:** [Logics-SWE-Env-2.5K](https://huggingface.co/datasets/Logics-MLLM/Logics-SWE-Env-2.5K)
+- **Repository artifacts:** SWE Labeler and PPTSynth code, the
+  [RRE–MOPD research package](papers/rre_mopd/README.md), and the
+  [Logics-PPT overview and figures](papers/logics_ppt/README.md).
+- **Models:** [Logics-SWE-Qwen3.6-27B](https://huggingface.co/Logics-MLLM/Logics-SWE-Qwen3.6-27B)
+  on Hugging Face, and four [Logics-PPT SFT and RL checkpoints](#released-logics-ppt-models)
+  on Hugging Face and ModelScope. Each model card gives its license and usage
+  details.
+- **Data and environments:** [Logics-SWE-Env-2.5K](https://huggingface.co/datasets/Logics-MLLM/Logics-SWE-Env-2.5K)
   provides 2,553 instance records with matching environment-image references
   and a documented execution protocol.
-- **Published paper:** [One to More, More to One: Category-Aware Iterative
-  Expert Training for Software Engineering Agents](https://arxiv.org/abs/2609.23377).
-- **Not included:** complete training data and execution trajectories.
-  Anonymous manifests describe training membership; they do not provide
-  the underlying task content or all inputs needed to repeat training.
-
-See the [RRE–MOPD package](papers/rre_mopd/README.md),
-[model card](papers/rre_mopd/MODEL_CARD.md), and each tool's documentation for
-the scope of individual releases.
+- **Papers:** The [RRE–MOPD paper](https://arxiv.org/abs/2609.23377) is on
+  arXiv. The Logics-PPT technical report, *Towards Presentation Intelligence:
+  High-Quality Data Synthesis, Guided Distillation and Verifiable Rewards*,
+  has an arXiv preprint coming very soon.
+- **Not included:** complete SWE training data and execution trajectories,
+  or Logics-PPT source documents, generated tasks, full training trajectories,
+  and unpublished training or reward services. The anonymous SWE manifests
+  document training membership but do not contain the underlying task content.
 
 ## License
 

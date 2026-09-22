@@ -1,0 +1,323 @@
+# =============================================================================
+# L2 Tag Prompt — Two-Phase Hierarchical Classification
+#
+# Phase 1: L1 classification (language, task_type, domain, spec_type, dependency)
+# Phase 2: L2 refinement (task_type_l2, domain_l2) + orthogonal dimensions
+#          Only injects the L2 candidates under the chosen L1
+# =============================================================================
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 1: L1 Classification
+# ─────────────────────────────────────────────────────────────────────────────
+phase1_system_prompt: |
+  You are an **Expert Software Engineering Analyst**. Your goal is to analyze a given
+  SWE benchmark instance (issue description + code patch) and classify it across five
+  L1-level dimensions. Choose exactly one label per dimension — the primary/dominant one.
+
+phase1_user_prompt_template: |
+  # L1 Classification Task
+
+  Analyze the following SWE benchmark instance and assign L1-level labels.
+
+  ## Instance Information
+
+  **Repository:** {repo}
+  **Instance ID:** {instance_id}
+  {repo_info_section}
+
+  ### Problem Statement (Issue Description)
+  ```
+  {problem_statement}
+  ```
+
+  ### Code Patch (Gold Fix)
+  ```diff
+  {patch}
+  ```
+
+  ### Test Patch
+  ```diff
+  {test_patch}
+  ```
+
+  ---
+
+  # Classification Dimensions
+
+  ## 1. Programming Language
+  Choose the **single primary** programming language. If multiple languages are used, pick the one most central to the task.
+
+  **Available Labels:**
+  go, c, c++, python, java, js/ts, php, shell, c#, html/css, sql, rust, kotlin, swift, ruby, lua, dart, scala, r, other, unknown
+
+  **Guidelines:**
+  - Pick the language that the task primarily revolves around
+  - If a Python script generates HTML, the primary language is `python` (not `html/css`)
+  - If truly equal, pick the one with more code written
+  - `dart`: Use for Dart / Flutter projects
+  - `r`: Use for R language (statistical computing)
+  - `scala`: Use for Scala / Spark projects
+  - `shell`: Includes bash, zsh, sh, and PowerShell scripts
+  - **`other`**: Use when the task involves a specific programming language NOT in the list above (e.g., Perl, Haskell, Groovy, MATLAB). The language is identifiable but not listed.
+  - **`unknown`**: Use when NO programming activity occurs (pure discussion, planning, conceptual explanation) OR the language truly cannot be determined. Also use when only config/data files are involved (JSON, YAML, Markdown) without actual programming.
+
+  ## 2. Task Type (L1)
+
+  Choose the **single primary** task type — the main intent of the work. The types are organized into categories below for reference, but you should output only the specific type (e.g., `bug-fix`, not `Fix`).
+
+  ### Fix
+  - **bug-fix**: Fix functional defects (incorrect output, crashes, exceptions, memory leaks). Also includes engineering bugs that don't fit traditional security taxonomies, such as serialization/pickling failures, framework lifecycle interaction bugs (e.g., template engine auto-calling callables), and configuration default inconsistencies.
+  - **performance-fix**: Fix performance issues (timeouts, severe slowdowns)
+  - **compatibility-fix**: Fix incompatibilities across versions/platforms/browsers
+
+  ### Implementation
+  - **feature**: Introduce new functionality. Includes user-facing features (new pages, endpoints, UI components), framework extension points (hooks, plugins, decorators), internal utility functions, new flags/options added to existing CLI commands, and internally-callable APIs. Key criterion: introducing capability that did not exist before, whether exposed to end users, developers, or other code.
+  - **enhancement**: Improve or extend existing functionality. Includes both externally-visible improvements (UX, error messages, accessibility, i18n) and internal improvements (replacing internal implementations with better alternatives, changing default values for safer/more sensible behavior, broadening input/invocation compatibility). Key criterion: the feature already exists and is being made better (vs. `feature` which adds new capability).
+  - **backward-compatibility**: Add compatibility path for old clients/versions
+  - **from_scratch**: Generate a complete project/application from scratch without modifying existing codebase
+
+  ### Testing & Quality
+  - **test-add**: Add missing tests
+  - **test-fix**: Fix failing tests
+  - **coverage**: Improve test coverage
+  - **debug-support**: Add debugging/diagnostic hooks
+
+  ### Refactoring & Maintenance
+  - **refactor**: Restructure architecture
+  - **style**: Improve code quality, readability, formatting
+  - **deprecation**: Deprecate old interfaces
+
+  ### Build & Release
+  - **build-fix**: Fix compilation/build failures
+  - **ci-fix**: Fix CI pipeline failures
+  - **deployment**: Deployment/release pipeline changes
+  - **packaging**: Produce and publish artifacts
+  - **config**: Environment/configuration management
+
+  ### Documentation & Understanding
+  - **user-docs**: README, API documentation, tutorials
+  - **design-spec**: Design documents, specifications, RFCs
+  - **diagram**: Architecture diagrams/flowcharts
+  - **code-explanation**: Explaining, analyzing, or reviewing existing code without making functional changes. Use when the primary intent is understanding/teaching, not producing deliverables.
+
+  ### Security & Compliance
+  - **security-fix**: Discover and fix vulnerabilities
+  - **auth**: Authentication/authorization changes
+  - **privacy**: Data privacy, retention, auditing
+
+  **Guidelines:**
+  - Choose the **single most dominant** task type
+  - If a bug-fix also adds a test, choose `bug-fix` (the test is secondary)
+  - Focus on the primary intent, not side effects
+  - If the user asks to "explain this code", "analyze the architecture", or "review this file" without requesting changes, choose `code-explanation`
+  - `from_scratch` is for building a complete new project/application from nothing; adding a new feature to an existing codebase is `feature`
+
+  ## 3. Application Domain (L1) — REPO-CENTRIC
+
+  Choose the **single primary** fine-grained domain label. **Domain reflects the PRIMARY PURPOSE OF THE REPOSITORY**, NOT the specific code/file modified in this PR.
+
+  ### Decision Procedure (follow in order)
+
+  **Step 1** — Read repository metadata FIRST (authoritative signal): repo description (most authoritative), repo topics (community keywords), repo primary_language (supporting context).
+
+  **Step 2** — Form a domain hypothesis based on metadata. The description usually contains a phrase like "X platform / framework / library / tool" that maps directly to one domain.
+
+  **Step 3** — Use problem_statement and patch as TIE-BREAKERS only. They CONFIRM the metadata hypothesis (default case); only override when the repository legitimately spans multiple domains.
+
+  ### Critical Rules
+
+  - **DO NOT** switch domain based on what code this PR happens to touch. A multiprocessing bug-fix inside Ansible's Python engine is STILL `devops_infra` (Ansible IS an IT-automation platform). A change to SSH X11 forwarding inside Teleport is STILL `security_auth` (Teleport IS an identity & access platform).
+  - **DO NOT** treat patches that modify "internal/utility" code as belonging to `devtools_test`. `devtools_test` is reserved for repos whose **product** is a developer tool (Webpack, Jest, ESLint).
+  - The same repository should produce the **same** domain across all its PRs.
+  - If metadata is missing (rare), fall back to repo name + PR content; append "(metadata-absent fallback)" to your rationale.
+
+  ### Client & UI
+  - **web_frontend**: Web front-end frameworks, libraries, components, or full web interfaces using any JavaScript/TypeScript UI framework (React, Vue, Angular, Svelte, Mithril, Solid, Preact, vanilla DOM, HTML/CSS-heavy)
+  - **mobile_dev**: Mobile native or cross-platform applications (Swift, Kotlin, Flutter, React Native)
+  - **desktop_gui**: Desktop GUI applications (Electron, Tauri, Qt, WPF)
+
+  ### Backend & Cloud
+  - **web_backend**: Web back-end frameworks, API services, microservices (Django, Flask, Spring Boot, FastAPI, Express, Axum, Gin, Rails, custom web frameworks)
+  - **database_storage**: Database systems, ORM, caching, message queues (PostgreSQL, Redis, SQLAlchemy, Kafka)
+
+  ### AI & Data
+  - **data_science**: Data science, scientific/numerical/symbolic computing, statistics, machine learning, deep learning, and domain-specific scientific libraries (NumPy, SciPy, SymPy, AstroPy, xarray, pandas, PyTorch, TensorFlow, scikit-learn). Includes computer algebra systems, astronomy/physics libraries, geometric/mathematical software, and any task whose primary nature is numerical or scientific computation.
+  - **data_engineering**: Data pipelines, ETL, stream processing, big data computing (Spark, Airflow, dbt, Pandas scripts)
+
+  ### System & Core
+  - **os_system**: Operating system core, file systems, drivers (Linux kernel, drivers, systemd)
+  - **iot_embedded**: Embedded systems, firmware, IoT devices (Arduino, RTOS, hardware SDKs)
+
+  ### DevOps & Infra
+  - **devops_infra**: Repositories whose **product** is an IT-automation / infrastructure / continuous-monitoring platform — including configuration-management platforms (Ansible, Salt, Chef, Puppet), CI/CD platforms, monitoring/observability stacks (Prometheus, Grafana), vulnerability scanners (Vuls, OpenVAS, Trivy), feature-flag/config-management services (Flipt, LaunchDarkly), Kubernetes ecosystem tools, and IaC tools (Terraform, Pulumi). Use this for the WHOLE repo, regardless of whether a specific PR happens to modify the platform's internal Python/Go engine or the user-facing playbook layer.
+
+  ### Media & Gaming
+  - **media_graphics**: Image rendering, audio/video processing, data visualization (FFmpeg, D3.js, Three.js, OpenCV)
+  - **game_dev**: Game engines, game logic scripting (Unity, Godot, Unreal Engine)
+
+  ### Tooling & Lang
+  - **devtools_test**: Repositories whose **product** IS a build tool, testing framework, linter, code formatter, test data generator, or developer productivity tool (Webpack, Jest, Pytest, ESLint, Faker, FactoryBot). Do NOT use this for repos that merely happen to have internal tooling code — operations platforms like Ansible / Teleport / Vuls are NOT `devtools_test`; those belong to `devops_infra` or `security_auth` per their repo product.
+  - **lang_runtime**: Programming language runtimes, compilers, interpreters, virtual machines, and foundational language ecosystem libraries that extend or complement the standard library — including HTTP client libraries, formatting/serialization libraries, datetime/timezone libraries, collection/data-structure libraries, async/concurrency runtimes, parser/schema libraries, and functional-programming type utilities (CPython, LLVM, TypeScript compiler, Tokio runtime, fmtlib formatting, Gson/nlohmann-json serialization, Carbon/dateutil datetime, immutable-js collections, RxJava reactive streams, requests/httpx/axios HTTP clients, tomlkit/etree parsers, ts-pattern, true-myth, valibot)
+  - **pkg_manager_cli**: Package managers, command-line utilities, terminal UI (TUI) frameworks, terminal styling/color libraries, and CLI argument parsing libraries (npm, pip, Homebrew, ripgrep, Textual TUI, termenv, optique)
+
+  ### Business & Web3
+  - **cms_ecommerce**: Content management systems, e-commerce platforms (WordPress, Shopify, Magento)
+  - **blockchain_web3**: Smart contracts, blockchain nodes, crypto wallets (Solidity, Hardhat, Web3.js)
+  - **security_auth**: Repositories whose **product** is an identity / authentication / authorization / access-management / cryptographic platform or library — including bastion / SSO / IAM products (Teleport, Keycloak), OAuth/OIDC providers, secrets-management (Vault), cryptographic libraries (OpenSSL), MFA/WebAuthn services, and security WAFs. Use this for the WHOLE repo regardless of whether a specific PR happens to modify SSH forwarding, session lifecycle, or RBAC engine internals.
+
+  ### Legacy-compatible docs label
+  - **docs_knowledge**: Documentation generators, static blogs, wikis (Docusaurus, MkDocs, Hugo). This label is accepted for compatibility and will be post-processed.
+
+  ### Non-Coding
+  - **non_coding**: Non-programming tasks — pure discussions, planning, conceptual explanations, or conversations with no code involved
+
+  ### Other
+  - **other**: Does not fit any of the above categories
+
+  **Guidelines:**
+  - ALWAYS read repo description + topics first before looking at PR content
+  - Same repo → same domain across PRs (key consistency check)
+  - Tests for a React component → `web_frontend` (the repo IS a React product; testing is reflected in task_type)
+  - Building a new Webpack plugin (Webpack repo itself) → `devtools_test`; using Jest to test a backend API (the repo is a backend) → `web_backend`
+  - Do NOT output `networking_api`, `infra_as_code`, or `devops_pipeline`; these are legacy labels.
+  - `docs_knowledge` is allowed as a compatibility label and will be remapped by post-processing.
+
+  ## 4. Task Specification Type
+  - **fuzzy**: Task needs more specifications, vague requirements, unclear goals
+  - **specific**: Task is detailed, self-contained, with clear requirements
+
+  ## 5. Dependency Context
+  - **codebase**: Requires access to existing codebase only
+  - **env**: Requires specific runtime/development environment only
+  - **codebase+env**: Requires BOTH existing codebase AND specific environment
+  - **none**: No external dependencies
+
+  ---
+
+  # Output Format
+
+  Output **exactly one** JSON object enclosed in `<label> ... </label>` tags.
+
+  <label>
+  {{
+    "code_language_rationale": "<brief explanation>",
+    "code_language": "<language>",
+    "task_type_rationale": "<brief explanation>",
+    "task_type_l1": "<L1 task type>",
+    "domain_rationale": "<brief explanation>",
+    "domain_l1": "<L1 domain>",
+    "task_spec_type": "<fuzzy/specific>",
+    "dependency_context": "<codebase/env/codebase+env/none>"
+  }}
+  </label>
+
+  **Rules:**
+  - Rationale fields come BEFORE their corresponding label
+  - Base classification on concrete evidence from the patch and problem statement
+  - Be concise in rationales (1-2 sentences)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 2: L2 Refinement + Orthogonal Dimensions
+# ─────────────────────────────────────────────────────────────────────────────
+phase2_system_prompt: |
+  You are an **Expert Software Engineering Analyst**. You have already classified a task
+  at the L1 level. Now refine it to L2 sub-categories and assess orthogonal dimensions.
+
+  Your L2 classification must be grounded in the code signals you observe. If no L2
+  sub-category fits well, use "unspecified".
+
+phase2_user_prompt_template: |
+  # L2 Refinement Task
+
+  You previously classified this instance as:
+  - **Task Type L1:** `{task_type_l1}`
+  - **Domain L1:** `{domain_l1}`
+
+  Now refine to L2 sub-categories and assess orthogonal dimensions.
+
+  ## Instance Information
+
+  **Repository:** {repo}
+  **Instance ID:** {instance_id}
+  {repo_info_section}
+
+  ### Problem Statement (Issue Description)
+  ```
+  {problem_statement}
+  ```
+
+  ### Code Patch (Gold Fix)
+  ```diff
+  {patch}
+  ```
+
+  ### Test Patch
+  ```diff
+  {test_patch}
+  ```
+
+  ---
+
+  # L2 Classification
+
+  ## Task Type L2 — Sub-types under `{task_type_l1}`
+
+  {task_type_l2_section}
+
+  ## Domain L2 — Sub-domains under `{domain_l1}`
+
+  {domain_l2_section}
+
+  ---
+
+  # Orthogonal Dimensions
+
+  ## Modification Scope
+  Assess based on the number and distribution of files modified in the patch.
+  - **single_file**: Modifies exactly 1 file
+  - **multi_file_same_module**: 2+ files in same module/package/directory
+  - **cross_module**: Files across different architectural layers or packages
+  - **cross_repo**: Spans multiple repositories
+
+  ## Cognitive Complexity
+  Assess the level of reasoning required to produce the fix.
+  - **mechanical**: Pattern-matching replacement, no semantic understanding needed
+  - **local_reasoning**: Understand one function/class behavior to determine the fix
+  - **global_reasoning**: Trace data flow across multiple modules
+  - **design_decision**: Architectural choices with multiple valid approaches
+
+  ## Time Estimate
+  For a competent developer familiar with the codebase:
+  - **trivial_15min**: <15min, ~1-5 LOC changed
+  - **small_1h**: 15min-1h, ~5-20 LOC changed
+  - **medium_4h**: 1-4h, ~20-100 LOC changed
+  - **large_4h_plus**: >4h, >100 LOC changed
+
+  ---
+
+  # Output Format
+
+  Output **exactly one** JSON object enclosed in `<label> ... </label>` tags.
+
+  <label>
+  {{
+    "task_type_l2_rationale": "<1-2 sentence explanation>",
+    "task_type_l2": ["<primary L2 sub-type>"],
+    "domain_l2_rationale": "<1-2 sentence explanation>",
+    "domain_l2": ["<primary L2 sub-domain>"],
+    "scope": "<single_file/multi_file_same_module/cross_module/cross_repo>",
+    "cognitive_complexity": "<mechanical/local_reasoning/global_reasoning/design_decision>",
+    "time_estimate": "<trivial_15min/small_1h/medium_4h/large_4h_plus>"
+  }}
+  </label>
+
+  **Rules:**
+  - **L2 fields are arrays**: select 1-3 most relevant sub-types/sub-domains
+  - If the task clearly involves multiple L2 categories, include all relevant ones (max 3)
+  - If only one fits, use a single-element array: `["logic_error"]`
+  - If none fits well, use `["unspecified"]`
+  - All L2 values must be from the listed options above
+  - Order by relevance: most relevant first
+  - Base classification on concrete code signals from the patch
+  - For scope, count distinct files in the patch (only the gold fix patch, not test_patch)
+  - For time estimate, consider both LOC changed and reasoning difficulty

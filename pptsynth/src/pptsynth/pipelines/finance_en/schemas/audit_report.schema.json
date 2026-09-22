@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AuditReport",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "pass",
+    "scores",
+    "findings",
+    "fixes_applied",
+    "summary"
+  ],
+  "properties": {
+    "pass": {
+      "type": "boolean",
+      "description": "True iff the case passes all dimensions at threshold (>= 4 on each axis)."
+    },
+    "scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "1-5 integer score on each meta-rubric axis. Anything <4 is a failing axis.",
+      "required": [
+        "style_alignment",
+        "section1_paper_specificity",
+        "design_constraint_density",
+        "instruction_underspecification",
+        "checklist_anchor_specificity",
+        "completeness_correctness_separation",
+        "trap_coverage",
+        "language_and_meta_hygiene",
+        "internal_consistency",
+        "atomicity_check",
+        "key_numbers_coverage"
+      ],
+      "properties": {
+        "style_alignment": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Does instructions.md match the required six-section structure (Strict Constraints, Sections 1-6, Output Expected)?"
+        },
+        "section1_paper_specificity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Are Section 1 section titles paper-specific (not generic shells like 'Methodology' but 'Methodology: Camera-Ray Conversion'), and do bullets name paper-specific topics, mechanisms, datasets, or baselines (not boilerplate)? Specificity here is at the topic level only — value-level specificity is scored separately by instruction_underspecification."
+        },
+        "design_constraint_density": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Are there enough 'Design Constraint:' lines (>=3) referencing real figures/tables on methodology, results, and visual analysis slides?"
+        },
+        "instruction_underspecification": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Do Section 1 bullets and Design Constraint lines describe topics/scope/qualitative framings without pre-disclosing specific numerical results, accuracy values, baseline rankings, or '+/-Δ' gains? A reader of instructions.md alone should NOT be able to reconstruct the paper's quantitative findings. Score 1 if bullets read as a complete answer outline; 5 if every value lives only in the rubric and instructions describe only what topic each slide must cover."
+        },
+        "checklist_anchor_specificity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Do completeness items name specific terms and correctness items name specific values/conditions?"
+        },
+        "completeness_correctness_separation": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Is no item mixing 'covered AND correct'? Are coverage and accuracy cleanly separated?"
+        },
+        "trap_coverage": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Do correctness items address >=3 of the trap kinds in the Paper Card (fabrication, metric misread, non-monotone flattened, method-level confusion, scope overclaim, unit/def error)?"
+        },
+        "language_and_meta_hygiene": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Is the entire case in English with no benchmark/rubric/judge meta-language leaked into instructions.md?"
+        },
+        "internal_consistency": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Do checklist items map back to required sections in instructions.md and to anchors in the Paper Card?"
+        },
+        "atomicity_check": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Does every item test exactly one binary condition? Score 1-2 if any item bundles >=3 independent conditions; 3 if items bundle 2; 4-5 if every item is atomic."
+        },
+        "key_numbers_coverage": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Do correctness items reference >=80% of key_numbers entries from the Paper Card? Score 1-2 if <50% referenced; 3 if 50-79%; 4-5 if >=80%."
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "description": "Concrete issues, each with a file and a fix recommendation. Empty if nothing wrong.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["axis", "severity", "where", "what", "fix"],
+        "properties": {
+          "axis": {
+            "type": "string",
+            "description": "Which scores key this finding maps to."
+          },
+          "severity": {"enum": ["blocker", "major", "minor"]},
+          "where": {
+            "type": "string",
+            "description": "File path and line/section, e.g. 'instructions.md Section 1 item 7'."
+          },
+          "what": {
+            "type": "string",
+            "minLength": 10
+          },
+          "fix": {
+            "type": "string",
+            "minLength": 10,
+            "description": "Concrete proposed edit."
+          }
+        }
+      }
+    },
+    "fixes_applied": {
+      "type": "array",
+      "description": "List of edits the audit stage actually applied (via Edit tool). Empty if no changes were made.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["file", "summary"],
+        "properties": {
+          "file": {"type": "string"},
+          "summary": {"type": "string"}
+        }
+      }
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Two- to three-sentence overall assessment."
+    }
+  }
+}

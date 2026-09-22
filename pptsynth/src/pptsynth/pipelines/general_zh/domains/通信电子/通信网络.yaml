@@ -1,0 +1,9 @@
+secondary: "通信网络"
+document_type_label: "通信网络技术/规划材料"
+reading_hints: |
+  通信网络文档通常包含：网络架构与拓扑、关键技术参数（带宽/延迟/容量）、
+  网络规划与部署方案、性能测试与优化方案、5G/4G等技术代际特点。
+  关注：不同网络技术代际（4G vs 5G vs 未来6G）的核心差异（数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:时延|端到端延迟)\\s*(?:低至|约为|达到)?\\s*\\d+(?:\\.\\d+)?\\s*(?:ms|毫秒|μs)"
+    label: "网络时延数值"

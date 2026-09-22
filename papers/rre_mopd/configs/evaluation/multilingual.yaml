@@ -1,0 +1,68 @@
+config_id: multilingual_eval
+benchmark_id: swebench_multilingual
+artifact_type: parameter_specification
+data_manifest: data/manifests/evaluation_tasks.csv
+seed: 42
+expected_tasks: 300
+rollout_batch_size: 300
+sequence_length: 200000
+max_actions_per_traj: 150
+max_tokens_per_step: 12280
+generation:
+  max_new_tokens: 12280
+  top_p: 0.95
+  top_k: 20
+  num_beams: 1
+  temperature: 1.0
+  num_return_sequences: 1
+  stop_strings:
+  - </tool_call>
+  - '</tool_call>
+
+    '
+  - '
+
+    </tool_call>
+
+    '
+  include_stop_str_in_output: true
+inference:
+  backend: vllm
+  dtype: bf16
+  infer_batch_size: 1
+  engine:
+    max_model_len: 200000
+    gpu_memory_utilization: 0.7
+    max_num_batched_tokens: 65536
+    block_size: 16
+    load_format: auto
+    tensor_parallel_size: 4
+    optimization_level: 1
+    attention_config:
+      backend: null
+rpc_timeout: 72000
+agent_family: SWE-agent
+agent_implementation_status: Internal adapter omitted; exact runnable implementation
+  is not included.
+parse_tool_call_parameter_to_dict: true
+chat_template: qwen3_coder
+environment:
+  scaffold_config: default
+  tool_call_parser: qwen3_coder
+  trajectory_mode: traj
+  reward_granularity: binary
+  task_timeout_sec: 12000
+  verifier_concurrency_limit: 3
+  verifier_concurrency_wait_timeout_sec: 21600
+  verifier_concurrency_instance_prefixes:
+  - apache__druid-
+  - apache__lucene-
+  - google__gson-
+  - javaparser__javaparser-
+  - projectlombok__lombok-
+  - reactivex__rxjava-
+  cost_limit: 0
+dependency_mirror:
+  url_status: Deployment-specific URL omitted; replacement must be configured locally.
+  instance_prefixes:
+  - apache__lucene-

@@ -1,0 +1,10 @@
+secondary: "节能减排"
+document_type_label: "节能减排方案/报告"
+reading_hints: |
+  节能减排文档通常包含：能耗/排放现状分析、主要能耗来源识别、
+  节能措施与技术方案、实施成本与预期节能量（含数值）、
+  合规要求与达标路径。
+  关注：不同节能措施的优先级与成本效益对比（数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:能耗|单位产值能耗|万元产值能耗)\\s*(?:约|为|降低至)?\\s*\\d+"
+    label: "能耗强度数值"

@@ -1,0 +1,8 @@
+secondary: "诊疗指南解读"
+document_type_label: "诊疗指南/临床路径解读"
+reading_hints: |
+  诊疗指南解读通常包含：指南背景与证据分级、诊断标准、分级/分期、
+  推荐治疗方案与用药、随访与管理。关注推荐等级与适用人群（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:证据|推荐)\\s*(?:等级|级别|强度)\\s*[A-D I-V0-9]+"
+    label: "证据/推荐等级"

@@ -1,0 +1,248 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DocCard",
+  "description": "Structured profile of a broad-domain Chinese document (report, proposal, training, policy, etc.).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "title",
+    "authors",
+    "affiliation",
+    "source_event",
+    "pdf_pages",
+    "page_count_range",
+    "central_thesis",
+    "document_type",
+    "ordered_sections",
+    "key_numbers",
+    "key_figures",
+    "key_terms",
+    "traps"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 2,
+      "description": "文档标题，与封面或首页上的完全一致。"
+    },
+    "authors": {
+      "type": "string",
+      "minLength": 1,
+      "description": "逗号分隔的作者/主讲人/起草人列表。"
+    },
+    "affiliation": {
+      "type": "string",
+      "minLength": 1,
+      "description": "发布机构/单位，允许写 '未知' 或 'N/A'。"
+    },
+    "source_event": {
+      "type": "string",
+      "minLength": 1,
+      "description": "文档发布的场合/会议/活动名称+年份，或 '内部文档'、'N/A'。从封面/页眉/页脚提取。"
+    },
+    "conference": {
+      "type": "string",
+      "description": "legacy alias for source_event; optional."
+    },
+    "pdf_pages": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "PDF 总页数。"
+    },
+    "page_count_range": {
+      "type": "array",
+      "items": {"type": "integer", "minimum": 6, "maximum": 30},
+      "minItems": 2,
+      "maxItems": 2,
+      "description": "[最小, 最大] 幻灯片页数。根据文档长度确定：1-4页→[8,12]，5-8页→[10,14]，9-12页→[12,16]，13+页→[14,20]。"
+    },
+    "central_thesis": {
+      "type": "string",
+      "minLength": 20,
+      "description": "一句话概括：文档要传达的核心主张 + 方法/途径 + 核心结论或价值点。使用中文。"
+    },
+    "document_type": {
+      "type": "string",
+      "minLength": 2,
+      "description": "文档类型，例如'病例报告'、'技术方案'、'年度总结'、'政策宣讲'、'产品介绍'、'培训材料'等。从领域上下文中选取最匹配的类型。"
+    },
+    "primary_domain": {
+      "type": "string",
+      "description": "一级领域，例如'医疗健康'、'科技互联网'、'政务党建'。"
+    },
+    "sub_domain": {
+      "type": "string",
+      "description": "二级领域/文档场景，例如'病例分享'、'架构设计'、'政府工作报告'。"
+    },
+    "language_note": {
+      "type": "string",
+      "description": "语言特征，例如'中文为主，含英文术语'。"
+    },
+    "ordered_sections": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 20,
+      "description": "有序的幻灯片章节列表，将成为 instructions.md 的 Section 1。必须包含标题页，以及至少5个内容章节。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "kind", "bullets"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 2,
+            "description": "章节标题，使用中文，须文档特定化。例如'方法：腹腔镜手术操作流程'而非简单的'方法'。"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "title",
+              "outline",
+              "background",
+              "problem_statement",
+              "limitations",
+              "method_overview",
+              "methodology",
+              "key_procedure",
+              "materials_and_data",
+              "solution",
+              "case_study",
+              "process",
+              "kpi",
+              "setup",
+              "results",
+              "visual_analysis",
+              "takeaways_limitations",
+              "conclusion",
+              "summary_recommendations",
+              "qa",
+              "appendix"
+            ]
+          },
+          "bullets": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 2},
+            "description": "每条要点描述该幻灯片应涵盖的主题（定性视角），不得预泄露具体数值结论。标题页：提供固定格式要点（文档标题/作者/单位/场合）。大纲页：空数组。"
+          },
+          "design_constraint": {
+            "type": "string",
+            "description": "可选。引用幻灯片必须展示的图/表/数据图，不包含具体数值。方法、结果和关键流程章节应包含。全篇至少2个章节须带设计约束。"
+          }
+        }
+      }
+    },
+    "key_numbers": {
+      "type": "array",
+      "minItems": 3,
+      "description": "幻灯片必须准确报告的定量信息。每条是一个完整锚点，用于正确性检查项。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["claim"],
+        "properties": {
+          "claim": {
+            "type": "string",
+            "minLength": 8,
+            "description": "包含数值、单位和条件的完整表述。使用中文。"
+          },
+          "paper_anchor": {
+            "type": "string",
+            "description": "来源位置，例如'第3页'、'图2'、'表1'。"
+          }
+        }
+      }
+    },
+    "key_figures": {
+      "type": "array",
+      "minItems": 1,
+      "description": "幻灯片中必须引用或再现的图表。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "what"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "图/表标签（图1、表2、Fig. 1 等，使用文档原文形式）。"
+          },
+          "page": {"type": "integer", "minimum": 1},
+          "what": {
+            "type": "string",
+            "minLength": 4,
+            "description": "该图/表展示的内容。使用中文。"
+          },
+          "intended_slide": {
+            "type": "string",
+            "description": "应出现在哪个 ordered_section 中。"
+          }
+        }
+      }
+    },
+    "key_terms": {
+      "type": "array",
+      "minItems": 3,
+      "description": "文档引入或定义的术语/概念，幻灯片必须正确定义。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["term", "definition"],
+        "properties": {
+          "term": {"type": "string", "minLength": 1},
+          "definition": {
+            "type": "string",
+            "minLength": 8,
+            "description": "简洁的、忠实于文档的定义。使用中文。"
+          },
+          "common_confusion": {
+            "type": "string",
+            "description": "可选。粗心的幻灯片可能做出的错误表述。"
+          }
+        }
+      }
+    },
+    "traps": {
+      "type": "array",
+      "minItems": 3,
+      "description": "幻灯片必须避免的具体表述错误风险。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["claim_to_avoid", "correct_form", "kind"],
+        "properties": {
+          "claim_to_avoid": {
+            "type": "string",
+            "minLength": 8,
+            "description": "需要标记的错误表述。中文。"
+          },
+          "correct_form": {
+            "type": "string",
+            "minLength": 8,
+            "description": "文档支持的忠实表述。中文。"
+          },
+          "kind": {
+            "enum": [
+              "fabrication",
+              "metric_misread",
+              "non_monotone_flattened",
+              "condition_level_confusion",
+              "scope_overclaim",
+              "unit_or_definition_error",
+              "trend_direction_error",
+              "factor_misattribution"
+            ]
+          }
+        }
+      }
+    },
+    "_provenance": {
+      "type": "object",
+      "description": "可选的自报告信息，用于审计追溯。",
+      "additionalProperties": false,
+      "properties": {
+        "pages_read": {"type": "string"},
+        "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
+        "notes": {"type": "string"}
+      }
+    }
+  }
+}

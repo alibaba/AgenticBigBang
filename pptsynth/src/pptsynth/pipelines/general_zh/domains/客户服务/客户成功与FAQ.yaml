@@ -1,0 +1,8 @@
+secondary: "客户成功与FAQ"
+document_type_label: "客户成功/FAQ"
+reading_hints: |
+  客户成功/FAQ文档通常包含：客户旅程与健康度、关键触点与干预、
+  常见问题与标准答复、知识库维护、续约/增购策略。关注干预策略与知识沉淀（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:续约率|流失率|活跃率|健康度)\\s*(?:为|达|约|超)?\\s*\\d+(?:\\.\\d+)?\\s*%"
+    label: "客户成功率数值"

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pooled joint RL training record manifest row",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["anon_record_id", "anon_instance_id", "routing_group", "training_phase", "source_subset", "record_occurrence"],
+  "properties": {
+    "anon_record_id": {"type": "string", "pattern": "^REC-[0-9A-F]{16}$"},
+    "anon_instance_id": {"type": "string", "pattern": "^TRN-[0-9A-F]{16}$"},
+    "routing_group": {"type": "string", "enum": ["A", "B", "C", "U"]},
+    "training_phase": {"type": "string", "const": "pooled_joint_rl"},
+    "source_subset": {"type": "string", "enum": ["initial_rl", "rest_3954"]},
+    "record_occurrence": {"type": "integer", "minimum": 1}
+  }
+}

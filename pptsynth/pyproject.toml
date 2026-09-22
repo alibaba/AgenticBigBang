@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pptsynth"
+version = "0.1.0"
+description = "Profile-routed synthesis of slide-generation tasks and rubrics from PDFs"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{name = "PPTSynth contributors"}]
+dependencies = [
+  "jsonschema>=4.0",
+  "json-repair>=0.30",
+  "pypdf>=6,<7",
+  "pypinyin>=0.51",
+  "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=8.0",
+]
+release = [
+  "build>=1.0",
+]
+
+[project.scripts]
+pptsynth = "pptsynth.cli:main"
+pptsynth-verify = "pptsynth.verify:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+pptsynth = [
+  "pipelines/**/*.json",
+  "pipelines/**/*.yaml",
+  "pipelines/**/*.md",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

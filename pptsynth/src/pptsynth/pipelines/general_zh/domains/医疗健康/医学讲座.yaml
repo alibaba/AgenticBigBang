@@ -1,0 +1,15 @@
+secondary: "医学讲座"
+document_type_label: "医学/学术讲座课件"
+reading_hints: |
+  医学讲座文档通常包含：疾病概述与流行病学、发病机制、诊断标准、
+  治疗指南推荐意见、最新研究进展、临床实践要点。
+  关注：指南推荐的证据级别和推荐强度（如IA级、IIB级）、
+  重要临床数据（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:发病率|患病率|病死率|死亡率)\\s*(?:约|为|达)\\s*\\d+"
+    label: "流行病学数值"
+title_slide_fields:
+  - "讲座题目:"
+  - "主讲人:"
+  - "所属机构:"
+  - "会议/日期:"

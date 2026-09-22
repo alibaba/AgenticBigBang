@@ -1,0 +1,10 @@
+secondary: "碳中和"
+document_type_label: "碳中和战略/方案材料"
+reading_hints: |
+  碳中和文档通常包含：碳排放现状摸底、减排目标与路径规划、
+  关键减排举措（能源替代/效率提升/碳汇/CCUS等）、
+  时间表与里程碑、碳交易或碳信用策略。
+  关注："碳中和"与"碳达峰"的时间节点区分（数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:碳达峰|碳中和)\\s*(?:目标年|时间|节点)\\s*\\d{4}"
+    label: "碳目标时间节点"

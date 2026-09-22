@@ -1,0 +1,8 @@
+secondary: "营销活动方案"
+document_type_label: "营销活动方案"
+reading_hints: |
+  营销活动方案通常包含：活动目标与主题、目标客群、玩法与机制、渠道与预算、
+  执行节奏与分工、效果预估与风险。关注机制设计与预算分配（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:预算|投放|费用)\\s*(?:约|为|达|共)?\\s*\\d+(?:\\.\\d+)?\\s*(?:万|万元|元)"
+    label: "营销预算金额"

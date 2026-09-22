@@ -1,0 +1,8 @@
+secondary: "工程进度汇报"
+document_type_label: "工程进度汇报"
+reading_hints: |
+  工程进度汇报通常包含：形象进度与计划对比、分部分项完成情况、
+  质量安全、资源与资金、问题与风险、纠偏措施。关注进度偏差与纠偏（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:形象进度|完成|完成率)\\s*(?:约|为|达)?\\s*\\d+(?:\\.\\d+)?\\s*%"
+    label: "工程进度百分比"

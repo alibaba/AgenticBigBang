@@ -1,0 +1,2491 @@
+# ==============================================================================
+# Task Type L2 Definitions
+# Mounted under L1_tag_prompt.yaml's 26 Task Type labels
+# Each L2: name / authoritative_source / official_definition / operational_definition / signals / boundary_notes
+#
+# IMPORTANT: All official_definition fields are direct quotes or close paraphrases
+# from the cited authoritative source. No fabrication.
+# ==============================================================================
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: bug-fix
+# Framework: CWE (Common Weakness Enumeration) - MITRE Corporation
+# ═══════════════════════════════════════════════════════════════════════════════
+bug-fix:
+  source_framework: "CWE (Common Weakness Enumeration), MITRE Corporation, cwe.mitre.org"
+  l2:
+    - name: logic_error
+      authoritative_source: "CWE-682: Incorrect Calculation; CWE-697: Incorrect Comparison"
+      official_definition: |
+        CWE-682: "The product performs a calculation that generates incorrect or unintended results
+        that are later used in security-critical decisions or resource management."
+        CWE-697: "The product compares two entities in a way that produces incorrect results."
+      operational_definition: |
+        A bug where the code's logical conditions, arithmetic operations, or comparison operators
+        produce incorrect results. Includes wrong boolean conditions (AND vs OR), off-by-one in
+        non-array contexts, incorrect formula implementations, and flawed state machine transitions.
+      signals:
+        - "wrong condition in if/else"
+        - "incorrect calculation"
+        - "comparison operator error (< vs <=, == vs ===)"
+        - "algorithm produces wrong output"
+        - "business logic flaw"
+      boundary_notes: |
+        vs off_by_one: off_by_one is specifically about array/loop index boundaries.
+        vs state_corruption: state_corruption is about unintended mutation, not incorrect logic.
+
+    - name: null_reference
+      authoritative_source: "CWE-476: NULL Pointer Dereference"
+      official_definition: |
+        "A NULL pointer dereference occurs when the application dereferences a pointer that it
+        expects to be valid, but is NULL, typically causing a crash or exit."
+      operational_definition: |
+        A bug where code accesses a property or method on a null, undefined, nil, or None value
+        without proper guard checks, causing runtime crashes (NullPointerException, TypeError,
+        segfault, AttributeError on NoneType).
+      signals:
+        - "NullPointerException"
+        - "TypeError: Cannot read properties of null/undefined"
+        - "nil pointer dereference"
+        - "AttributeError: 'NoneType' object has no attribute"
+        - "segmentation fault from null access"
+      boundary_notes: |
+        vs improper_validation: null_reference is about dereferencing null values at runtime;
+        improper_validation is about failing to reject invalid input at the boundary.
+
+    - name: race_condition
+      authoritative_source: "CWE-362: Concurrent Execution using Shared Resource with Improper Synchronization ('Race Condition')"
+      official_definition: |
+        "The product contains a code sequence that can run concurrently with other code, and the
+        code sequence requires temporary, exclusive access to a shared resource, but a timing
+        window exists in which the shared resource can be modified by another code sequence."
+      operational_definition: |
+        A bug arising from concurrent access to shared state without proper synchronization.
+        Includes data races, TOCTOU (time-of-check-to-time-of-use) vulnerabilities, deadlocks
+        caused by incorrect lock ordering, and lost updates in database transactions.
+      signals:
+        - "data race"
+        - "deadlock"
+        - "TOCTOU"
+        - "concurrent modification exception"
+        - "lock ordering issue"
+        - "goroutine leak / channel deadlock"
+      boundary_notes: |
+        vs state_corruption: race_condition requires concurrency; state_corruption can occur
+        in single-threaded code through unintended mutation.
+
+    - name: type_mismatch
+      authoritative_source: "CWE-704: Incorrect Type Conversion or Cast"
+      official_definition: |
+        "When the product does not correctly convert an entity of one type into an entity of
+        another type, this can introduce resultant weaknesses. This typically occurs when an object
+        is converted to a type that is not the correct type."
+      operational_definition: |
+        A bug caused by wrong type casts, implicit type coercion errors, generic type parameter
+        mismatches, or interface/protocol conformance failures. Results in ClassCastException,
+        TypeError, truncated data, or precision loss.
+      signals:
+        - "ClassCastException"
+        - "TypeError: expected X got Y"
+        - "invalid type assertion"
+        - "wrong generic type parameter"
+        - "integer overflow from narrowing cast"
+      boundary_notes: |
+        vs logic_error: type_mismatch is specifically about type system violations;
+        logic_error is about incorrect semantic behavior with correct types.
+
+    - name: resource_leak
+      authoritative_source: "CWE-664: Improper Control of a Resource Through its Lifetime"
+      official_definition: |
+        "The product does not maintain or incorrectly maintains control over a resource throughout
+        its lifetime of creation, use, and release."
+      operational_definition: |
+        A bug where resources (memory, file handles, database connections, sockets, goroutines)
+        are acquired but not properly released, leading to gradual exhaustion. Includes missing
+        close/free calls, missing finally/defer blocks, and unbounded growth of internal caches.
+      signals:
+        - "memory leak"
+        - "file handle not closed"
+        - "connection pool exhausted"
+        - "goroutine/thread leak"
+        - "missing defer/finally/using"
+      boundary_notes: |
+        vs state_corruption: resource_leak is about lifetime management;
+        state_corruption is about incorrect values in live objects.
+
+    - name: injection_xss
+      authoritative_source: "CWE-707: Improper Neutralization"
+      official_definition: |
+        "The product does not ensure or incorrectly ensures that structured messages or data are
+        well-formed and that certain security properties are met before being read from an upstream
+        component or sent to a downstream component."
+      operational_definition: |
+        A bug-fix that addresses injection vulnerabilities: SQL injection (CWE-89), Cross-site
+        Scripting XSS (CWE-79), OS command injection (CWE-78), or path traversal (CWE-22).
+        The fix typically adds input sanitization, parameterized queries, or output encoding.
+      signals:
+        - "SQL injection fix"
+        - "XSS sanitization"
+        - "command injection prevention"
+        - "path traversal fix"
+        - "parameterized query"
+        - "html escaping"
+      boundary_notes: |
+        vs security-fix.injection: When the primary intent is fixing a functional bug that happens
+        to be an injection → bug-fix.injection_xss. When the primary intent is a security audit
+        finding → security-fix.injection. Use task context to disambiguate.
+
+    - name: improper_validation
+      authoritative_source: "CWE-20: Improper Input Validation"
+      official_definition: |
+        "The product receives input or data, but it does not validate or incorrectly validates
+        that the input has the properties that are required to process the data safely and
+        correctly."
+      operational_definition: |
+        A bug where the code accepts malformed, out-of-range, or semantically invalid input
+        because validation checks are missing or insufficient. The fix adds boundary checks,
+        format validation, length limits, or type constraints at system boundaries.
+      signals:
+        - "missing input validation"
+        - "boundary check added"
+        - "invalid format accepted"
+        - "length limit not enforced"
+        - "schema validation missing"
+      boundary_notes: |
+        vs null_reference: null_reference is a specific case of dereferencing null;
+        improper_validation is broader (any invalid input shape).
+        vs enhancement.add_validation: If existing code crashed due to missing validation = bug-fix;
+        if code worked but could be more robust = enhancement.
+
+    - name: exception_handling
+      authoritative_source: "CWE-703: Improper Check or Handling of Exceptional Conditions"
+      official_definition: |
+        "The product does not properly anticipate or handle exceptional conditions that rarely
+        occur during normal operation of the product."
+      operational_definition: |
+        A bug where exceptions or errors are improperly handled: swallowed silently (empty catch),
+        caught too broadly (catching Exception/Throwable), not propagated to callers, or where
+        error recovery logic is itself broken. The fix improves error handling fidelity.
+      signals:
+        - "empty catch block"
+        - "swallowed exception"
+        - "overly broad except clause"
+        - "error not propagated"
+        - "finally block missing cleanup"
+      boundary_notes: |
+        vs enhancement.improve_error_handling: If the code crashes/misbehaves due to bad error
+        handling = bug-fix. If error handling works but messages could be friendlier = enhancement.
+
+    - name: state_corruption
+      authoritative_source: "CWE-471: Modification of Assumed-Immutable Data (MAID)"
+      official_definition: |
+        "The product does not properly protect an assumed-immutable element from being modified
+        by an attacker or by another part of the code."
+      operational_definition: |
+        A bug where object/variable state is unexpectedly modified, leading to inconsistency.
+        Includes unintended shared mutable state, stale cache entries, failed transaction
+        rollbacks, and aliasing bugs where modifying one reference affects another.
+      signals:
+        - "stale state / stale cache"
+        - "shared mutable state bug"
+        - "transaction not rolled back"
+        - "unintended aliasing"
+        - "dirty read / inconsistent view"
+      boundary_notes: |
+        vs race_condition: state_corruption can happen in single-threaded code;
+        race_condition requires concurrent execution.
+
+    - name: off_by_one
+      authoritative_source: "CWE-193: Off-by-one Error"
+      official_definition: |
+        "A product calculates or uses an incorrect maximum or minimum value that is 1 more, or
+        1 less, than the correct value."
+      operational_definition: |
+        A bug specifically involving array index boundaries, loop iteration counts, or string
+        length calculations that are off by exactly one. Results in ArrayIndexOutOfBounds,
+        buffer over-read by one byte, or missing the last/first element in iteration.
+      signals:
+        - "ArrayIndexOutOfBoundsException"
+        - "fence post error"
+        - "< vs <= in loop"
+        - "i+1 vs i"
+        - "buffer overread by 1"
+      boundary_notes: |
+        vs logic_error: off_by_one is specifically ±1 boundary errors;
+        logic_error covers broader incorrect calculations.
+
+    - name: lifecycle_serialization
+      authoritative_source: "CWE-664: Improper Control of a Resource Through its Lifetime (Pillar) — encompassing CWE-666 Operation on Resource in Wrong Phase and CWE-672 Operation on a Resource after Expiration"
+      official_definition: |
+        CWE-664: "The product does not maintain or incorrectly maintains control over a resource
+        throughout its lifetime of creation, use, and release." Includes objects that cannot be
+        serialized/persisted/replayed correctly across lifecycle phases, framework lifecycle
+        hooks misfiring on edge-case object states, and configuration defaults that produce
+        inconsistent state between phases.
+      operational_definition: |
+        Bugs caused by an object/resource being used in a state or phase where its lifecycle
+        contract is broken. Concretely covers: (1) serialization/deserialization failures
+        (pickle of unpicklable weakrefs in matplotlib, JSON roundtrip mismatch); (2) framework
+        lifecycle interaction bugs (Django template engine auto-calling enum classes that
+        require args; deprecated command still appearing in completion/help systems);
+        (3) configuration default values that produce inconsistent state across phases or
+        environments (FILE_UPLOAD_PERMISSIONS=None giving different permissions depending on
+        which OS-tempfile path was used).
+      signals:
+        - "pickle / serialization failure"
+        - "JSON / protobuf roundtrip mismatch"
+        - "framework hook fires on wrong object state (template engine, lifecycle callbacks)"
+        - "deprecated command still in help/completion"
+        - "default value None causing inconsistent state across runs/OSes"
+        - "weakref / proxy not survivable across boundary"
+      boundary_notes: |
+        vs resource_leak: resource_leak is unbounded growth from missing release; lifecycle_
+        serialization is wrong-phase / wrong-state operation on a resource (no leak required).
+        vs state_corruption: state_corruption is unintended mutation of live state;
+        lifecycle_serialization is failure to correctly transition state across lifecycle
+        boundaries (serialize, restore, deprecate, default-init).
+        vs enhancement.internal_improvement: if the old default just produced a less-safe but
+        still-working behavior → enhancement.internal_improvement. If the inconsistency is a
+        reported defect → bug-fix.lifecycle_serialization.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: performance-fix
+# Framework: ISO/IEC 25010:2023 - Performance Efficiency quality characteristic
+# ═══════════════════════════════════════════════════════════════════════════════
+performance-fix:
+  source_framework: "ISO/IEC 25010:2023, Quality in use model — Performance Efficiency"
+  l2:
+    - name: query_optimization
+      authoritative_source: "ISO 25010 → Time Behaviour; Database indexing theory (Elmasri & Navathe)"
+      official_definition: |
+        ISO 25010 Time Behaviour: "Degree to which the response and processing times and
+        throughput rates of a product or system meet requirements when performing its functions."
+        Applied specifically to database query execution paths.
+      operational_definition: |
+        Fix slow database queries by adding/modifying indexes, rewriting inefficient SQL (e.g.,
+        eliminating N+1 queries, replacing correlated subqueries with JOINs), or optimizing
+        query plans. The bottleneck is specifically in data retrieval layer.
+      signals:
+        - "slow query"
+        - "missing index"
+        - "N+1 query"
+        - "full table scan"
+        - "EXPLAIN ANALYZE"
+        - "query plan optimization"
+      boundary_notes: |
+        vs algorithm_complexity: query_optimization is database-specific;
+        algorithm_complexity is for in-memory algorithmic improvements.
+
+    - name: caching
+      authoritative_source: "ISO 25010 → Time Behaviour"
+      official_definition: |
+        Applying memoization or caching layers to reduce redundant computation or I/O,
+        directly improving response time as defined by ISO 25010 Time Behaviour.
+      operational_definition: |
+        Add or optimize caching to avoid redundant work: HTTP cache headers, application-level
+        caching (Redis/Memcached), function memoization, CDN configuration, or cache
+        invalidation strategy fixes.
+      signals:
+        - "cache miss rate high"
+        - "add Redis/Memcached"
+        - "memoize function"
+        - "HTTP Cache-Control headers"
+        - "CDN configuration"
+        - "cache invalidation fix"
+      boundary_notes: |
+        vs lazy_loading: caching stores computed results; lazy_loading defers computation.
+
+    - name: lazy_loading
+      authoritative_source: "ISO 25010 → Resource Utilization"
+      official_definition: |
+        ISO 25010 Resource Utilization: "Degree to which the amounts and types of resources used
+        by a product or system meet requirements when performing its functions."
+        Applied via deferred resource loading patterns.
+      operational_definition: |
+        Defer loading of resources until actually needed: code splitting (dynamic import),
+        lazy component loading, image lazy loading, virtual scrolling for large lists,
+        or database lazy fetch strategies.
+      signals:
+        - "dynamic import / code splitting"
+        - "React.lazy"
+        - "Intersection Observer for images"
+        - "virtual scroll"
+        - "lazy fetch / deferred loading"
+      boundary_notes: |
+        vs caching: lazy_loading defers the first load; caching avoids repeated loads.
+
+    - name: algorithm_complexity
+      authoritative_source: "ISO 25010 → Time Behaviour; Cormen et al., Introduction to Algorithms (CLRS)"
+      official_definition: |
+        Improving asymptotic time or space complexity of algorithms, directly impacting
+        Time Behaviour per ISO 25010. CLRS defines complexity via Big-O/Theta notation.
+      operational_definition: |
+        Replace an algorithm with a more efficient one: O(n²) → O(n log n), linear search →
+        hash lookup, naive recursion → dynamic programming, unnecessary nested loops eliminated.
+      signals:
+        - "O(n²) to O(n)"
+        - "HashMap instead of linear search"
+        - "binary search"
+        - "dynamic programming"
+        - "reduce nested loops"
+      boundary_notes: |
+        vs query_optimization: algorithm_complexity is for in-memory/CPU-bound algorithms;
+        query_optimization is for database I/O.
+
+    - name: memory_optimization
+      authoritative_source: "ISO 25010 → Resource Utilization"
+      official_definition: |
+        ISO 25010 Resource Utilization applied to memory: reducing peak or sustained memory
+        consumption while maintaining functional equivalence.
+      operational_definition: |
+        Reduce memory footprint: object pooling, buffer reuse, arena allocation, reducing
+        unnecessary copies, streaming instead of loading all into memory, or right-sizing
+        data structures.
+      signals:
+        - "reduce memory footprint"
+        - "object pool"
+        - "buffer reuse / arena allocator"
+        - "streaming processing"
+        - "reduce allocations"
+      boundary_notes: |
+        vs resource_leak (bug-fix): memory_optimization reduces legitimate memory use;
+        resource_leak fixes memory that should have been freed but wasn't.
+
+    - name: batch_processing
+      authoritative_source: "ISO 25010 → Capacity"
+      official_definition: |
+        ISO 25010 Capacity: "Degree to which the maximum limits of a product or system parameter
+        meet requirements." Batch processing improves throughput capacity.
+      operational_definition: |
+        Replace item-by-item processing with batch operations: bulk database inserts, batch
+        API calls, chunk-based file processing, or pagination optimization to handle larger
+        data volumes efficiently.
+      signals:
+        - "batch insert"
+        - "bulk API request"
+        - "chunk processing"
+        - "pagination optimization"
+        - "streaming batch"
+      boundary_notes: |
+        vs concurrency_parallelism: batch_processing groups sequential operations;
+        concurrency_parallelism executes operations simultaneously.
+
+    - name: concurrency_parallelism
+      authoritative_source: "ISO 25010 → Time Behaviour; Herlihy & Shavit, The Art of Multiprocessor Programming"
+      official_definition: |
+        Leveraging concurrent or parallel execution to improve throughput, per ISO 25010
+        Time Behaviour. Herlihy & Shavit define parallelism as "using multiple processors
+        to solve a problem faster."
+      operational_definition: |
+        Introduce or optimize concurrent/parallel execution: async/await, thread pools, worker
+        pools, goroutines, parallel map/reduce, or SIMD vectorization to improve throughput.
+      signals:
+        - "async/await optimization"
+        - "thread pool / worker pool"
+        - "parallel processing"
+        - "concurrent.futures"
+        - "goroutine / channel"
+      boundary_notes: |
+        vs batch_processing: concurrency_parallelism runs things simultaneously;
+        batch_processing groups sequential operations.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: compatibility-fix
+# Framework: ISO/IEC/IEEE 14764:2022 — Adaptive Maintenance
+# ═══════════════════════════════════════════════════════════════════════════════
+compatibility-fix:
+  source_framework: "ISO/IEC/IEEE 14764:2022, Section 6.2 — Adaptive Maintenance"
+  l2:
+    - name: browser_compat
+      authoritative_source: "MDN Web Docs: Browser Compatibility Data (BCD); Can I Use"
+      official_definition: |
+        MDN BCD provides machine-readable browser compatibility data for web standards.
+        "Can I Use" tracks feature support across browser versions. Fixes target cross-browser
+        rendering or API availability differences.
+      operational_definition: |
+        Fix rendering or functionality differences across browsers: adding vendor prefixes,
+        polyfills for missing APIs, workarounds for browser-specific bugs, or removing
+        features unsupported in target browser matrix.
+      signals:
+        - "-webkit- / -moz- prefix"
+        - "polyfill"
+        - "IE11 / Safari workaround"
+        - "Can I Use reference"
+        - "feature detection (Modernizr)"
+      boundary_notes: |
+        vs os_platform_compat: browser_compat is web rendering specific;
+        os_platform_compat is about OS-level differences.
+
+    - name: os_platform_compat
+      authoritative_source: "ISO 14764:2022 Adaptive Maintenance; POSIX.1 (IEEE 1003.1)"
+      official_definition: |
+        ISO 14764 Adaptive: "Modification of a software product performed after delivery to keep
+        a software product usable in a changed or changing environment." Applied to OS/platform
+        differences.
+      operational_definition: |
+        Fix issues arising from OS/platform differences: path separators (/ vs \), line endings
+        (LF vs CRLF), file system case sensitivity, permission models (chmod vs ACL), or
+        platform-specific API availability.
+      signals:
+        - "Windows vs Linux path"
+        - "path.sep / os.path"
+        - "CRLF / LF"
+        - "case-sensitive filesystem"
+        - "platform-specific #ifdef"
+      boundary_notes: |
+        vs runtime_version_compat: os_platform_compat is about OS differences;
+        runtime_version_compat is about language version differences on same OS.
+
+    - name: dependency_breaking_change
+      authoritative_source: "Semantic Versioning 2.0.0 (semver.org), §8: Major version changes"
+      official_definition: |
+        SemVer §8: "Major version X (X.y.z | X > 0) MUST be incremented if any backwards
+        incompatible changes are introduced to the public API." This L2 fixes code broken
+        by such changes in dependencies.
+      operational_definition: |
+        Fix code that broke due to a dependency's major version upgrade: renamed APIs, removed
+        functions, changed behavior, or new required parameters. Typically involves reading
+        the dependency's migration guide.
+      signals:
+        - "deprecated API removed in v3"
+        - "migration from dependency vX to vY"
+        - "breaking change in upstream"
+        - "API signature changed"
+      boundary_notes: |
+        vs build-fix.dependency_resolution: dependency_breaking_change is about runtime/semantic
+        breakage; dependency_resolution is about package manager version conflicts.
+
+    - name: runtime_version_compat
+      authoritative_source: "ISO 14764:2022 Adaptive Maintenance"
+      official_definition: |
+        Adaptive maintenance addressing language runtime version upgrades: Python 2→3,
+        Node.js LTS transitions, Java 8→11→17, etc.
+      operational_definition: |
+        Fix incompatibilities caused by upgrading the language runtime version: syntax changes
+        (print statement → function), removed stdlib modules, changed default behaviors,
+        or new strict mode requirements.
+      signals:
+        - "Python 2 to 3 migration"
+        - "Node.js version upgrade"
+        - "Java 8 vs 11 vs 17"
+        - "ES5 to ES6+ syntax"
+        - "deprecated stdlib module"
+      boundary_notes: |
+        vs dependency_breaking_change: runtime_version_compat is about the language itself;
+        dependency_breaking_change is about third-party libraries.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: feature
+# Framework: Benchmark Survey (arXiv:2505.05283) code generation sub-categories
+# + ISO 25010 Functional Suitability
+# ═══════════════════════════════════════════════════════════════════════════════
+feature:
+  source_framework: "Benchmark Survey arXiv:2505.05283 (2025); ISO 25010 Functional Suitability"
+  l2:
+    - name: crud_endpoint
+      authoritative_source: "Fielding, R. (2000). Architectural Styles and REST; Richardson Maturity Model"
+      official_definition: |
+        REST architectural style defines resource-oriented interfaces with standard HTTP methods
+        (GET, POST, PUT, DELETE) operating on resources. Richardson Level 2 adds HTTP verbs.
+      operational_definition: |
+        Implement a new Create/Read/Update/Delete API endpoint or data operation interface.
+        Includes defining the route, request/response schema, database interaction, and
+        basic validation for a new resource.
+      signals:
+        - "new POST/GET/PUT/DELETE endpoint"
+        - "router.add / @app.route"
+        - "new controller method"
+        - "CRUD operations"
+        - "resource API"
+      boundary_notes: |
+        vs enhancement.extend_api: crud_endpoint creates a wholly new resource endpoint;
+        extend_api adds parameters/fields to an existing one.
+
+    - name: new_ui_component
+      authoritative_source: "Component-Based Software Engineering (Szyperski, 2002); React/Vue/Angular component model"
+      official_definition: |
+        Szyperski defines a software component as "a unit of composition with contractually
+        specified interfaces and explicit context dependencies only." Applied to UI elements.
+      operational_definition: |
+        Add new UI-layer capability: a new reusable UI component (button, form, modal, card,
+        table), OR a new UI state hook (custom React/Vue hook tracking window state, viewport,
+        scroll position, etc.), OR a new completion provider / view-helper utility consumed by
+        existing UI components. The unifying criterion is "new building block at the UI layer".
+      signals:
+        - "new React/Vue/Angular component"
+        - "component file created"
+        - "render() / template"
+        - "custom hook (useWindowWidth, useScrollPosition, useDebounce)"
+        - "completion provider / autocomplete source"
+        - "view helper function"
+      boundary_notes: |
+        vs new_page_view: new_ui_component is a reusable building block at any UI layer (component,
+        hook, helper); new_page_view is a complete routed page that composes such blocks.
+
+    - name: new_command
+      authoritative_source: "POSIX.1 Utility Conventions (IEEE 1003.1-2017, Ch.12); CLI Design Guidelines"
+      official_definition: |
+        POSIX defines utility conventions: "utility_name [-options] [operands]". A new command
+        adds a new utility entry point with its own option parsing and execution logic.
+      operational_definition: |
+        Add new CLI capability — either a wholly new command/subcommand, OR a new flag/option/
+        argument added to an existing CLI command. Both kinds register new user-invocable surface
+        in the CLI: new command name, new subcommand, or new --flag on an existing command, plus
+        its handler/parsing logic and help text.
+      signals:
+        - "add_command / subcommand"
+        - "argparse / click / cobra new command"
+        - "new CLI entry point"
+        - "new --flag / --option on existing command (e.g. runserver --skip-checks)"
+        - "command handler implementation"
+      boundary_notes: |
+        vs enhancement.extend_api: new_command covers any CLI-surface addition (new command or
+        new flag on existing command); extend_api is for HTTP/library APIs.
+        vs add_config_option: new_command is invoked at runtime via CLI; add_config_option is
+        a static config file/setting.
+
+    - name: integration_external
+      authoritative_source: "ISO 25010 → Interoperability (under Compatibility)"
+      official_definition: |
+        ISO 25010 Interoperability: "Degree to which two or more systems, products or components
+        can exchange information and use the information that has been exchanged."
+      operational_definition: |
+        Implement or extend integration with external systems / data sources: integrate a new
+        third-party API/SDK/webhook, OR extend an existing integration to support a new data
+        source type, new external platform version, or new package source (e.g., adding git
+        source to ansible-galaxy install, adding Amazon Linux 2023 to a vulnerability scanner,
+        adding a new payment gateway adapter).
+      signals:
+        - "third-party API integration"
+        - "SDK client implementation"
+        - "webhook handler"
+        - "OAuth token exchange"
+        - "external service call"
+        - "new data source / platform / package source supported"
+      boundary_notes: |
+        vs crud_endpoint: integration_external interacts with external systems;
+        crud_endpoint exposes your own API.
+
+    - name: new_data_model
+      authoritative_source: "Elmasri & Navathe, Fundamentals of Database Systems; ER Model (Chen, 1976)"
+      official_definition: |
+        Chen (1976) Entity-Relationship model: defines entities, attributes, and relationships.
+        Applied as creating new ORM models, database tables, or schema definitions.
+      operational_definition: |
+        Define a new data entity: create ORM model class, database migration (CREATE TABLE),
+        GraphQL type definition, protobuf message, or dataclass/struct with persistence.
+      signals:
+        - "new model class"
+        - "CREATE TABLE / migration"
+        - "schema definition"
+        - "new protobuf message"
+        - "new dataclass with DB mapping"
+      boundary_notes: |
+        vs crud_endpoint: new_data_model defines the data shape;
+        crud_endpoint exposes operations on it.
+
+    - name: workflow_automation
+      authoritative_source: "ISO 25010 → Functional Appropriateness"
+      official_definition: |
+        ISO 25010 Functional Appropriateness: "Degree to which the functions facilitate the
+        accomplishment of specified tasks and objectives." Applied to automated workflows.
+      operational_definition: |
+        Implement a new automated workflow: scheduled tasks (cron jobs), event-driven pipelines,
+        pub/sub handlers, or multi-step business process automation.
+      signals:
+        - "new cron job / scheduled task"
+        - "event handler / listener"
+        - "workflow / pipeline definition"
+        - "pub/sub subscriber"
+        - "trigger / automation"
+      boundary_notes: |
+        vs deployment: workflow_automation is application-level automation;
+        deployment is infrastructure-level release processes.
+
+    - name: new_page_view
+      authoritative_source: "MVC Pattern (Reenskaug, 1979); MVVM Pattern"
+      official_definition: |
+        Reenskaug's MVC separates Model, View, and Controller. A new View is a complete
+        user-facing screen with its own route, data fetching, and layout.
+      operational_definition: |
+        Add a complete new page/view/route: register the URL route, create the page component,
+        implement data fetching (loader/getServerSideProps), and compose UI components.
+      signals:
+        - "new route registered"
+        - "new page component"
+        - "getServerSideProps / loader"
+        - "new view template"
+        - "route + data + UI"
+      boundary_notes: |
+        vs new_ui_component: new_page_view is a full routed page;
+        new_ui_component is a reusable sub-element.
+
+    - name: auth_feature
+      authoritative_source: "OWASP Authentication Cheat Sheet; NIST SP 800-63B"
+      official_definition: |
+        OWASP: "Authentication is the process of verifying that an individual, entity or website
+        is whom it claims to be." NIST 800-63B defines authenticator assurance levels.
+      operational_definition: |
+        Implement new authentication or authorization functionality: login/signup flows, JWT/session
+        token generation, password reset, permission checks, or role-based access gates.
+      signals:
+        - "login / signup implementation"
+        - "JWT generation"
+        - "password hash / bcrypt"
+        - "permission check / guard"
+        - "role-based access"
+      boundary_notes: |
+        vs auth (L1): feature.auth_feature adds NEW auth capabilities;
+        auth (L1) modifies EXISTING auth systems.
+
+    - name: new_library_api
+      authoritative_source: "Szyperski, C. (2002). Component Software: Beyond Object-Oriented Programming, Ch.4 — defines library interface evolution as adding new 'provided interfaces' to a component; Fowler, M. (2002). Public versus Published Interfaces — distinguishes adding new published API surface from modifying existing"
+      official_definition: |
+        Szyperski (2002): "A software component is a unit of composition with contractually
+        specified interfaces." Adding a new public interface (function, class, type, method)
+        to a library component is interface evolution — creating new API surface that consumers
+        can depend on.
+        Fowler (2002): "A published interface is one that is used by code you can't control."
+      operational_definition: |
+        Add new public API surface to a library or framework codebase: new exported function,
+        new class/struct/type, new method on existing class, new hook/callback point, new
+        template filter/tag, new codec/encoder, new mathematical operation, new transformer,
+        new schema primitive, new matcher/validator, or new protocol implementation.
+        Key distinction: the work adds a NEW callable/usable entity to the library's public
+        contract, intended for consumption by downstream code. The repo IS the library.
+        Examples: adding a DurationEncoder to a data-science lib, adding matchEach() to a
+        pattern-matching library, adding a __reversed__ method to Django's OrderedSet, adding
+        a new Sphinx directive, adding a new linter rule/checker to a linting tool.
+      signals:
+        - "new exported function / class / type"
+        - "new public method on existing library class"
+        - "new directive / filter / tag / codec / encoder"
+        - "new linter rule / checker (in a linter repo)"
+        - "library's public API surface grows"
+        - "downstream consumers can now call/use the new entity"
+      boundary_notes: |
+        vs crud_endpoint: crud_endpoint creates REST/GraphQL endpoints in an APPLICATION;
+        new_library_api creates callable API in a LIBRARY/FRAMEWORK.
+        vs new_command: new_command adds CLI-invocable commands/flags;
+        new_library_api adds programmatically-invocable library functions.
+        vs enhancement.extend_api: extend_api adds parameters/fields to EXISTING functions;
+        new_library_api creates WHOLLY NEW functions/classes/types.
+        vs new_ui_component: new_ui_component adds UI widgets;
+        new_library_api adds non-UI library primitives.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: enhancement
+# Framework: ISO/IEC 25010:2023 Quality Model
+# ═══════════════════════════════════════════════════════════════════════════════
+enhancement:
+  source_framework: "ISO/IEC 25010:2023 Product Quality Model"
+  l2:
+    - name: extend_api
+      authoritative_source: "ISO 25010 → Functional Suitability → Functional Completeness"
+      official_definition: |
+        "Degree to which the set of functions covers all the specified tasks and user objectives."
+        Extending an API increases its functional completeness.
+      operational_definition: |
+        Extend an existing API surface — public or internal — without breaking backward
+        compatibility. Includes: adding parameters/return fields to existing functions/methods;
+        adding new framework extension hooks (e.g., Django ModelAdmin.get_inlines, Rails callbacks)
+        on existing classes; adding new template filters/tags to an existing templating engine;
+        adding new internal-API attributes (e.g., sklearn estimator.refit_time_) on existing
+        classes; adding new parameters to existing factory/save logic to support new modes.
+        Key: the API entity (function/class/endpoint/template engine) already exists and is
+        being extended.
+      signals:
+        - "add optional parameter to existing function/method"
+        - "new response field"
+        - "method overload"
+        - "extend interface"
+        - "new framework hook on existing class (get_xxx, before_yyy)"
+        - "new template filter / tag on existing engine"
+        - "new attribute exposed on existing class"
+      boundary_notes: |
+        vs feature.crud_endpoint: extend_api modifies existing endpoints/classes;
+        crud_endpoint creates wholly new endpoints/resources.
+        vs feature.new_command: extend_api is for HTTP/library/framework APIs;
+        new_command is for the CLI surface (which may be reached via flags on existing commands).
+
+    - name: improve_ux
+      authoritative_source: "ISO 25010 → Interaction Capability (formerly Usability)"
+      official_definition: |
+        ISO 25010 Interaction Capability: "Degree to which a product or system can be used by
+        specified users to achieve specified goals with effectiveness, efficiency and satisfaction."
+      operational_definition: |
+        Improve user-facing interaction: better loading states, responsive layouts, clearer
+        navigation flows, improved feedback messages, or smoother animations.
+      signals:
+        - "loading spinner / skeleton"
+        - "responsive design improvement"
+        - "better navigation UX"
+        - "animation / transition"
+        - "user feedback improvement"
+      boundary_notes: |
+        vs accessibility: improve_ux is general usability; accessibility is specifically
+        about users with disabilities (WCAG compliance).
+
+    - name: add_validation
+      authoritative_source: "ISO 25010 → Functional Suitability → Functional Correctness"
+      official_definition: |
+        "Degree to which a product or system provides the correct results with the needed degree
+        of precision." Validation ensures correctness of processed data.
+      operational_definition: |
+        Add input validation or data integrity checks to existing functionality that currently
+        works but could accept invalid data. Adds schema validation, form validation rules,
+        type guards, or business rule checks.
+      signals:
+        - "add validation rule"
+        - "schema validation (Zod/Yup/JSON Schema)"
+        - "form validation"
+        - "type guard"
+        - "business rule constraint"
+      boundary_notes: |
+        vs bug-fix.improper_validation: If the system crashes on invalid input = bug-fix.
+        If it works but silently accepts bad data = enhancement.add_validation.
+
+    - name: add_logging
+      authoritative_source: "ISO 25010 → Maintainability → Analysability"
+      official_definition: |
+        "Degree of effectiveness and efficiency with which it is possible to assess the impact
+        on a product or system of an intended change." Logging/observability supports this.
+      operational_definition: |
+        Add structured logging, metrics collection, distributed tracing, or health check
+        endpoints to improve system observability and debugging capabilities.
+      signals:
+        - "add structured log statements"
+        - "metrics / Prometheus counter"
+        - "OpenTelemetry tracing"
+        - "health check endpoint"
+        - "audit trail"
+      boundary_notes: |
+        vs debug-support: add_logging is permanent observability infrastructure;
+        debug-support is temporary debugging aids.
+
+    - name: improve_error_handling
+      authoritative_source: "ISO 25010 → Interaction Capability → User Error Protection"
+      official_definition: |
+        "Degree to which a system protects users against making errors." Includes providing
+        meaningful error messages and recovery paths.
+      operational_definition: |
+        Improve error messages, add retry logic, provide fallback behaviors, or make error
+        states more informative. The error handling already exists but could be better.
+      signals:
+        - "better error message"
+        - "user-friendly error"
+        - "retry with backoff"
+        - "graceful degradation"
+        - "fallback behavior"
+      boundary_notes: |
+        vs bug-fix.exception_handling: If errors cause crashes/data loss = bug-fix.
+        If errors are handled but poorly communicated = enhancement.
+
+    - name: add_config_option
+      authoritative_source: "ISO 25010 → Functional Suitability → Functional Appropriateness"
+      official_definition: |
+        "Degree to which the functions facilitate the accomplishment of specified tasks and
+        objectives." Configuration options allow adaptation to different use contexts.
+      operational_definition: |
+        Add new configuration options, feature toggles, or settings that allow users to
+        customize behavior without code changes. Makes existing functionality more flexible.
+      signals:
+        - "new config option"
+        - "feature flag / toggle"
+        - "environment variable support"
+        - "settings page addition"
+        - "CLI flag added"
+      boundary_notes: |
+        vs config (L1): enhancement.add_config_option adds options to application logic;
+        config (L1) manages infrastructure/environment configuration.
+
+    - name: accessibility
+      authoritative_source: "ISO 25010 → Interaction Capability → Accessibility; WCAG 2.1 (W3C)"
+      official_definition: |
+        ISO 25010: "Degree to which a product or system can be used by people with the widest
+        range of characteristics and capabilities to achieve a specified goal."
+        WCAG 2.1 defines Perceivable, Operable, Understandable, Robust (POUR) principles.
+      operational_definition: |
+        Improve accessibility for users with disabilities: adding ARIA labels, keyboard
+        navigation, screen reader support, color contrast improvements, focus management,
+        or alt text for images.
+      signals:
+        - "aria-label / aria-described-by"
+        - "keyboard navigation"
+        - "screen reader support"
+        - "color contrast ratio"
+        - "alt text"
+        - "focus management"
+      boundary_notes: |
+        vs improve_ux: accessibility specifically targets users with disabilities
+        per WCAG guidelines; improve_ux is general usability.
+
+    - name: i18n_l10n
+      authoritative_source: "ISO 25010 → Portability → Adaptability; Unicode CLDR"
+      official_definition: |
+        ISO 25010 Adaptability: "Degree to which a product or system can effectively and
+        efficiently be adapted for different or evolving hardware, software or other operational
+        or usage environments." i18n/l10n enables adaptation to locales.
+      operational_definition: |
+        Add internationalization (extracting strings, using i18n libraries) or localization
+        (translating, adapting date/currency/number formats, supporting RTL layouts).
+      signals:
+        - "i18n / gettext / react-intl"
+        - "translation file"
+        - "locale support"
+        - "date/currency format"
+        - "RTL layout support"
+      boundary_notes: |
+        vs accessibility: i18n_l10n is about language/locale adaptation;
+        accessibility is about disability access.
+
+    - name: internal_improvement
+      authoritative_source: "ISO/IEC/IEEE 14764:2022 — Perfective Maintenance (clause 6.2)"
+      official_definition: |
+        ISO 14764 Perfective Maintenance: "Modification of a software product after delivery to
+        improve performance or maintainability... [it] modifies a product to enhance attributes
+        such as efficiency or maintainability without changing the externally visible
+        functionality."
+      operational_definition: |
+        Improve internal qualities of existing functionality without changing externally-visible
+        behavior. Covers all of: replacing internal implementations with better/safer/more modern
+        alternatives (e.g., subprocess.run + PGPASSWORD instead of tempfile, html.escape stdlib
+        instead of custom); changing default values for safer/more sensible defaults (e.g.,
+        SECURE_REFERRER_POLICY default); broadening input/invocation compatibility (e.g.,
+        autoreload supporting `python -m`); internal performance/algorithmic optimization that
+        users do not observe directly (e.g., Django migration reducer combining operations,
+        ImageField avoiding unnecessary signal connection, Add+RemoveIndex cancellation);
+        leveraging an existing built-in feature to simplify custom code (e.g., using
+        `disabled=True` instead of custom readonly logic).
+      signals:
+        - "replace internal implementation"
+        - "modernization / use newer API"
+        - "change default value for safer/cleaner behavior"
+        - "support new invocation pattern (broaden input compatibility)"
+        - "internal optimization without API change"
+        - "simplify by leveraging built-in framework feature"
+        - "consolidate internal logic"
+      boundary_notes: |
+        vs feature.*: internal_improvement does not add new capability — the feature already
+        exists and works; its internal mechanics are being improved.
+        vs refactor (L1): refactor restructures code shape (Fowler operations like Extract
+        Method, Move Function); internal_improvement changes implementation strategy/values
+        for better quality.
+        vs performance-fix: performance-fix addresses a measured problem (timeout, severe
+        slowdown); internal_improvement is proactive, not driven by a reported regression.
+        vs bug-fix.config_default_inconsistency: if the old default caused a defect, it's a
+        bug-fix; if the new default is just safer/better, it's internal_improvement.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: backward-compatibility
+# Framework: Semantic Versioning 2.0.0 + ISO 14764 Adaptive
+# ═══════════════════════════════════════════════════════════════════════════════
+backward-compatibility:
+  source_framework: "Semantic Versioning 2.0.0 (semver.org); ISO 14764:2022 Adaptive"
+  l2:
+    - name: api_versioning
+      authoritative_source: "REST API Versioning Best Practices (Fielding 2000); Microsoft REST API Guidelines §12"
+      official_definition: |
+        Microsoft REST Guidelines: "Group Services SHOULD support explicit versioning... Version
+        is incremented when any change is made to the API contract." Enables serving multiple
+        API versions simultaneously.
+      operational_definition: |
+        Add API version management: create v1/v2 route prefixes, implement version negotiation
+        (Accept-Version header), or maintain parallel endpoint implementations.
+      signals:
+        - "/api/v1/ and /api/v2/"
+        - "Accept-Version header"
+        - "version negotiation"
+        - "versioned router"
+      boundary_notes: |
+        vs deprecation_shim: api_versioning runs versions in parallel;
+        deprecation_shim marks old version for removal.
+
+    - name: deprecation_shim
+      authoritative_source: "Semantic Versioning 2.0.0, §7"
+      official_definition: |
+        SemVer §7: "Existing public API functionality MAY be marked as deprecated before being
+        removed. Deprecation SHOULD be signaled by incrementing the MINOR version."
+      operational_definition: |
+        Add a compatibility shim that keeps old interfaces working while emitting deprecation
+        warnings and pointing to new alternatives. Provides a migration grace period.
+      signals:
+        - "@deprecated annotation"
+        - "DeprecationWarning emitted"
+        - "legacy wrapper / shim"
+        - "migration guide reference"
+        - "will be removed in vX.0"
+      boundary_notes: |
+        vs deprecation (L1): backward-compatibility.deprecation_shim ADDS the shim;
+        deprecation (L1) EXECUTES the removal.
+
+    - name: data_migration
+      authoritative_source: "Schema Evolution Patterns (Fowler, 2005); Avro/Protobuf backward compatibility rules"
+      official_definition: |
+        Fowler: Schema evolution ensures "a reader using a new schema can read data written with
+        an old schema." Protobuf/Avro define specific forward/backward compatibility rules.
+      operational_definition: |
+        Add support for reading old data formats, auto-upgrading schema versions, or maintaining
+        both old and new serialization paths during transition.
+      signals:
+        - "schema migration / upgrade"
+        - "read old format"
+        - "backward compatible schema"
+        - "version field in data"
+        - "format auto-detection"
+      boundary_notes: |
+        vs build-fix.dependency_resolution: data_migration is about data format evolution;
+        dependency_resolution is about package version conflicts.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: from_scratch
+# Framework: Benchmark Survey arXiv:2505.05283 code generation granularity
+# ═══════════════════════════════════════════════════════════════════════════════
+from_scratch:
+  source_framework: "Benchmark Survey arXiv:2505.05283 (2025) — Code Generation Granularity Taxonomy"
+  l2:
+    - name: scaffold_project
+      authoritative_source: "Survey §3.1: Repository-level code generation"
+      official_definition: |
+        "Repository-level code generation... generates the structure and boilerplate of an
+        entire software project given high-level specifications."
+      operational_definition: |
+        Initialize a new project from scratch: create directory structure, configuration files
+        (package.json, Cargo.toml, etc.), entry point, build setup, and basic boilerplate.
+      signals:
+        - "project init / create-app"
+        - "directory structure created"
+        - "boilerplate generation"
+        - "initial config files"
+      boundary_notes: |
+        vs full_application: scaffold_project creates skeleton only;
+        full_application implements complete functionality.
+
+    - name: implement_algorithm
+      authoritative_source: "Survey §3.1: Function-level code generation; Cormen et al. (CLRS)"
+      official_definition: |
+        "Function-level code generation... produces a complete, self-contained function body
+        given a natural language description or signature." Applied to algorithmic problems.
+      operational_definition: |
+        Implement a specific algorithm or data structure from scratch: sorting, graph algorithms,
+        tree operations, mathematical computations, or competitive programming solutions.
+      signals:
+        - "algorithm implementation"
+        - "data structure from scratch"
+        - "LeetCode-style problem"
+        - "implement sorting / search / graph"
+      boundary_notes: |
+        vs performance-fix.algorithm_complexity: implement_algorithm creates new;
+        algorithm_complexity optimizes existing.
+
+    - name: build_prototype
+      authoritative_source: "IEEE 1012-2016 V&V: Prototyping as validation technique"
+      official_definition: |
+        IEEE 1012: Prototyping validates feasibility through "an early version of a system that
+        demonstrates critical functionality." PoC confirms technical viability.
+      operational_definition: |
+        Build a minimal viable prototype or proof-of-concept to validate a technical approach.
+        Prioritizes speed over production quality. Often throwaway code.
+      signals:
+        - "prototype / PoC"
+        - "proof of concept"
+        - "spike"
+        - "minimal viable"
+        - "feasibility demo"
+      boundary_notes: |
+        vs full_application: build_prototype is minimal/throwaway;
+        full_application is production-intent.
+
+    - name: create_library
+      authoritative_source: "Survey §3.1: Class-level / Multi-file code generation"
+      official_definition: |
+        "Class-level generation produces entire class definitions with multiple methods, fields,
+        and inter-method dependencies." Extended to library/SDK creation.
+      operational_definition: |
+        Create a new reusable library, package, or SDK from scratch: design public API surface,
+        implement core functionality, add exports, and prepare for distribution.
+      signals:
+        - "new library / package"
+        - "SDK implementation"
+        - "public API design"
+        - "npm/PyPI publish preparation"
+      boundary_notes: |
+        vs scaffold_project: create_library includes significant implementation;
+        scaffold_project is mostly boilerplate.
+
+    - name: implement_spec
+      authoritative_source: "IETF RFC Process (RFC 2026); W3C Specification Levels"
+      official_definition: |
+        RFC 2026: Standards Track documents progress through Proposed Standard → Draft Standard
+        → Internet Standard. Implementation conformance testing validates spec adherence.
+      operational_definition: |
+        Implement functionality by strictly following an external specification, RFC, or
+        protocol standard. Correctness is defined by spec conformance, not user requirements.
+      signals:
+        - "implement RFC XXXX"
+        - "per specification"
+        - "protocol implementation"
+        - "conformance to standard"
+        - "spec compliance"
+      boundary_notes: |
+        vs implement_algorithm: implement_spec follows external formal docs;
+        implement_algorithm solves computational problems.
+
+    - name: full_application
+      authoritative_source: "Survey §3.1: Repository-level code generation (complete)"
+      official_definition: |
+        Full repository-level generation: "generating a complete, functional software system
+        including multiple files, modules, and their interactions."
+      operational_definition: |
+        Build a complete application from scratch with multiple layers: frontend, backend,
+        database, configuration, and potentially deployment. Production-intent quality.
+      signals:
+        - "full stack application"
+        - "complete project from scratch"
+        - "frontend + backend + database"
+        - "entire system implementation"
+      boundary_notes: |
+        vs scaffold_project: full_application includes implementation;
+        vs build_prototype: full_application is production-quality.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: test-add
+# Framework: ISTQB Foundation Level Syllabus v4.0 (2023)
+# ═══════════════════════════════════════════════════════════════════════════════
+test-add:
+  source_framework: "ISTQB Certified Tester Foundation Level Syllabus v4.0 (2023)"
+  l2:
+    - name: unit_test
+      authoritative_source: "ISTQB Glossary: Component Testing"
+      official_definition: |
+        "A test level that focuses on individual hardware or software components.
+        Synonyms: module testing, unit testing."
+      operational_definition: |
+        Add tests for individual functions, methods, or classes in isolation. Dependencies
+        are typically mocked/stubbed. Tests verify a single unit's behavior.
+      signals:
+        - "test_function / describe('function')"
+        - "@Test annotation"
+        - "mock dependencies"
+        - "assert / expect"
+        - "single function under test"
+      boundary_notes: |
+        vs integration_test: unit_test isolates the unit under test;
+        integration_test verifies interactions between units.
+
+    - name: integration_test
+      authoritative_source: "ISTQB Glossary: Integration Testing"
+      official_definition: |
+        "A test level that focuses on interactions between components or systems."
+      operational_definition: |
+        Add tests verifying that multiple components work correctly together: API endpoint
+        tests with real database, service-to-service communication tests, or module
+        interaction tests with real (non-mocked) dependencies.
+      signals:
+        - "integration test"
+        - "real database / testcontainers"
+        - "API test with server running"
+        - "service interaction test"
+        - "multiple modules under test"
+      boundary_notes: |
+        vs e2e_test: integration_test covers component interactions;
+        e2e_test simulates complete user journeys.
+
+    - name: e2e_test
+      authoritative_source: "ISTQB Glossary: System Testing"
+      official_definition: |
+        "A test level that focuses on verifying that a system as a whole meets specified
+        requirements." End-to-end tests exercise the entire application stack.
+      operational_definition: |
+        Add tests that simulate real user flows through the complete system: browser automation
+        (Cypress/Playwright/Selenium), API workflow tests covering multiple endpoints, or
+        full deployment smoke tests.
+      signals:
+        - "Cypress / Playwright / Selenium"
+        - "end-to-end test"
+        - "full user flow"
+        - "browser automation"
+        - "system-level test"
+      boundary_notes: |
+        vs integration_test: e2e_test exercises the full stack as a user would;
+        integration_test focuses on specific component boundaries.
+
+    - name: regression_test
+      authoritative_source: "ISTQB Glossary: Regression Testing"
+      official_definition: |
+        "A type of change-related testing to detect whether defects have been introduced or
+        uncovered in unchanged areas of the software."
+      operational_definition: |
+        Add tests specifically to prevent a previously-fixed bug from recurring. Usually
+        accompanies a bug fix, reproducing the exact failure scenario.
+      signals:
+        - "test for bug #XXX"
+        - "regression test"
+        - "prevent recurrence"
+        - "reproduce the reported issue"
+      boundary_notes: |
+        vs unit_test: regression_test is motivated by a specific bug;
+        unit_test is motivated by coverage of functionality.
+
+    - name: property_test
+      authoritative_source: "Claessen & Hughes (2000). QuickCheck: A Lightweight Tool for Random Testing of Haskell Programs. ICFP."
+      official_definition: |
+        "QuickCheck tests universally quantified properties of programs... generating large
+        numbers of random test cases and checking that the property holds for each."
+      operational_definition: |
+        Add property-based or fuzz tests: define invariants that must hold for all inputs,
+        use generators to produce random inputs (Hypothesis, QuickCheck, fast-check), or
+        add fuzzing harnesses (AFL, libFuzzer).
+      signals:
+        - "hypothesis / property test"
+        - "quickcheck / fast-check"
+        - "fuzzing / fuzz test"
+        - "invariant check"
+        - "random input generation"
+      boundary_notes: |
+        vs unit_test: property_test uses random/generated inputs;
+        unit_test uses hand-crafted specific inputs.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: test-fix
+# Framework: xUnit Test Patterns (Meszaros, 2007)
+# ═══════════════════════════════════════════════════════════════════════════════
+test-fix:
+  source_framework: "Meszaros, G. (2007). xUnit Test Patterns: Refactoring Test Code. Addison-Wesley."
+  l2:
+    - name: flaky_test
+      authoritative_source: "Meszaros Ch.16: Erratic Test"
+      official_definition: |
+        "An Erratic Test is one that sometimes passes and sometimes fails... caused by Interacting
+        Tests, Interacting Test Suites, Lonely Test, Resource Leakage, or Nondeterministic Tests."
+      operational_definition: |
+        Fix tests that pass/fail non-deterministically: timing dependencies, shared global state
+        between tests, filesystem race conditions, or network-dependent assertions.
+      signals:
+        - "flaky / intermittent failure"
+        - "timing-dependent test"
+        - "race condition in test"
+        - "test order dependency"
+        - "non-deterministic assertion"
+      boundary_notes: |
+        vs assertion_fix: flaky_test fails randomly; assertion_fix fails consistently.
+
+    - name: assertion_fix
+      authoritative_source: "Meszaros Ch.16: Assertion Roulette"
+      official_definition: |
+        "Assertion Roulette: It is hard to tell which of several assertions within the same test
+        method caused a test failure." Also covers stale expected values.
+      operational_definition: |
+        Fix tests that fail consistently due to outdated expected values, incorrect assertions,
+        or stale snapshots. The test logic is correct but the expectation is wrong.
+      signals:
+        - "update expected value"
+        - "snapshot update"
+        - "wrong assertion target"
+        - "expected vs actual mismatch"
+      boundary_notes: |
+        vs flaky_test: assertion_fix has deterministic failure; flaky_test is random.
+        vs mock_update: assertion_fix is about expected values; mock_update is about mock config.
+
+    - name: fixture_setup
+      authoritative_source: "Meszaros Ch.18: Test Fixture Teardown"
+      official_definition: |
+        "Fresh Fixture: Each test creates its own fresh fixture... Shared Fixture: Reuse the
+        same fixture instance across many tests." Problems arise from improper lifecycle.
+      operational_definition: |
+        Fix issues with test data setup or teardown: fixture conflicts between tests, missing
+        cleanup, incorrect initial state, or database seeding problems.
+      signals:
+        - "fixture conflict"
+        - "setUp/tearDown fix"
+        - "test isolation issue"
+        - "shared state between tests"
+        - "database cleanup missing"
+      boundary_notes: |
+        vs flaky_test: fixture_setup causes consistent failures in specific test combinations;
+        flaky_test is random regardless of ordering.
+
+    - name: mock_update
+      authoritative_source: "Meszaros Ch.11: Test Double"
+      official_definition: |
+        "A Test Double is any object that replaces a real component solely for testing purposes.
+        Stubs provide canned answers; Mocks verify interactions; Fakes have working implementations."
+      operational_definition: |
+        Update mocks, stubs, or fakes that became outdated due to interface changes in the
+        production code. The mock's return values or expected calls no longer match reality.
+      signals:
+        - "mock return value update"
+        - "stub interface changed"
+        - "spy expectation outdated"
+        - "fake implementation drift"
+      boundary_notes: |
+        vs assertion_fix: mock_update fixes the test doubles;
+        assertion_fix fixes the expected outcome assertions.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: coverage
+# Framework: ISTQB Foundation Level — Coverage Criteria
+# ═══════════════════════════════════════════════════════════════════════════════
+coverage:
+  source_framework: "ISTQB Foundation Level Syllabus v4.0, §4.3 White-Box Test Techniques"
+  l2:
+    - name: branch_coverage
+      authoritative_source: "ISTQB Glossary: Branch Coverage (Decision Coverage)"
+      official_definition: |
+        "The coverage of all branches (decision outcomes) in a control flow graph.
+        100% branch coverage implies 100% statement coverage."
+      operational_definition: |
+        Add tests specifically targeting uncovered branches: else clauses, switch cases,
+        ternary operator outcomes, or early return paths.
+      signals:
+        - "cover else branch"
+        - "uncovered decision"
+        - "switch case coverage"
+        - "ternary path"
+      boundary_notes: |
+        vs path_coverage: branch_coverage covers individual decisions;
+        path_coverage covers combinations of decisions.
+
+    - name: edge_case_coverage
+      authoritative_source: "ISTQB §4.2: Boundary Value Analysis"
+      official_definition: |
+        "Boundary value analysis (BVA): A black-box test technique in which test cases are
+        designed based on boundary values."
+      operational_definition: |
+        Add tests for boundary conditions and edge cases: empty collections, null inputs,
+        maximum/minimum values, zero-length strings, single-element arrays, or overflow values.
+      signals:
+        - "edge case test"
+        - "boundary value"
+        - "empty input / null"
+        - "max/min value"
+        - "overflow condition"
+      boundary_notes: |
+        vs branch_coverage: edge_case_coverage tests specific input values;
+        branch_coverage targets code structure.
+
+    - name: path_coverage
+      authoritative_source: "ISTQB §4.3: Path Coverage"
+      official_definition: |
+        "The coverage of all paths in a control flow graph, where a path is a unique sequence
+        of branches from entry to exit."
+      operational_definition: |
+        Add tests covering different execution path combinations through complex control flow:
+        multiple loop iterations (0, 1, many), nested condition combinations, or exception
+        propagation paths.
+      signals:
+        - "path combination test"
+        - "loop 0/1/many iterations"
+        - "nested condition combinations"
+        - "exception path coverage"
+      boundary_notes: |
+        vs branch_coverage: path_coverage is stricter — covers combinations;
+        branch_coverage only requires each individual branch once.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: debug-support
+# Framework: ISO 25010 Maintainability → Analysability
+# ═══════════════════════════════════════════════════════════════════════════════
+debug-support:
+  source_framework: "ISO/IEC 25010:2023 → Maintainability → Analysability"
+  l2:
+    - name: logging_instrumentation
+      authoritative_source: "ISO 25010 Analysability"
+      official_definition: |
+        "Degree of effectiveness and efficiency with which it is possible to assess the impact
+        on a product or system of an intended change, to diagnose a product for deficiencies
+        or causes of failures, or to identify parts to be modified."
+      operational_definition: |
+        Add debug-level logging, trace points, or instrumentation at strategic code locations
+        to aid in diagnosing runtime behavior. Typically verbose/debug level, may be behind
+        a flag.
+      signals:
+        - "debug log added"
+        - "trace point"
+        - "instrumentation hook"
+        - "verbose logging mode"
+      boundary_notes: |
+        vs enhancement.add_logging: debug-support logging is for developer debugging;
+        enhancement.add_logging is permanent production observability.
+
+    - name: diagnostic_endpoint
+      authoritative_source: "Health Check Response Format (RFC draft-inadarei-api-health-check)"
+      official_definition: |
+        The Health Check RFC defines: "a service health check response format for HTTP APIs...
+        allowing monitoring tools to verify service availability and diagnose issues."
+      operational_definition: |
+        Add diagnostic HTTP endpoints: /health, /ready, /debug/vars, /debug/pprof, or internal
+        state dump endpoints that expose runtime diagnostics for troubleshooting.
+      signals:
+        - "/health or /ready endpoint"
+        - "/debug/ endpoint"
+        - "pprof / expvar"
+        - "internal state dump"
+        - "diagnostic API"
+      boundary_notes: |
+        vs enhancement.add_logging: diagnostic_endpoint exposes data via API;
+        add_logging writes to log streams.
+
+    - name: error_reporting
+      authoritative_source: "Sentry SDK Documentation; OpenTelemetry Specification — Error Semantics"
+      official_definition: |
+        Sentry: "Sentry's SDKs capture errors, panics, and unhandled exceptions, providing
+        real-time visibility into production issues with full stack traces, breadcrumbs,
+        and contextual data."
+      operational_definition: |
+        Integrate error reporting/tracking service: set up Sentry/Bugsnag/Rollbar SDK,
+        configure breadcrumbs, add error boundaries, or implement crash reporting.
+      signals:
+        - "Sentry.init / Sentry.captureException"
+        - "error tracking integration"
+        - "crash reporter setup"
+        - "error boundary"
+        - "Bugsnag / Rollbar"
+      boundary_notes: |
+        vs enhancement.add_logging: error_reporting sends to external service;
+        add_logging writes locally.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: refactor
+# Framework: Fowler, M. (2018). Refactoring: Improving the Design of Existing Code, 2nd Ed.
+# ═══════════════════════════════════════════════════════════════════════════════
+refactor:
+  source_framework: "Fowler, M. (2018). Refactoring, 2nd Edition. Addison-Wesley."
+  l2:
+    - name: extract_method
+      authoritative_source: "Fowler Ch.6: Extract Function"
+      official_definition: |
+        "You have a code fragment that can be grouped together. Turn the fragment into a function
+        whose name explains the purpose of the function."
+      operational_definition: |
+        Extract a logical code fragment into a separate function, method, class, or module
+        to improve readability and reusability. The behavior remains identical.
+      signals:
+        - "extract function/method"
+        - "pull out into helper"
+        - "new utility function"
+        - "decompose long function"
+      boundary_notes: |
+        vs code_reorganization: extract_method creates new functions from inline code;
+        code_reorganization moves existing functions between files.
+
+    - name: rename_symbol
+      authoritative_source: "Fowler Ch.6: Change Function Declaration / Rename Variable"
+      official_definition: |
+        "Change Function Declaration: Change the name of a function, add/remove parameters."
+        "Rename Variable: Change the name of a variable to better communicate its purpose."
+      operational_definition: |
+        Rename variables, functions, classes, files, or modules to better communicate their
+        purpose and align with naming conventions. No behavioral change.
+      signals:
+        - "rename for clarity"
+        - "naming convention alignment"
+        - "better descriptive name"
+        - "consistent naming"
+      boundary_notes: |
+        vs style.naming_convention: rename_symbol is semantic improvement;
+        naming_convention is mechanical convention enforcement (camelCase vs snake_case).
+
+    - name: dead_code_removal
+      authoritative_source: "Fowler Ch.8: Remove Dead Code"
+      official_definition: |
+        "When code is no longer in use, it should be removed. If you ever need it again, you
+        can always find it in your version control system."
+      operational_definition: |
+        Delete code that is no longer reachable, called, or needed: unused functions, commented-out
+        blocks, deprecated features past their EOL, or unreachable branches.
+      signals:
+        - "remove unused code"
+        - "delete dead code"
+        - "unreachable code removed"
+        - "commented-out code deleted"
+      boundary_notes: |
+        vs deprecation.remove_deprecated: dead_code_removal targets any unused code;
+        remove_deprecated specifically removes previously-announced deprecated APIs.
+
+    - name: pattern_migration
+      authoritative_source: "ISO 14764:2022 Perfective Maintenance; GoF Design Patterns (1994)"
+      official_definition: |
+        ISO 14764 Perfective: "Modification of a software product after delivery to improve
+        performance or maintainability." Applied as migrating from one pattern to another.
+      operational_definition: |
+        Migrate code from one design pattern or paradigm to another: class components → hooks,
+        callbacks → promises/async-await, REST → GraphQL, inheritance → composition, or
+        mutable state → immutable.
+      signals:
+        - "migrate from X to Y pattern"
+        - "class to function component"
+        - "callback to async/await"
+        - "inheritance to composition"
+      boundary_notes: |
+        vs simplify_logic: pattern_migration is about paradigm/framework shifts;
+        simplify_logic is about reducing complexity within existing paradigm.
+
+    - name: code_reorganization
+      authoritative_source: "Fowler Ch.8: Move Function"
+      official_definition: |
+        "Move Function: A function has more communication with elements of another module
+        than with those of the module it currently lives in. Move it there."
+      operational_definition: |
+        Move functions/classes/files between modules or directories, split large files into
+        smaller ones, or restructure directory hierarchy. No logic changes.
+      signals:
+        - "move to different module"
+        - "split file"
+        - "restructure directory"
+        - "reorganize exports"
+      boundary_notes: |
+        vs extract_method: code_reorganization moves existing entities;
+        extract_method creates new ones from inline code.
+
+    - name: simplify_logic
+      authoritative_source: "Fowler Ch.10: Simplify Conditional Logic"
+      official_definition: |
+        Includes: "Decompose Conditional, Consolidate Conditional Expression, Replace Nested
+        Conditional with Guard Clauses, Replace Conditional with Polymorphism."
+      operational_definition: |
+        Reduce complexity of control flow: flatten nested if/else, introduce early returns/guard
+        clauses, merge duplicate conditions, or replace complex switches with dispatch tables.
+      signals:
+        - "flatten nested conditionals"
+        - "early return"
+        - "guard clause"
+        - "consolidate conditions"
+        - "reduce cyclomatic complexity"
+      boundary_notes: |
+        vs pattern_migration: simplify_logic works within existing paradigm;
+        pattern_migration changes paradigms.
+
+    - name: decouple_dependency
+      authoritative_source: "Fowler Ch.12: Replace Type Code with Subclasses/Strategy/State; Martin (2000) DIP"
+      official_definition: |
+        Robert C. Martin's Dependency Inversion Principle: "High-level modules should not depend
+        on low-level modules. Both should depend on abstractions." Fowler provides mechanical
+        refactoring steps to achieve this.
+      operational_definition: |
+        Reduce coupling between modules: extract interfaces, introduce dependency injection,
+        break circular dependencies, or apply the adapter pattern to isolate external systems.
+      signals:
+        - "dependency injection"
+        - "extract interface"
+        - "break circular dependency"
+        - "adapter pattern"
+        - "inversion of control"
+      boundary_notes: |
+        vs code_reorganization: decouple_dependency changes dependency direction;
+        code_reorganization only moves code without changing dependencies.
+
+    - name: api_signature_refactor
+      authoritative_source: "Fowler, Refactoring 2nd Ed (2018), Ch.6 'A First Set of Refactorings' — Change Function Declaration, Remove Parameter, Introduce Parameter Object; Ch.10 — Substitute Algorithm; Ch.12 — Replace Type Code with Subclasses; Ch.7 — Replace Array with Object"
+      official_definition: |
+        Fowler groups the following catalog refactorings under "API refactoring" — they all
+        change the shape of an API contract while preserving behavior:
+        • "Change Function Declaration" (incl. Add/Remove/Rename parameter)
+        • "Introduce Parameter Object" (replace positional args with object)
+        • "Substitute Algorithm" (replace internal algorithm with a clearer/equivalent one)
+        • "Replace Type Code with Subclasses / with State / with Polymorphism" (replace
+          stringly-typed codes with proper types/enums)
+        • "Replace Array with Object" (when array elements have heterogeneous meaning)
+      operational_definition: |
+        Refactoring that changes the signature/shape of an existing API or its underlying
+        algorithm/data-structure choice while preserving behavior. Concretely covers:
+        removing a redundant parameter (Fowler "Remove Parameter") — e.g., execute_sql_flush
+        dropping `using`; introducing a parameter object (Fowler "Introduce Parameter Object")
+        — e.g., XAttr helpers using object args; substituting an algorithm with a stdlib
+        equivalent (Fowler "Substitute Algorithm") — e.g., django.utils.html.escape using
+        stdlib html.escape; replacing untyped string codes with strongly-typed enum (Fowler
+        "Replace Type Code with Subclasses") — e.g., qutebrowser SelectionInfo Reason values;
+        replacing flat arrays with grouped maps (Fowler "Replace Array with Object") — e.g.,
+        vuls port-scan slice-to-map.
+      signals:
+        - "remove redundant parameter"
+        - "introduce parameter object / DTO"
+        - "substitute algorithm with stdlib / library equivalent"
+        - "replace string code with enum / sealed class"
+        - "data-structure refactor (slice → map, list → struct)"
+        - "add stronger types to existing API"
+      boundary_notes: |
+        vs extract_method: api_signature_refactor changes the shape of an existing
+        function/class API; extract_method creates new functions from inline code.
+        vs rename_symbol: api_signature_refactor changes type/parameter list/algorithm;
+        rename_symbol changes only the identifier name.
+        vs simplify_logic: api_signature_refactor changes the API contract (signature/types);
+        simplify_logic flattens control flow without changing the contract.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: style
+# Framework: Conventional Commits Specification — style type
+# ═══════════════════════════════════════════════════════════════════════════════
+style:
+  source_framework: "Conventional Commits Specification 1.0.0 — style type"
+  l2:
+    - name: formatting
+      authoritative_source: "CC: style — 'Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)'"
+      official_definition: |
+        Conventional Commits defines style as: "Changes that do not affect the meaning of the
+        code (white-space, formatting, missing semi-colons, etc)."
+      operational_definition: |
+        Pure formatting changes: apply auto-formatter (prettier/black/gofmt/clang-format),
+        fix indentation, add/remove semicolons, adjust line length, or normalize quotes.
+      signals:
+        - "prettier / black / gofmt applied"
+        - "indentation fix"
+        - "whitespace normalization"
+        - "line length adjustment"
+      boundary_notes: |
+        vs naming_convention: formatting is whitespace/punctuation;
+        naming_convention is identifier names.
+
+    - name: naming_convention
+      authoritative_source: "PEP 8 (Python); Google Style Guides (Java/C++/JS/Go)"
+      official_definition: |
+        PEP 8: "Function names should be lowercase, with words separated by underscores."
+        Google Java: "Class names are written in UpperCamelCase." Each language has its standard.
+      operational_definition: |
+        Standardize identifier naming to match language conventions: camelCase ↔ snake_case,
+        prefix/suffix conventions (I- for interfaces, -able for traits), or enforcing
+        project-specific naming rules.
+      signals:
+        - "rename to match convention"
+        - "camelCase to snake_case"
+        - "consistent prefix/suffix"
+        - "PEP 8 compliance"
+      boundary_notes: |
+        vs refactor.rename_symbol: naming_convention is mechanical convention enforcement;
+        rename_symbol improves semantic meaning.
+
+    - name: import_ordering
+      authoritative_source: "isort (Python); ESLint import/order rule; Go goimports"
+      official_definition: |
+        isort: "isort your imports, so you don't have to." Enforces a deterministic import
+        ordering: stdlib → third-party → local, alphabetized within groups.
+      operational_definition: |
+        Organize import/require statements: sort alphabetically, group by category
+        (stdlib/external/internal), remove unused imports, or apply tool-enforced ordering.
+      signals:
+        - "isort / organize imports"
+        - "import ordering"
+        - "unused import removed"
+        - "import grouping"
+      boundary_notes: |
+        vs formatting: import_ordering specifically targets import statements;
+        formatting covers general whitespace/punctuation.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: deprecation
+# Framework: Semantic Versioning 2.0.0 §7; API Lifecycle Management
+# ═══════════════════════════════════════════════════════════════════════════════
+deprecation:
+  source_framework: "Semantic Versioning 2.0.0 (semver.org) §7; Microsoft API Lifecycle Policy"
+  l2:
+    - name: mark_deprecated
+      authoritative_source: "SemVer §7"
+      official_definition: |
+        SemVer §7: "Existing public API functionality that is being deprecated SHOULD be marked
+        as such in a new minor release so users can smoothly transition to the new API."
+      operational_definition: |
+        Mark interfaces as deprecated without removing them: add @deprecated annotations,
+        emit runtime deprecation warnings, update documentation to recommend alternatives,
+        and set a timeline for removal.
+      signals:
+        - "@Deprecated / @deprecated"
+        - "DeprecationWarning"
+        - "marked obsolete"
+        - "removal scheduled for vX"
+      boundary_notes: |
+        vs remove_deprecated: mark_deprecated announces intent; remove_deprecated executes.
+        vs backward-compatibility.deprecation_shim: marking vs providing a compatibility layer.
+
+    - name: remove_deprecated
+      authoritative_source: "SemVer §8: Major version increment"
+      official_definition: |
+        SemVer §8: "Major version X MUST be incremented if any backwards incompatible changes
+        are introduced to the public API." Removing deprecated APIs is a breaking change.
+      operational_definition: |
+        Remove previously-deprecated interfaces that have passed their grace period. This is
+        a breaking change that typically accompanies a major version bump.
+      signals:
+        - "remove deprecated API"
+        - "breaking: drop old interface"
+        - "removed in major version"
+        - "EOL for legacy API"
+      boundary_notes: |
+        vs refactor.dead_code_removal: remove_deprecated removes announced-deprecated APIs;
+        dead_code_removal removes any unreachable code.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: build-fix
+# Framework: Conventional Commits — build type
+# ═══════════════════════════════════════════════════════════════════════════════
+build-fix:
+  source_framework: "Conventional Commits — build type: 'Changes that affect the build system or external dependencies'"
+  l2:
+    - name: compile_error
+      authoritative_source: "Language compiler diagnostic standards (GCC, javac, rustc, tsc error codes)"
+      official_definition: |
+        Compiler errors are defined by each language's specification. E.g., rustc error index
+        (doc.rust-lang.org/error_codes) catalogs all compile-time failures.
+      operational_definition: |
+        Fix compilation failures: syntax errors, type errors caught by static analysis,
+        missing imports, or incompatible type annotations.
+      signals:
+        - "compile error / build failure"
+        - "syntax error"
+        - "type error (static)"
+        - "missing import"
+        - "cannot find symbol"
+      boundary_notes: |
+        vs linker_error: compile_error is within a single translation unit;
+        linker_error is at the linking/assembly stage across units.
+
+    - name: linker_error
+      authoritative_source: "ELF Specification (Tool Interface Standard); CMake documentation"
+      official_definition: |
+        Linker resolves external symbol references across object files. Errors occur when
+        symbols are undefined, multiply defined, or ABI-incompatible.
+      operational_definition: |
+        Fix linking stage failures: undefined symbols, library not found, ABI mismatch
+        between compiled objects, or incorrect link order.
+      signals:
+        - "undefined reference"
+        - "unresolved external symbol"
+        - "library not found"
+        - "ABI incompatibility"
+        - "link order issue"
+      boundary_notes: |
+        vs compile_error: linker_error is post-compilation;
+        compile_error is within compilation.
+
+    - name: dependency_resolution
+      authoritative_source: "npm documentation — Dependency Resolution; pip dependency resolver; Cargo resolver"
+      official_definition: |
+        npm: "The npm install algorithm resolves the dependency tree, deduplicating where
+        possible." Resolution failures occur from version conflicts or peer dependency
+        mismatches.
+      operational_definition: |
+        Fix package manager dependency conflicts: version range incompatibilities, diamond
+        dependencies, peer dependency requirements, or corrupted lockfiles.
+      signals:
+        - "dependency conflict"
+        - "peer dependency error"
+        - "version incompatibility"
+        - "lockfile corruption"
+        - "diamond dependency"
+      boundary_notes: |
+        vs compatibility-fix.dependency_breaking_change: dependency_resolution is package
+        manager conflict; dependency_breaking_change is runtime semantic breakage.
+
+    - name: build_config
+      authoritative_source: "Webpack/Vite/CMake/Gradle documentation — build configuration"
+      official_definition: |
+        Build tools are configured via declarative or programmatic config files. Errors arise
+        from incorrect settings, missing plugins, or incompatible option combinations.
+      operational_definition: |
+        Fix build tool configuration errors: webpack.config.js issues, CMakeLists.txt errors,
+        Gradle build script problems, or missing environment variables needed during build.
+      signals:
+        - "webpack config error"
+        - "CMake configuration issue"
+        - "Gradle sync failed"
+        - "build environment variable missing"
+      boundary_notes: |
+        vs config (L1): build-fix.build_config fixes broken builds;
+        config (L1) manages runtime application configuration.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: ci-fix
+# Framework: Conventional Commits — ci type
+# ═══════════════════════════════════════════════════════════════════════════════
+ci-fix:
+  source_framework: "Conventional Commits — ci type: 'Changes to CI configuration files and scripts'"
+  l2:
+    - name: workflow_syntax
+      authoritative_source: "GitHub Actions Workflow Syntax (docs.github.com); GitLab CI/CD YAML syntax"
+      official_definition: |
+        GitHub Actions: "Workflow files use YAML syntax, and must have either a .yml or .yaml
+        file extension. If you're new to YAML, see Learn YAML in five minutes."
+        Syntax errors prevent workflow execution.
+      operational_definition: |
+        Fix CI configuration syntax errors: YAML formatting issues, invalid step definitions,
+        incorrect job dependency declarations, or wrong action version references.
+      signals:
+        - "workflow YAML syntax error"
+        - "invalid step definition"
+        - "job dependency error"
+        - "action version incorrect"
+      boundary_notes: |
+        vs env_setup: workflow_syntax is declarative config errors;
+        env_setup is runtime environment problems.
+
+    - name: env_setup
+      authoritative_source: "GitHub Actions Runner Documentation — Runner Environment"
+      official_definition: |
+        Runner environment includes pre-installed software, environment variables, and
+        available system resources. Failures occur when expected tools or versions are missing.
+      operational_definition: |
+        Fix CI environment issues: missing runtime/tool on runner, incorrect version of language
+        runtime, permission errors in CI context, or missing secrets/credentials.
+      signals:
+        - "tool not found in CI"
+        - "runner version mismatch"
+        - "CI permission denied"
+        - "missing secret / credential"
+        - "setup-node / setup-python version"
+      boundary_notes: |
+        vs workflow_syntax: env_setup is runtime environment;
+        workflow_syntax is configuration file format.
+
+    - name: flaky_ci
+      authoritative_source: "Google Engineering Practices: Dealing with Flaky Tests in CI"
+      official_definition: |
+        Google: "A flaky test is a test that could fail or pass for the same configuration...
+        flaky tests are a significant drain on engineering productivity." Applied to CI failures.
+      operational_definition: |
+        Fix CI pipelines that fail intermittently: network timeouts during package download,
+        resource exhaustion under load, service startup race conditions, or rate limiting
+        from external registries.
+      signals:
+        - "CI timeout"
+        - "intermittent CI failure"
+        - "network error in pipeline"
+        - "resource exhausted"
+        - "rate limited by registry"
+      boundary_notes: |
+        vs test-fix.flaky_test: flaky_ci is about CI infrastructure instability;
+        flaky_test is about test code non-determinism.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: deployment
+# Framework: Humble & Farley (2010). Continuous Delivery. Addison-Wesley.
+# ═══════════════════════════════════════════════════════════════════════════════
+deployment:
+  source_framework: "Humble & Farley (2010). Continuous Delivery; Conventional Commits ci type"
+  l2:
+    - name: container_deploy
+      authoritative_source: "Docker Documentation; Kubernetes Concepts (kubernetes.io)"
+      official_definition: |
+        Kubernetes: "A Deployment provides declarative updates for Pods and ReplicaSets.
+        You describe a desired state in a Deployment, and the Deployment Controller changes
+        the actual state to the desired state."
+      operational_definition: |
+        Configure container-based deployment: write/modify Dockerfile, create/update K8s
+        manifests (Deployment, Service, Ingress), configure Helm charts, or set up
+        docker-compose for multi-container orchestration.
+      signals:
+        - "Dockerfile"
+        - "k8s deployment manifest"
+        - "Helm chart"
+        - "docker-compose"
+        - "container registry push"
+      boundary_notes: |
+        vs devops_infra.container_k8s (Domain): deployment.container_deploy is task type;
+        devops_infra.container_k8s is the domain where the work happens.
+
+    - name: serverless_deploy
+      authoritative_source: "AWS Lambda Documentation; Serverless Framework Documentation"
+      official_definition: |
+        AWS: "AWS Lambda is a compute service that lets you run code without provisioning or
+        managing servers... you pay only for the compute time you consume."
+      operational_definition: |
+        Configure serverless deployment: Lambda/Cloud Functions configuration, API Gateway
+        setup, Vercel/Netlify deployment settings, or serverless framework configuration.
+      signals:
+        - "serverless.yml"
+        - "Lambda function config"
+        - "vercel.json / netlify.toml"
+        - "Cloud Functions deployment"
+        - "API Gateway configuration"
+      boundary_notes: |
+        vs container_deploy: serverless_deploy uses FaaS platforms;
+        container_deploy manages container lifecycle.
+
+    - name: traditional_deploy
+      authoritative_source: "Humble & Farley Ch.11: Deploying and Releasing Applications"
+      official_definition: |
+        Traditional deployment involves "copying files to a production server and restarting
+        the application." Includes SSH-based deployment, rsync, and process managers.
+      operational_definition: |
+        Set up traditional server deployment: SSH/SCP scripts, systemd service files, nginx
+        reverse proxy configuration, Ansible playbooks, or PM2/supervisord setup.
+      signals:
+        - "deploy.sh / rsync"
+        - "systemd service file"
+        - "nginx site configuration"
+        - "Ansible deployment"
+        - "PM2 / supervisord"
+      boundary_notes: |
+        vs container_deploy: traditional_deploy runs directly on OS;
+        container_deploy uses container isolation.
+
+    - name: rollback_strategy
+      authoritative_source: "Humble & Farley Ch.10: Deployment Pipeline Patterns"
+      official_definition: |
+        "Blue-Green Deployment: Maintain two identical production environments... Canary Releasing:
+        Route a small percentage of users to the new version." Both enable safe rollback.
+      operational_definition: |
+        Implement deployment safety mechanisms: blue-green switching, canary release
+        configuration, rolling update parameters, automatic rollback triggers, or
+        feature flag-controlled rollouts.
+      signals:
+        - "rollback mechanism"
+        - "blue-green deployment"
+        - "canary release"
+        - "rolling update strategy"
+        - "feature flag rollout"
+      boundary_notes: |
+        vs config.feature_flags: rollback_strategy is deployment infrastructure;
+        feature_flags are application-level toggles.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: packaging
+# Framework: Conventional Commits — build type; Package Registry Documentation
+# ═══════════════════════════════════════════════════════════════════════════════
+packaging:
+  source_framework: "CC build type; npm/PyPI/OCI packaging specifications"
+  l2:
+    - name: npm_publish
+      authoritative_source: "npm Documentation: Publishing packages (docs.npmjs.com)"
+      official_definition: |
+        npm: "To share your code publicly, you can publish it to the npm registry... You need
+        a package.json file with name and version fields."
+      operational_definition: |
+        Prepare and publish an npm/yarn package: configure package.json (exports, files,
+        main/module), set up prepublish scripts, configure registry, or handle scoped packages.
+      signals:
+        - "npm publish"
+        - "package.json version/exports"
+        - "prepublishOnly script"
+        - "npm registry configuration"
+      boundary_notes: |
+        vs pypi_publish: npm_publish is JavaScript ecosystem;
+        pypi_publish is Python ecosystem.
+
+    - name: pypi_publish
+      authoritative_source: "PyPA Packaging User Guide (packaging.python.org)"
+      official_definition: |
+        PyPA: "Packaging Python Projects: a tutorial on how to package a Python project...
+        Generate distribution archives and upload them to PyPI using twine."
+      operational_definition: |
+        Prepare and publish a Python package: configure setup.py/pyproject.toml, build wheel/
+        sdist, set up twine upload, or configure testpypi for staging.
+      signals:
+        - "pyproject.toml / setup.py"
+        - "wheel / sdist build"
+        - "twine upload"
+        - "PyPI configuration"
+      boundary_notes: |
+        vs npm_publish: pypi_publish is Python; npm_publish is JavaScript.
+
+    - name: container_image
+      authoritative_source: "OCI Image Specification (opencontainers.org)"
+      official_definition: |
+        OCI Image Spec: "This specification defines how to bundle filesystem layers and metadata
+        into an interoperable container image format."
+      operational_definition: |
+        Build and publish container images: optimize Dockerfile (multi-stage builds, layer
+        caching), configure image registry push, set up automated image building, or
+        manage image tags/versions.
+      signals:
+        - "docker build optimization"
+        - "multi-stage build"
+        - "image push to registry"
+        - "container image tagging"
+        - "image size reduction"
+      boundary_notes: |
+        vs deployment.container_deploy: container_image builds the artifact;
+        container_deploy runs it.
+
+    - name: binary_release
+      authoritative_source: "GitHub Releases Documentation; GoReleaser Documentation"
+      official_definition: |
+        GitHub: "Releases are deployable software iterations you can package and make available
+        for a wider audience to download and use." GoReleaser automates cross-compilation
+        and release artifact creation.
+      operational_definition: |
+        Produce and distribute compiled binary artifacts: cross-compilation setup, release
+        automation (GoReleaser, cargo-dist), installer scripts, or GitHub Release asset uploads.
+      signals:
+        - "cross-compile binaries"
+        - "GoReleaser / cargo-dist"
+        - "release binary"
+        - "installer script"
+        - "GitHub Release assets"
+      boundary_notes: |
+        vs container_image: binary_release produces native executables;
+        container_image produces OCI images.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: config
+# Framework: 12-Factor App (Heroku, 2012) Factor III; Conventional Commits chore type
+# ═══════════════════════════════════════════════════════════════════════════════
+config:
+  source_framework: "12-Factor App (Heroku, 2012), Factor III: Config; CC chore type"
+  l2:
+    - name: env_variables
+      authoritative_source: "12-Factor App, Factor III: Config"
+      official_definition: |
+        "An app's config is everything that is likely to vary between deploys... The twelve-factor
+        app stores config in environment variables."
+      operational_definition: |
+        Manage environment variables and secrets: add/modify .env files, configure secrets in
+        CI/CD, set up config maps, or implement secrets management (Vault, AWS SSM).
+      signals:
+        - ".env file"
+        - "environment variable"
+        - "secrets management"
+        - "config map"
+        - "dotenv"
+      boundary_notes: |
+        vs app_config: env_variables are deployment-environment-specific;
+        app_config is application logic configuration.
+
+    - name: app_config
+      authoritative_source: "Spring Configuration Reference; Django Settings; Node config libraries"
+      official_definition: |
+        Application configuration files that define behavior: Django's settings.py, Spring's
+        application.yml, or config libraries (cosmiconfig, python-decouple).
+      operational_definition: |
+        Modify application configuration files: change settings values, add new config keys,
+        restructure config hierarchy, or add config schema validation.
+      signals:
+        - "settings.py / application.yml"
+        - "config.yaml modification"
+        - "appsettings.json"
+        - "config key addition"
+      boundary_notes: |
+        vs env_variables: app_config is in version-controlled config files;
+        env_variables are deployment-time secrets/values.
+
+    - name: infra_config
+      authoritative_source: "Terraform Documentation; Ansible Documentation"
+      official_definition: |
+        Terraform: "Configuration files describe to Terraform the components needed to run
+        a single application or your entire datacenter." Infrastructure as Code defines
+        resources declaratively.
+      operational_definition: |
+        Modify infrastructure configuration: Terraform variables, Ansible vars, Kubernetes
+        configmaps/secrets, or cloud resource parameters (instance types, scaling policies).
+      signals:
+        - "terraform variable"
+        - "ansible vars/defaults"
+        - "K8s configmap"
+        - "cloud resource parameter"
+      boundary_notes: |
+        vs devops_infra (Domain): config.infra_config is the task type;
+        devops_infra is where the work happens.
+
+    - name: feature_flags
+      authoritative_source: "Fowler, M. (2010). Feature Toggles (aka Feature Flags). martinfowler.com"
+      official_definition: |
+        Fowler: "Feature Toggles (often also referred to as Feature Flags) are a powerful
+        technique, allowing teams to modify system behavior without changing code."
+      operational_definition: |
+        Configure feature flags or toggles: add new flags to toggle systems (LaunchDarkly,
+        Unleash), set up A/B test configurations, or implement percentage-based rollouts.
+      signals:
+        - "feature flag configuration"
+        - "LaunchDarkly / Unleash"
+        - "A/B test setup"
+        - "percentage rollout"
+        - "toggle configuration"
+      boundary_notes: |
+        vs deployment.rollback_strategy: feature_flags are application-level;
+        rollback_strategy is infrastructure-level.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: user-docs
+# Framework: Divio Documentation System (2017)
+# ═══════════════════════════════════════════════════════════════════════════════
+user-docs:
+  source_framework: "Divio Documentation System (documentation.divio.com, 2017)"
+  l2:
+    - name: tutorial
+      authoritative_source: "Divio: Tutorials"
+      official_definition: |
+        "A tutorial is learning-oriented. It takes the reader by the hand through a series
+        of steps to complete a project. It is wholly learning-oriented, not information-oriented."
+      operational_definition: |
+        Write step-by-step learning material that guides a newcomer through completing a
+        concrete project or task from start to finish.
+      signals:
+        - "tutorial / getting started"
+        - "step-by-step guide"
+        - "follow along"
+        - "prerequisite: none"
+      boundary_notes: |
+        vs how_to_guide: tutorials teach by doing (learning-oriented);
+        how-to guides solve specific problems (task-oriented).
+
+    - name: how_to_guide
+      authoritative_source: "Divio: How-to guides"
+      official_definition: |
+        "A how-to guide is goal-oriented. It takes the reader through the steps required to
+        solve a real-world problem. It is wholly practical, not theoretical."
+      operational_definition: |
+        Write practical instructions for achieving a specific goal: migration guides,
+        deployment recipes, troubleshooting steps, or configuration walkthroughs.
+      signals:
+        - "how to / guide"
+        - "cookbook / recipe"
+        - "solving a specific problem"
+        - "practical steps"
+      boundary_notes: |
+        vs tutorial: how_to_guide assumes prior knowledge and solves a specific problem;
+        tutorial assumes no knowledge and teaches fundamentals.
+
+    - name: api_reference
+      authoritative_source: "Divio: Reference"
+      official_definition: |
+        "Reference guides are information-oriented. They describe the machinery—and are accurate
+        and complete. They describe the API: function signatures, parameters, return values."
+      operational_definition: |
+        Write technical reference documentation: function signatures, parameter descriptions,
+        return types, error codes, or auto-generated API docs (JSDoc, Sphinx, Swagger).
+      signals:
+        - "API reference"
+        - "function signature docs"
+        - "parameter description"
+        - "Swagger / OpenAPI spec"
+        - "JSDoc / Sphinx"
+      boundary_notes: |
+        vs tutorial: api_reference is information-oriented lookup;
+        tutorial is learning-oriented walkthrough.
+
+    - name: readme
+      authoritative_source: "GitHub: About READMEs (docs.github.com)"
+      official_definition: |
+        GitHub: "A README file communicates expectations for your project and helps you manage
+        contributions. It tells visitors what your project does, how to use it, and how to
+        get started."
+      operational_definition: |
+        Write or update README files: project description, installation instructions, usage
+        examples, badge addition, or contribution guidelines.
+      signals:
+        - "README.md"
+        - "project description"
+        - "installation instructions"
+        - "usage examples"
+        - "badges"
+      boundary_notes: |
+        vs tutorial: readme is a project landing page overview;
+        tutorial is a complete guided learning experience.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: design-spec
+# Framework: ISO/IEC/IEEE 42010:2022 (Architecture Description); IETF RFC 2026
+# ═══════════════════════════════════════════════════════════════════════════════
+design-spec:
+  source_framework: "ISO/IEC/IEEE 42010:2022; IETF RFC 2026"
+  l2:
+    - name: architecture_doc
+      authoritative_source: "ISO/IEC/IEEE 42010:2022 — Systems and software engineering — Architecture description"
+      official_definition: |
+        "An architecture description is an artifact that expresses an architecture... it contains
+        architecture views, each conforming to an architecture viewpoint and addressing the
+        concerns of identified stakeholders."
+      operational_definition: |
+        Write architecture documentation: system component diagrams, module relationships,
+        technology choices, Architecture Decision Records (ADRs), or C4 model descriptions.
+      signals:
+        - "architecture document"
+        - "system design"
+        - "ADR (Architecture Decision Record)"
+        - "C4 model"
+        - "component diagram"
+      boundary_notes: |
+        vs rfc_proposal: architecture_doc describes current/planned architecture;
+        rfc_proposal proposes a specific change for review.
+
+    - name: rfc_proposal
+      authoritative_source: "IETF RFC 2026: The Internet Standards Process"
+      official_definition: |
+        RFC 2026: "Specifications that are intended to become Internet Standards evolve through
+        a set of maturity levels known as the 'standards track': Proposed Standard, Draft
+        Standard, Internet Standard."
+      operational_definition: |
+        Write a formal proposal or RFC for a new feature or architecture change: problem
+        statement, proposed solution, alternatives considered, and migration plan.
+      signals:
+        - "RFC document"
+        - "proposal / enhancement proposal"
+        - "design doc"
+        - "alternatives considered"
+        - "migration plan"
+      boundary_notes: |
+        vs architecture_doc: rfc_proposal is a change proposal for review;
+        architecture_doc describes existing/planned state.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: diagram — No L2
+# ═══════════════════════════════════════════════════════════════════════════════
+diagram:
+  source_framework: "N/A — Label is sufficiently specific without sub-categories"
+  l2: null
+  rationale: |
+    The 'diagram' L1 label is already narrow enough (architecture diagrams, flowcharts,
+    sequence diagrams) that further subdivision would create too-small categories with
+    insufficient samples for meaningful RL training signal.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: code-explanation
+# Framework: Benchmark Survey arXiv:2505.05283 — Code Understanding
+# ═══════════════════════════════════════════════════════════════════════════════
+code-explanation:
+  source_framework: "Benchmark Survey arXiv:2505.05283 (2025) — Code Understanding sub-tasks"
+  l2:
+    - name: architecture_overview
+      authoritative_source: "Survey §3.2: Code Understanding → System-level comprehension"
+      official_definition: |
+        System-level code understanding: "comprehending the overall structure, module interactions,
+        and design patterns of a software system."
+      operational_definition: |
+        Explain system architecture: describe module relationships, data flow, design decisions,
+        or provide high-level overview of how components interact.
+      signals:
+        - "how does the system work"
+        - "architecture explanation"
+        - "module overview"
+        - "system design walkthrough"
+      boundary_notes: |
+        vs design-spec.architecture_doc: code-explanation explains existing code;
+        design-spec creates new documentation artifacts.
+
+    - name: api_usage
+      authoritative_source: "Survey §3.2: Code Understanding → API-level comprehension"
+      official_definition: |
+        API-level understanding: "comprehending function interfaces, parameter semantics,
+        return value specifications, and usage patterns."
+      operational_definition: |
+        Explain how to use a specific API, library, or function: provide usage examples,
+        describe parameters and return values, or demonstrate integration patterns.
+      signals:
+        - "how to use this API"
+        - "usage example"
+        - "parameter explanation"
+        - "library usage guide"
+      boundary_notes: |
+        vs user-docs.api_reference: code-explanation.api_usage is conversational explanation;
+        user-docs.api_reference is formal documentation artifact.
+
+    - name: algorithm_explain
+      authoritative_source: "Survey §3.2: Code Understanding → Algorithm-level comprehension"
+      official_definition: |
+        Algorithm-level understanding: "explaining the logic, invariants, and complexity
+        characteristics of algorithmic code."
+      operational_definition: |
+        Explain algorithm implementation: describe step-by-step logic, analyze time/space
+        complexity, explain invariants, or walk through execution with examples.
+      signals:
+        - "algorithm explanation"
+        - "complexity analysis"
+        - "step-by-step logic"
+        - "invariant description"
+      boundary_notes: |
+        vs architecture_overview: algorithm_explain is function/algorithm level;
+        architecture_overview is system level.
+
+    - name: debug_walkthrough
+      authoritative_source: "Survey §3.2: Code Understanding → Debugging comprehension"
+      official_definition: |
+        Debugging comprehension: "tracing execution paths, identifying failure points, and
+        reasoning about root causes of defects."
+      operational_definition: |
+        Guide through a debugging process: trace execution flow, identify where/why something
+        fails, perform root cause analysis, or explain error messages.
+      signals:
+        - "debug walkthrough"
+        - "trace the issue"
+        - "root cause analysis"
+        - "why does this fail"
+      boundary_notes: |
+        vs bug-fix: debug_walkthrough explains/investigates without making changes;
+        bug-fix implements the actual fix.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: security-fix
+# Framework: CWE Top 25 Most Dangerous Software Weaknesses (2023)
+# ═══════════════════════════════════════════════════════════════════════════════
+security-fix:
+  source_framework: "CWE/SANS Top 25 Most Dangerous Software Weaknesses (2023 Edition)"
+  l2:
+    - name: injection
+      authoritative_source: "CWE-89: SQL Injection; CWE-79: XSS; CWE-78: OS Command Injection"
+      official_definition: |
+        CWE-89: "The product constructs all or part of an SQL command using externally-influenced
+        input... without properly neutralizing special elements."
+        CWE-79: "The product does not neutralize user-controllable input before it is placed
+        in output that is used as a web page served to other users."
+      operational_definition: |
+        Fix injection vulnerabilities identified through security audit: add parameterized
+        queries (SQL injection), implement output encoding (XSS), or sanitize system commands.
+        Distinguished from bug-fix by security audit/CVE context.
+      signals:
+        - "CVE fix for injection"
+        - "security audit: SQL injection"
+        - "XSS vulnerability patch"
+        - "command injection remediation"
+      boundary_notes: |
+        vs bug-fix.injection_xss: security-fix.injection is from security audit/CVE context;
+        bug-fix.injection_xss is discovered as a functional bug.
+
+    - name: buffer_overflow
+      authoritative_source: "CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')"
+      official_definition: |
+        "The product copies an input buffer to an output buffer without verifying that the
+        size of the input buffer is less than the size of the output buffer, leading to a
+        buffer overflow."
+      operational_definition: |
+        Fix buffer overflow vulnerabilities: add bounds checking, replace unsafe functions
+        (strcpy → strncpy), implement safe memory allocation patterns, or fix heap overflows.
+      signals:
+        - "buffer overflow fix"
+        - "bounds check added"
+        - "stack overflow vulnerability"
+        - "heap overflow patch"
+        - "unsafe strcpy/memcpy"
+      boundary_notes: |
+        vs bug-fix.off_by_one: security-fix.buffer_overflow is exploitable memory corruption;
+        bug-fix.off_by_one is a logic error in array indexing.
+
+    - name: broken_access
+      authoritative_source: "CWE-862: Missing Authorization; CWE-863: Incorrect Authorization"
+      official_definition: |
+        CWE-862: "The product does not perform an authorization check when an actor attempts to
+        access a resource or perform an action."
+        CWE-863: "The product performs an authorization check when an actor attempts to access
+        a resource, but the check is implemented incorrectly."
+      operational_definition: |
+        Fix broken access control: add missing authorization checks, fix IDOR (Insecure Direct
+        Object Reference), prevent privilege escalation, or correct permission validation logic.
+      signals:
+        - "unauthorized access fix"
+        - "IDOR vulnerability"
+        - "privilege escalation"
+        - "missing auth check"
+        - "access control bypass"
+      boundary_notes: |
+        vs auth (L1): security-fix.broken_access fixes a vulnerability;
+        auth (L1) implements/modifies auth features.
+
+    - name: crypto_weakness
+      authoritative_source: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm; CWE-1007: Insufficient Visual Distinction of Homoglyphs Presented to User (anti-spoofing display safeguards)"
+      official_definition: |
+        CWE-327: "The product uses a broken or risky cryptographic algorithm or protocol...
+        Examples include DES, MD5 when used for integrity, SHA-1 for digital signatures, or
+        ECB mode."
+        CWE-1007: "The product displays information or identifiers to a user, but the
+        display mechanism does not make it easy for the user to distinguish between visually
+        similar or identical glyphs (homoglyphs), which may cause the user to misinterpret a
+        glyph and perform an unintended or undesired action." Anti-spoofing fixes (e.g.,
+        Punycode/IDN encoding to prevent homograph attacks) belong here.
+      operational_definition: |
+        Fix cryptographic / anti-spoofing weaknesses: replace deprecated algorithms (MD5/SHA-1
+        → SHA-256), fix insecure random number generation, remove hardcoded keys/passwords,
+        upgrade to stronger key sizes, or apply Punycode/IDN encoding to prevent homograph
+        phishing attacks.
+      signals:
+        - "weak crypto algorithm replaced"
+        - "MD5/SHA-1 deprecation"
+        - "hardcoded secret removed"
+        - "insecure PRNG fix"
+        - "key size upgrade"
+        - "Punycode / IDN homograph anti-phishing fix"
+      boundary_notes: |
+        vs security_auth.crypto_impl (Domain): security-fix.crypto_weakness is task type (fixing
+        a vulnerability); security_auth is where crypto work happens as a domain.
+
+    - name: sensitive_data_exposure
+      authoritative_source: "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
+      official_definition: |
+        "The product exposes sensitive information to an actor that is not explicitly authorized
+        to have access to that information."
+      operational_definition: |
+        Fix sensitive data leaks: remove credentials from logs, mask PII in error messages,
+        prevent stack traces in production responses, or fix overly verbose API responses.
+      signals:
+        - "credentials in logs"
+        - "PII exposure fix"
+        - "stack trace leaked"
+        - "sensitive data in response"
+        - "information disclosure"
+      boundary_notes: |
+        vs privacy (L1): security-fix.sensitive_data_exposure fixes accidental leaks;
+        privacy (L1) implements deliberate data governance.
+
+    - name: dos_resource_exhaustion
+      authoritative_source: "CWE-400: Uncontrolled Resource Consumption (CWE Top 25, 2023, ranked #20)"
+      official_definition: |
+        CWE-400: "The product does not properly control the allocation and maintenance of a
+        limited resource, thereby enabling an actor to influence the amount of resources
+        consumed, eventually leading to the exhaustion of available resources." Common forms
+        include unbounded HTTP body reads, unbounded recursion/loops on attacker-controlled
+        input, and missing rate/size limits.
+      operational_definition: |
+        Fix denial-of-service / resource exhaustion vulnerabilities: bound HTTP body reads
+        (e.g., `utils.ReadAtMost`), add request rate limits, cap recursion depth, set
+        timeouts on attacker-influenced operations, or limit memory allocation tied to
+        untrusted input.
+      signals:
+        - "ReadAtMost / MaxBytesReader"
+        - "request size limit added"
+        - "rate limiting introduced"
+        - "recursion depth cap"
+        - "DoS / resource exhaustion mitigation"
+      boundary_notes: |
+        vs bug-fix.resource_leak: dos_resource_exhaustion is a security fix for an
+        attacker-influenceable resource-consumption channel; resource_leak is a functional
+        bug where the program itself fails to release resources.
+        vs security_auth.waf_firewall (Domain): dos_resource_exhaustion is the task type
+        (adding the cap inside application code); waf_firewall is the domain when the work
+        is on a WAF/firewall product itself.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: auth
+# Framework: OWASP Authentication Cheat Sheet; RFC 6749 (OAuth 2.0); NIST SP 800-63B
+# ═══════════════════════════════════════════════════════════════════════════════
+auth:
+  source_framework: "OWASP Auth Cheat Sheet; RFC 6749; NIST SP 800-63B"
+  l2:
+    - name: oauth_oidc
+      authoritative_source: "RFC 6749: The OAuth 2.0 Authorization Framework; OpenID Connect Core 1.0; OWASP Authentication Cheat Sheet — 'Federated/Delegated Authentication' section"
+      official_definition: |
+        RFC 6749: "The OAuth 2.0 authorization framework enables a third-party application to
+        obtain limited access to an HTTP service... on behalf of a resource owner."
+        OIDC: "OpenID Connect 1.0 is a simple identity layer on top of OAuth 2.0."
+        OWASP groups OAuth/OIDC together with other delegated authentication mechanisms
+        (including SAML federation and reverse-proxy header-based SSO) as "Federated /
+        Delegated Authentication".
+      operational_definition: |
+        Implement or modify federated / delegated authentication flows: OAuth 2.0 / OIDC
+        authorization code grant, token refresh, PKCE, token introspection, or SSO
+        integration. Also covers reverse-proxy header-based SSO where authentication is
+        delegated to a trusted upstream proxy that injects identity headers (e.g.,
+        X-Forwarded-User, X-Auth-Request-Email) consumed by the application.
+      signals:
+        - "OAuth flow implementation"
+        - "OIDC / OpenID Connect"
+        - "authorization code grant"
+        - "refresh token"
+        - "PKCE"
+        - "reverse-proxy header SSO (X-Forwarded-User, trusted header auth)"
+      boundary_notes: |
+        vs feature.auth_feature: auth.oauth_oidc modifies existing OAuth/SSO setup;
+        feature.auth_feature creates a new auth subsystem from scratch.
+
+    - name: session_management
+      authoritative_source: "OWASP Session Management Cheat Sheet"
+      official_definition: |
+        OWASP: "Session Management is a process by which a server maintains the state of an
+        entity interacting with it... sessions are maintained on the server by a session
+        identifier."
+      operational_definition: |
+        Modify session handling: cookie security attributes (HttpOnly, Secure, SameSite),
+        session expiry/rotation, session fixation prevention, or token-based session storage.
+      signals:
+        - "session configuration"
+        - "cookie security attributes"
+        - "session rotation"
+        - "session fixation fix"
+        - "token refresh logic"
+      boundary_notes: |
+        vs oauth_oidc: session_management is session lifecycle;
+        oauth_oidc is token-based delegation.
+
+    - name: rbac_abac
+      authoritative_source: "NIST INCITS 359-2004: Role Based Access Control"
+      official_definition: |
+        NIST RBAC: "Users are assigned to roles, permissions are assigned to roles, and users
+        acquire permissions by virtue of being members of roles."
+      operational_definition: |
+        Implement or modify role/attribute-based access control: define roles and permissions,
+        implement policy evaluation, add permission middleware, or configure access matrices.
+      signals:
+        - "role / permission definition"
+        - "RBAC / ABAC implementation"
+        - "permission middleware"
+        - "access control policy"
+        - "role assignment"
+      boundary_notes: |
+        vs security-fix.broken_access: auth.rbac_abac builds the system;
+        broken_access fixes vulnerabilities in it.
+
+    - name: mfa
+      authoritative_source: "NIST SP 800-63B: Digital Identity Guidelines — Authentication and Lifecycle Management"
+      official_definition: |
+        NIST 800-63B §5.1: "Multi-factor authentication (MFA) refers to the use of more than
+        one distinct authentication factor... from: something you know, something you have,
+        something you are."
+      operational_definition: |
+        Implement or modify multi-factor authentication: TOTP setup (Google Authenticator),
+        WebAuthn/FIDO2 integration, SMS/email verification, or backup codes.
+      signals:
+        - "TOTP / authenticator app"
+        - "WebAuthn / FIDO2"
+        - "2FA / MFA implementation"
+        - "backup codes"
+        - "second factor verification"
+      boundary_notes: |
+        vs session_management: mfa adds additional authentication factors;
+        session_management handles post-authentication sessions.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: privacy
+# Framework: GDPR (General Data Protection Regulation); CCPA
+# ═══════════════════════════════════════════════════════════════════════════════
+privacy:
+  source_framework: "GDPR Regulation (EU) 2016/679; California Consumer Privacy Act (CCPA)"
+  l2:
+    - name: data_minimization
+      authoritative_source: "GDPR Article 5(1)(c)"
+      official_definition: |
+        GDPR Art. 5(1)(c): "Personal data shall be adequate, relevant and limited to what is
+        necessary in relation to the purposes for which they are processed ('data minimisation')."
+      operational_definition: |
+        Reduce data collection or storage to minimum necessary: remove unnecessary fields from
+        forms/APIs, anonymize data where identity isn't needed, or implement data masking.
+      signals:
+        - "remove unnecessary data collection"
+        - "data minimization"
+        - "anonymization"
+        - "reduce PII scope"
+        - "field removal"
+      boundary_notes: |
+        vs retention_deletion: data_minimization reduces what is collected;
+        retention_deletion manages how long collected data is kept.
+
+    - name: retention_deletion
+      authoritative_source: "GDPR Article 5(1)(e): Storage Limitation"
+      official_definition: |
+        GDPR Art. 5(1)(e): "Personal data shall be kept in a form which permits identification
+        of data subjects for no longer than is necessary for the purposes for which the personal
+        data are processed."
+      operational_definition: |
+        Implement data retention/deletion policies: TTL on stored data, scheduled purge jobs,
+        right-to-erasure (RTBF) implementation, or data lifecycle management.
+      signals:
+        - "data retention policy"
+        - "TTL / expiry"
+        - "right to erasure / RTBF"
+        - "data purge job"
+        - "account deletion"
+      boundary_notes: |
+        vs data_minimization: retention_deletion is about duration;
+        data_minimization is about scope.
+
+    - name: consent_management
+      authoritative_source: "GDPR Article 7: Conditions for Consent"
+      official_definition: |
+        GDPR Art. 7(1): "Where processing is based on consent, the controller shall be able to
+        demonstrate that the data subject has consented to processing of his or her personal data."
+      operational_definition: |
+        Implement consent collection and management: cookie consent banners, privacy preference
+        centers, opt-in/opt-out mechanisms, or consent record storage.
+      signals:
+        - "cookie consent"
+        - "privacy preference center"
+        - "opt-in / opt-out"
+        - "consent record"
+        - "GDPR consent flow"
+      boundary_notes: |
+        vs data_minimization: consent_management is about user permission;
+        data_minimization is about reducing what's collected regardless of consent.

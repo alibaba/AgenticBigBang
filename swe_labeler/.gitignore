@@ -1,0 +1,38 @@
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+config/local*.yaml
+config/*_private.yaml
+*.pem
+*.key
+
+# Generated artifacts and private data
+output/
+output_*/
+logs/
+cache/
+benchmark/
+data/
+datasets/
+training_data/
+stats*/
+unspecified_cases/
+preprocessed_test/
+*.log
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local backup snapshots and editor files
+.backup_*/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

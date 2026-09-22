@@ -1,0 +1,34 @@
+{
+  "counts": {
+    "categories": {
+      "A": {
+        "training_records": 601,
+        "unique_instances": 601
+      },
+      "B": {
+        "training_records": 516,
+        "unique_instances": 516
+      },
+      "C": {
+        "training_records": 1652,
+        "unique_instances": 1651
+      }
+    },
+    "training_records": 2769,
+    "unique_instances": 2768
+  },
+  "id_scheme": {
+    "instance": "TRN- plus 16 uppercase hexadecimal HMAC characters",
+    "record": "REC- plus 16 uppercase hexadecimal HMAC characters",
+    "secret_material_in_public_bundle": false
+  },
+  "known_multiplicity": {
+    "instances_with_two_source_records": 1
+  },
+  "output_sha256": {
+    "initial_rl_training_records.csv": "93cbf71e613183d546d065b1c66c0a1641e78ad9ad8ecfc7a964d45761b89667",
+    "initial_rl_unique_instances.csv": "3703ba5e53146832e84be331d0c652ec904d440357b980eb720b0a6b1d68041f"
+  },
+  "schema_version": "1.0",
+  "training_phase": "initial_expert_rl"
+}

@@ -1,0 +1,8 @@
+secondary: "金融风控与保险"
+document_type_label: "金融风控/保险方案"
+reading_hints: |
+  金融风控/保险文档通常包含：风险类型识别、风险计量与限额、信贷/承保政策、
+  理赔/处置流程、风险缓释措施。关注风险指标口径（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:违约率|不良率|赔付率|逾期率|风险敞口)\\s*(?:为|达|约|超)?\\s*\\d+(?:\\.\\d+)?\\s*%"
+    label: "风控/赔付率数值"

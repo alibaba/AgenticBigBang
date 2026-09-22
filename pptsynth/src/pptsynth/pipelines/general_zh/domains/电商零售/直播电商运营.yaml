@@ -1,0 +1,8 @@
+secondary: "直播电商运营"
+document_type_label: "直播电商运营方案"
+reading_hints: |
+  直播电商方案通常包含：账号与人设、选品与货盘、脚本与节奏、
+  投流与引流、转化与承接、复盘优化。关注货盘与转化链路（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:GMV|销售额|转化率|观看|UV)\\s*(?:约|为|达)?\\s*\\d+(?:\\.\\d+)?\\s*(?:万|亿|%|人次)?"
+    label: "直播运营数值"

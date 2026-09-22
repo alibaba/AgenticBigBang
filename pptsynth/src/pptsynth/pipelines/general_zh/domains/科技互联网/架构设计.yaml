@@ -1,0 +1,12 @@
+secondary: "架构设计"
+document_type_label: "系统架构设计文档"
+reading_hints: |
+  架构设计文档通常包含：系统整体架构图、各子系统/模块职责划分、
+  接口与数据流设计、非功能性需求（性能/可用性/安全）、
+  技术栈选型及理由、部署架构。
+  关注：架构决策的核心理由（取舍权衡），性能目标（SLA数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "可用性\\s*(?:达到|为|≥|>=)\\s*\\d+\\.\\d+%"
+    label: "系统可用性SLA"
+  - pattern: "响应时间\\s*(?:<|≤|<=|为|约)\\s*\\d+\\s*(?:ms|毫秒|秒)"
+    label: "响应时间指标"

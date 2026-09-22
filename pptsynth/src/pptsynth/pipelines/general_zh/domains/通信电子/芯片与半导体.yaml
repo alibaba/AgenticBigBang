@@ -1,0 +1,6 @@
+secondary: "芯片与半导体"
+document_type_label: "芯片与半导体方案/PPT"
+reading_hints: |
+  芯片/半导体文档通常包含：芯片架构与制程节点、性能规格(频率/功耗/面积)、
+  IP核与EDA工具、封装测试方案、良率与成本分析。
+  关注：制程参数、性能对比（具体数值只进入key_numbers）。

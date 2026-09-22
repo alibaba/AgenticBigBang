@@ -1,0 +1,10 @@
+secondary: "年度总结"
+document_type_label: "年度工作总结汇报"
+reading_hints: |
+  年度总结文档通常包含：年度工作目标回顾、主要工作完成情况（含KPI数据）、
+  重点项目进展、团队建设与人才发展、存在的问题与改进措施、
+  下年度工作规划。
+  关注：各项KPI的完成情况（是否达标、超额/未达原因）（数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:营收|利润|销售额)\\s*(?:同比|较|比上年)\\s*(?:增长|下降|提升)了\\s*\\d+"
+    label: "年度财务增幅"

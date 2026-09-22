@@ -1,0 +1,9 @@
+secondary: "招商路演"
+document_type_label: "品牌/商家招商路演材料"
+reading_hints: |
+  招商路演文档通常包含：平台/商圈概况与流量数据、目标招商品类、
+  合作模式与扶持政策、入驻门槛与流程、成功案例与预期收益测算。
+  关注：不同合作模式（联营/租赁/品牌店等）的条件差异（数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:坑位费|广告费|运营服务费)\\s*(?:约|为)?\\s*\\d+\\s*(?:万|元)"
+    label: "招商费用数值"

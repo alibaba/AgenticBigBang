@@ -1,0 +1,5 @@
+secondary: "库存与物流"
+document_type_label: "库存/物流方案"
+reading_hints: |
+  库存/物流文档通常包含：库存结构与周转、补货与安全库存策略、仓网与配送、
+  成本与时效。关注策略与瓶颈（具体数值只进入key_numbers）。

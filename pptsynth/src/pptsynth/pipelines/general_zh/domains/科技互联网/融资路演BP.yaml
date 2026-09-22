@@ -1,0 +1,8 @@
+secondary: "融资路演BP"
+document_type_label: "融资路演/商业计划书(BP)"
+reading_hints: |
+  融资路演BP通常包含：痛点与机会、产品与技术壁垒、市场空间、商业模式、
+  竞争格局、团队、财务预测与融资需求。关注价值主张与增长逻辑（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:融资|估值|营收|GMV)\\s*(?:约|为|达|预计)?\\s*\\d+(?:\\.\\d+)?\\s*(?:万|亿|万元|亿元)"
+    label: "融资/估值金额"

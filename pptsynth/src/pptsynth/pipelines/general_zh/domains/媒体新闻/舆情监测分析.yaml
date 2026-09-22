@@ -1,0 +1,5 @@
+secondary: "舆情监测分析"
+document_type_label: "舆情监测报告"
+reading_hints: |
+  舆情监测文档通常包含：监测范围与关键词、声量与情感走势、传播路径与关键节点、
+  风险研判、应对建议。关注研判逻辑与处置（具体数值只进入key_numbers）。

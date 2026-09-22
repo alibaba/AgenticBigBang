@@ -1,0 +1,9 @@
+secondary: "品类分析"
+document_type_label: "电商品类分析报告"
+reading_hints: |
+  品类分析文档通常包含：市场规模与增速趋势、消费者洞察与需求分析、
+  竞品格局与市场份额、机会与潜力品类识别、策略建议与选品方向。
+  关注：不同消费者细分群体的差异化需求（数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "市场规模\\s*(?:约|为|达到)?\\s*\\d+\\s*(?:亿|万亿)元?"
+    label: "市场规模数值"

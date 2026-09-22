@@ -1,0 +1,10 @@
+secondary: "食品安全"
+document_type_label: "食品安全/质量控制材料"
+reading_hints: |
+  食品安全文档通常包含：食品安全法规与标准体系、危害因子识别（物理/化学/生物）、
+  关键控制点（HACCP）与控制措施、检测方法与限量标准、
+  事故案例与应急处置、企业合规要点。
+  关注：不同危害类型的控制要求区分（数值限量只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:限量|最大残留限量|MRL)\\s*(?:为|不超过)?\\s*\\d+(?:\\.\\d+)?\\s*(?:mg/kg|ppb|ppm)"
+    label: "食品安全限量标准值"

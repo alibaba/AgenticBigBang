@@ -1,0 +1,9 @@
+secondary: "项目提案"
+document_type_label: "房地产项目提案/投资分析"
+reading_hints: |
+  项目提案文档通常包含：市场分析与机会判断、项目选址与规划方案、
+  投资估算与财务测算、开发计划与时间节点、风险分析与应对策略。
+  关注：财务指标的计算假设与条件（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:IRR|NPV|回报率|利润率)\\s*(?:约|为|预计)?\\s*\\d+"
+    label: "财务回报指标"

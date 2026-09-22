@@ -1,0 +1,8 @@
+secondary: "招聘与配置"
+document_type_label: "招聘/人才配置方案"
+reading_hints: |
+  招聘/配置文档通常包含：编制与需求、招聘渠道与流程、评估标准与面试设计、
+  录用与Offer、入职配置。关注岗位画像与评估维度（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:编制|招聘|到岗)\\s*(?:人数|名额)?\\s*(?:约|为|达|共)?\\s*\\d+\\s*(?:人|名)"
+    label: "招聘人数"

@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AuditReport",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "pass",
+    "scores",
+    "findings",
+    "fixes_applied",
+    "summary"
+  ],
+  "properties": {
+    "pass": {
+      "type": "boolean",
+      "description": "当且仅当所有维度得分≥4时为true。"
+    },
+    "scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "每个元评价轴的1-5整数评分。<4为该轴不合格。",
+      "required": [
+        "style_alignment",
+        "section1_paper_specificity",
+        "design_constraint_density",
+        "instruction_underspecification",
+        "checklist_anchor_specificity",
+        "completeness_correctness_separation",
+        "trap_coverage",
+        "language_and_meta_hygiene",
+        "internal_consistency",
+        "atomicity_check",
+        "key_numbers_coverage"
+      ],
+      "properties": {
+        "style_alignment": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "instructions.md 是否遵循六段式结构（严格约束、Sections 1-6、预期输出）？"
+        },
+        "section1_paper_specificity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Section 1 的章节标题是否论文特定化，要点是否涉及论文特定的主题、机制、数据集或基线？"
+        },
+        "design_constraint_density": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "是否有足够的'设计约束:'行（≥3）引用论文中真实的图/表标识符？"
+        },
+        "instruction_underspecification": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Section 1 的要点和设计约束行是否仅描述主题/范围/定性框架，而未预泄露具体数值结果？"
+        },
+        "checklist_anchor_specificity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "完整性项是否使用论文特定术语？正确性项是否包含具体锚点？"
+        },
+        "completeness_correctness_separation": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "是否没有单个检查项同时询问'是否包含'和'是否正确'？"
+        },
+        "trap_coverage": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "正确性检查项是否覆盖了Paper Card traps列表中≥3种不同的trap类型？同时检查 _field_manifest.txt：每个 TRAP 条目应有专门的正确性检查项。若不足50%的traps被覆盖，评分1-2。"
+        },
+        "language_and_meta_hygiene": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "整个案例是否使用中文（保留英文术语）？是否不含管线元语言？"
+        },
+        "internal_consistency": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "完整性检查项的必要元素是否在 instructions.md Section 1 中有对应？正确性检查项的锚点是否存在于Paper Card中？"
+        },
+        "atomicity_check": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "每个检查项是否仅测试一个独立条件？若有项包含≥3个独立条件，评分1-2；包含2个条件评分3；每项都是原子的评分4-5。"
+        },
+        "key_numbers_coverage": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "正确性检查项是否引用了 Paper Card 中≥80%的 key_numbers 条目（对照 _field_manifest.txt）？引用<50%评分1-2；50-79%评分3；≥80%评分4-5。"
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "description": "具体问题列表，每个附带文件位置和修复建议。无问题则为空。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["axis", "severity", "where", "what", "fix"],
+        "properties": {
+          "axis": {
+            "type": "string",
+            "description": "对应哪个评分轴。"
+          },
+          "severity": {"enum": ["blocker", "major", "minor"]},
+          "where": {
+            "type": "string",
+            "description": "文件路径和行/章节。"
+          },
+          "what": {
+            "type": "string",
+            "minLength": 5
+          },
+          "fix": {
+            "type": "string",
+            "minLength": 5,
+            "description": "具体的修改建议。"
+          }
+        }
+      }
+    },
+    "fixes_applied": {
+      "type": "array",
+      "description": "审计阶段实际应用的编辑列表。无修改则为空。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["file", "summary"],
+        "properties": {
+          "file": {"type": "string"},
+          "summary": {"type": "string"}
+        }
+      }
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 10,
+      "description": "两到三句话的总体评估。"
+    }
+  }
+}

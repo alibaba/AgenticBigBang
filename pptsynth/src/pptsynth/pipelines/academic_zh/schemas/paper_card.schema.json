@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PaperCard",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "title",
+    "authors",
+    "affiliation",
+    "conference",
+    "pdf_pages",
+    "page_count_range",
+    "central_thesis",
+    "ordered_sections",
+    "key_numbers",
+    "key_figures",
+    "key_terms",
+    "traps",
+    "paper_type"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 2,
+      "description": "论文标题，与标题页上的完全一致。"
+    },
+    "authors": {
+      "type": "string",
+      "minLength": 1,
+      "description": "逗号分隔的作者列表。如论文标注了等同贡献，请保留标记。"
+    },
+    "affiliation": {
+      "type": "string",
+      "minLength": 2,
+      "description": "逗号分隔的机构列表，与论文一致。"
+    },
+    "conference": {
+      "type": "string",
+      "minLength": 3,
+      "description": "完整会议名称+年份，例如'中国林业学术大会 2023'、'交通能源与智能动力大会(CTEIP) 2024'。从论文页眉/页脚提取。"
+    },
+    "pdf_pages": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "PDF总页数（含参考文献和附录）。"
+    },
+    "page_count_range": {
+      "type": "array",
+      "items": {"type": "integer", "minimum": 8, "maximum": 30},
+      "minItems": 2,
+      "maxItems": 2,
+      "description": "[最小, 最大] 幻灯片页数。根据论文页数确定：8-9页→[10,14]，10-12页→[12,16]，13-15页→[14,18]，16+页→[16,20]。"
+    },
+    "central_thesis": {
+      "type": "string",
+      "minLength": 30,
+      "description": "一句话概括：论文要解决的问题 + 方法/途径 + 核心结论或发现。避免使用'研究了'、'探讨了'等模糊动词。使用中文。"
+    },
+    "paper_type": {
+      "type": "string",
+      "enum": ["experimental", "computational", "qualitative", "review", "mixed"],
+      "description": "论文类型。experimental=实验性研究，computational=数值模拟/仿真，qualitative=定性/历史/政策研究，review=综述，mixed=混合类型。"
+    },
+    "ordered_sections": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 14,
+      "description": "有序的幻灯片章节列表，将成为 instructions.md 的 Section 1。必须包含：标题页、大纲、背景、现有方法不足（可选）、方法概述、方法论、关键实验程序/技术细节、试验材料与数据、实验设置、结果、总结与局限、结论。可包含一个 visual_analysis 章节。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "kind", "bullets"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 2,
+            "description": "章节标题，使用中文，须论文特定化。例如'方法：预燃室湍流射流点火技术'而非简单的'方法'。"
+          },
+          "kind": {
+            "enum": [
+              "title",
+              "outline",
+              "background",
+              "limitations",
+              "method_overview",
+              "methodology",
+              "key_procedure",
+              "materials_and_data",
+              "setup",
+              "results",
+              "visual_analysis",
+              "takeaways_limitations",
+              "conclusion"
+            ]
+          },
+          "bullets": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 4},
+            "description": "使用中文撰写。对于非标题章节：2-5条简短要点，采用'标签：定性描述'的形式，每条≤30字，描述该页幻灯片应涵盖的主题和定性视角。要点须论文特定化（涉及具体机制/数据集/基线名称），但不得预泄露具体数值结果、精度百分比、基线排名等——这些内容仅进入 key_numbers/key_terms/traps，由 Stage 3 生成评分标准。标题页：提供四条固定格式要点'论文标题: ...'、'作者团队: ...'、'单位: ...'、'会议: ...'。大纲页：空数组。"
+          },
+          "design_constraint": {
+            "type": "string",
+            "description": "可选。引用幻灯片必须展示的图/表及其主题，不包含具体数值。格式：'展示<图X>，显示<主题描述>'。方法、结果和视觉分析章节应包含此字段。全篇至少3个章节须带设计约束。"
+          }
+        }
+      }
+    },
+    "key_numbers": {
+      "type": "array",
+      "minItems": 4,
+      "description": "幻灯片必须准确报告的定量信息。每条是一个完整的锚点，用于正确性检查项。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["claim"],
+        "properties": {
+          "claim": {
+            "type": "string",
+            "minLength": 10,
+            "description": "包含数值、单位和条件的完整表述，例如'在压缩比15:1、当量比0.8条件下，指示热效率达到46.2%'。使用中文。"
+          },
+          "paper_anchor": {
+            "type": "string",
+            "description": "来源位置，例如'表2'、'第4.2节'、'第7页'。"
+          }
+        }
+      }
+    },
+    "key_figures": {
+      "type": "array",
+      "minItems": 2,
+      "description": "幻灯片中必须引用或再现的图表。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "what"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "论文中的标签，可以是中文形式（图1、表2）或英文形式（Fig. 1、Table 1），使用论文原文的确切形式。"
+          },
+          "page": {"type": "integer", "minimum": 1},
+          "what": {
+            "type": "string",
+            "minLength": 5,
+            "description": "该图/表展示的内容。使用中文。"
+          },
+          "intended_slide": {
+            "type": "string",
+            "description": "该图/表应出现在哪个 ordered_section 中（按标题或 kind）。"
+          }
+        }
+      }
+    },
+    "key_terms": {
+      "type": "array",
+      "minItems": 5,
+      "description": "论文引入或定义的术语/概念，幻灯片必须正确定义。每个术语锚定一个正确性检查项。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["term", "definition"],
+        "properties": {
+          "term": {"type": "string", "minLength": 1},
+          "definition": {
+            "type": "string",
+            "minLength": 10,
+            "description": "简洁的、忠实于论文的定义。使用中文。"
+          },
+          "common_confusion": {
+            "type": "string",
+            "description": "可选。粗心的幻灯片可能做出的似是而非的错误表述。"
+          }
+        }
+      }
+    },
+    "traps": {
+      "type": "array",
+      "minItems": 4,
+      "description": "幻灯片必须避免的具体表述错误风险。用于生成最具区分力的正确性检查项。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["claim_to_avoid", "correct_form", "kind"],
+        "properties": {
+          "claim_to_avoid": {
+            "type": "string",
+            "minLength": 10,
+            "description": "需要标记的错误表述，使用具体措辞。中文。"
+          },
+          "correct_form": {
+            "type": "string",
+            "minLength": 10,
+            "description": "论文支持的忠实表述。中文。"
+          },
+          "kind": {
+            "enum": [
+              "fabrication",
+              "metric_misread",
+              "non_monotone_flattened",
+              "condition_level_confusion",
+              "scope_overclaim",
+              "unit_or_definition_error",
+              "trend_direction_error",
+              "factor_misattribution"
+            ]
+          }
+        }
+      }
+    },
+    "domain": {
+      "type": "string",
+      "description": "主要研究领域，例如'内燃机/燃烧'、'森林生态'、'土壤/水土保持'。用于统计和领域感知验证。"
+    },
+    "language_note": {
+      "type": "string",
+      "description": "语言特征说明，例如'中文为主，含英文术语和图表标签'。"
+    },
+    "_provenance": {
+      "type": "object",
+      "description": "可选的自报告信息，用于审计追溯。",
+      "additionalProperties": false,
+      "properties": {
+        "pages_read": {"type": "string", "description": "阅读了哪些页，例如'1-12（完整）'或'1-6, 9-11'。"},
+        "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
+        "notes": {"type": "string"}
+      }
+    }
+  }
+}

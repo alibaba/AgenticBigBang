@@ -1,0 +1,6 @@
+secondary: "软件研发与工程"
+document_type_label: "软件研发与工程汇报/PPT"
+reading_hints: |
+  软件研发文档通常包含：项目技术架构、开发流程(敏捷/DevOps)、
+  代码质量指标、测试覆盖率、技术债务、迭代计划。
+  关注：工程实践方法论、团队协作模式（具体数值只进入key_numbers）。

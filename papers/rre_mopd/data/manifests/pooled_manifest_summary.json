@@ -1,0 +1,43 @@
+{
+  "counts": {
+    "by_routing_group": {
+      "A": {
+        "training_records": 601,
+        "unique_instances": 601
+      },
+      "B": {
+        "training_records": 516,
+        "unique_instances": 516
+      },
+      "C": {
+        "training_records": 1652,
+        "unique_instances": 1651
+      },
+      "U": {
+        "training_records": 3954,
+        "unique_instances": 3954
+      }
+    },
+    "by_source_subset": {
+      "initial_rl": {
+        "training_records": 2769,
+        "unique_instances": 2768
+      },
+      "rest_3954": {
+        "training_records": 3954,
+        "unique_instances": 3954
+      }
+    },
+    "duplicate_extra_records": 1,
+    "training_records": 6723,
+    "unique_instances": 6722
+  },
+  "output_sha256": {
+    "pooled_rest_training_records.csv": "b0f425b8e63e23b35d8bbaa3a9a3cfae97c02e01e89c1f010a6d4fc31fe6c2f6",
+    "pooled_training_records.csv": "c9727e844bb39680c1b2dfe3f76494bcf0e5a31e7119c160027577bf172a8262",
+    "pooled_unique_instances.csv": "879e8574e30afcc13befd66e3a8a7f6da36add750b9a046ca228af714b72f713"
+  },
+  "relationship": "initial_rl records plus rest_3954 records form the pooled training set",
+  "schema_version": "1.0",
+  "training_phase": "pooled_joint_rl"
+}

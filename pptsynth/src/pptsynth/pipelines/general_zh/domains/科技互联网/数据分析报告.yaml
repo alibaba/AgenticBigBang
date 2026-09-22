@@ -1,0 +1,8 @@
+secondary: "数据分析报告"
+document_type_label: "数据分析报告"
+reading_hints: |
+  数据分析报告通常包含：分析目标与口径、数据来源与处理、核心指标与趋势、
+  分维度下钻、异常归因、结论与行动建议。关注指标口径与归因逻辑（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:环比|同比|增长|下降)\\s*\\d+(?:\\.\\d+)?\\s*(?:%|个百分点)"
+    label: "数据变动幅度"

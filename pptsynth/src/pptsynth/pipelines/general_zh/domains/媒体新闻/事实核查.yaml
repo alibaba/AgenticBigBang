@@ -1,0 +1,5 @@
+secondary: "事实核查"
+document_type_label: "事实核查报告"
+reading_hints: |
+  事实核查文档通常包含：待核查论断清单、信源与证据、交叉验证方法、
+  核查结论与置信度、更正建议。关注证据链与结论依据（具体数值只进入key_numbers）。

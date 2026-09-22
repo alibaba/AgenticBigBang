@@ -1,0 +1,8 @@
+secondary: "预算与成本管理"
+document_type_label: "预算/成本管理方案"
+reading_hints: |
+  预算/成本文档通常包含：编制依据与假设、预算科目与分解、成本结构、
+  预算执行与偏差、控制措施。关注预算口径与偏差归因（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:预算|实际|偏差|超支|节约)\\s*(?:约|为|达)?\\s*\\d+(?:\\.\\d+)?\\s*(?:万|万元|元|亿元)"
+    label: "预算/成本偏差金额"

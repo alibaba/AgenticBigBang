@@ -1,0 +1,8 @@
+secondary: "ESG可持续发展报告"
+document_type_label: "ESG/可持续发展报告"
+reading_hints: |
+  ESG报告通常包含：治理架构与议题识别、环境（碳/能耗/排放）、
+  社会（员工/供应链/社区）、治理与合规、目标与绩效。关注议题与绩效口径（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:碳排放|能耗|减排|用水)\\s*(?:约|为|达|下降|减少)?\\s*\\d+(?:\\.\\d+)?\\s*(?:吨|万吨|%|kWh)?"
+    label: "ESG环境指标"

@@ -1,0 +1,8 @@
+secondary: "审计与内控"
+document_type_label: "审计/内控报告"
+reading_hints: |
+  审计/内控文档通常包含：审计范围与依据、控制测试、发现的问题与风险等级、
+  整改建议、审计意见。关注问题定级与整改闭环（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:重大|重要|一般)\\s*(?:缺陷|风险|问题)\\s*(?:共|计|达)?\\s*\\d+\\s*(?:项|个|条)"
+    label: "内控缺陷数量"

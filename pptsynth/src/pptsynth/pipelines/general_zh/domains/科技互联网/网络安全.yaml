@@ -1,0 +1,6 @@
+secondary: "网络安全"
+document_type_label: "网络安全方案/PPT"
+reading_hints: |
+  网络安全文档通常包含：威胁建模、安全架构、漏洞管理、
+  合规要求(等保/GDPR)、应急响应流程、安全运营中心(SOC)。
+  关注：风险等级评估、漏洞数量（具体数值只进入key_numbers）。

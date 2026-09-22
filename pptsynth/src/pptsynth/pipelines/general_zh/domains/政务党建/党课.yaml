@@ -1,0 +1,15 @@
+secondary: "党课"
+document_type_label: "党课课件/党建教育材料"
+reading_hints: |
+  党课文档通常包含：学习的理论背景与意义、核心理论内容阐释、
+  典型案例与历史经验、现实意义与实践要求、行动倡议。
+  关注：核心概念的准确定义（避免混淆相似概念）、
+  特定历史事件的时间节点与意义（具体时间只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "\\d{4}年\\s*\\d+月\\s*\\d+日\\s*(?:成立|召开|发布|颁布)"
+    label: "重要历史节点日期"
+title_slide_fields:
+  - "党课主题:"
+  - "主讲人:"
+  - "支部/单位:"
+  - "日期:"

@@ -1,0 +1,5 @@
+secondary: "环境影响评价"
+document_type_label: "环境影响评价(EIA)报告"
+reading_hints: |
+  环评报告通常包含：项目概况与工程分析、环境现状、影响预测与评价、
+  污染防治措施、环境管理与监测、结论。关注影响预测与措施（具体数值只进入key_numbers）。

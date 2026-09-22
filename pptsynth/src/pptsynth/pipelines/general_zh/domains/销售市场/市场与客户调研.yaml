@@ -1,0 +1,8 @@
+secondary: "市场与客户调研"
+document_type_label: "市场/客户调研报告"
+reading_hints: |
+  市场调研文档通常包含：调研目标与方法、样本与口径、市场/竞争/客户洞察、
+  结论与建议。关注方法与样本代表性（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:样本量|受访者|问卷)\\s*(?:约|为|达|共|回收)?\\s*\\d+(?:\\.\\d+)?\\s*(?:份|人|个)"
+    label: "调研样本量"

@@ -1,0 +1,2326 @@
+# ==============================================================================
+# Domain L2 Definitions
+# Mounted under L1_tag_prompt.yaml's 21 Domain labels (using prompt original names)
+# Each L2: name / authoritative_source / official_definition / operational_definition / signals / boundary_notes
+#
+# IMPORTANT: All official_definition fields are direct quotes or close paraphrases
+# from the cited authoritative source. No fabrication.
+# ==============================================================================
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: web_frontend
+# Framework: Stack Overflow Tag Clustering (2019) Clusters #43/#26/#6/#28
+# ═══════════════════════════════════════════════════════════════════════════════
+web_frontend:
+  source_framework: "SO Blog 2019 Tag Clustering: Clusters #43 (jQuery/JS), #26 (React), #6 (Angular), #28 (Vue)"
+  l2:
+    - name: react
+      authoritative_source: "React Official Documentation (react.dev)"
+      official_definition: |
+        "React is a JavaScript library for building user interfaces. It lets you compose complex
+        UIs from small and isolated pieces of code called 'components'."
+      operational_definition: |
+        Code using the React ecosystem: JSX/TSX components, React hooks (useState, useEffect),
+        React Router, state management (Redux, Zustand, Jotai), or React-based meta-frameworks
+        when the work focuses on component logic rather than SSR infrastructure.
+      signals:
+        - "import React / from 'react'"
+        - "useState / useEffect / useRef"
+        - ".jsx / .tsx file"
+        - "react-dom"
+        - "Redux / Zustand / Jotai"
+      boundary_notes: |
+        vs nextjs: If work focuses on SSR/routing/data-fetching infrastructure → nextjs.
+        If work is on React component logic regardless of framework → react.
+
+    - name: vue
+      authoritative_source: "Vue.js Official Documentation (vuejs.org)"
+      official_definition: |
+        "Vue is a progressive framework for building user interfaces. It provides a declarative,
+        component-based programming model that helps you efficiently develop user interfaces."
+      operational_definition: |
+        Code using the Vue ecosystem: Single File Components (.vue), Composition API (ref,
+        reactive, computed), Vue Router, state management (Pinia, Vuex), or Nuxt.js when
+        focused on Vue-specific patterns.
+      signals:
+        - ".vue file"
+        - "v-model / v-if / v-for"
+        - "Vue.createApp / createApp"
+        - "Pinia / Vuex store"
+        - "Composition API (ref, reactive)"
+      boundary_notes: |
+        vs react: Vue uses template syntax and .vue SFC files;
+        React uses JSX and function components with hooks.
+
+    - name: angular
+      authoritative_source: "Angular Official Documentation (angular.io)"
+      official_definition: |
+        "Angular is a development platform for building mobile and desktop web applications
+        using TypeScript/JavaScript. It provides a component-based framework with a collection
+        of integrated libraries."
+      operational_definition: |
+        Code using Angular framework: TypeScript components with decorators (@Component,
+        @Injectable), dependency injection, RxJS observables, Angular modules (NgModule),
+        or Angular CLI configuration.
+      signals:
+        - "@Component / @Injectable / @NgModule"
+        - "import { ... } from '@angular/core'"
+        - "RxJS Observable / pipe"
+        - "angular.json"
+        - "ng generate / ng serve"
+      boundary_notes: |
+        vs react: Angular uses decorators and DI; React uses hooks and composition.
+        Angular is opinionated full-framework; React is a view library.
+
+    - name: svelte
+      authoritative_source: "Svelte Official Documentation (svelte.dev)"
+      official_definition: |
+        "Svelte is a radical new approach to building user interfaces... Svelte shifts that work
+        into a compile step that happens when you build your app, converting your components
+        into highly efficient imperative code."
+      operational_definition: |
+        Code using Svelte or SvelteKit: .svelte files with reactive declarations ($:),
+        Svelte stores, SvelteKit routing/load functions, or Svelte-specific template syntax.
+      signals:
+        - ".svelte file"
+        - "$: reactive declaration"
+        - "svelte/store"
+        - "SvelteKit / +page.svelte"
+        - "on:click / bind:value"
+      boundary_notes: |
+        vs react/vue: Svelte compiles away the framework; React/Vue ship runtime code.
+
+    - name: nextjs
+      authoritative_source: "Next.js Official Documentation (nextjs.org)"
+      official_definition: |
+        "Next.js is a React framework that gives you building blocks to create web applications.
+        It handles the tooling and configuration needed for React, and provides additional
+        structure, features, and optimizations (SSR, SSG, routing, API routes)."
+      operational_definition: |
+        Code focused on Next.js infrastructure: App Router/Pages Router, server components,
+        getServerSideProps/getStaticProps, API routes, middleware, or next.config.js settings.
+        Distinct from pure React component work.
+      signals:
+        - "next/router / next/navigation"
+        - "getServerSideProps / getStaticProps"
+        - "next.config.js / next.config.mjs"
+        - "app/ directory (App Router)"
+        - "middleware.ts"
+      boundary_notes: |
+        vs react: nextjs is about Next.js-specific features (SSR, routing, API routes);
+        react is about React component logic that works in any React environment.
+
+    - name: vanilla_dom
+      authoritative_source: "MDN Web APIs Reference (developer.mozilla.org)"
+      official_definition: |
+        MDN: "The Document Object Model (DOM) connects web pages to scripts by representing the
+        structure of a document in memory." Web APIs provide browser-native functionality.
+      operational_definition: |
+        Browser-side JavaScript without framework dependencies: direct DOM manipulation
+        (querySelector, createElement), event listeners, Fetch API, Canvas 2D, Web Components,
+        or vanilla TypeScript targeting browser APIs.
+      signals:
+        - "document.querySelector"
+        - "addEventListener"
+        - "document.createElement"
+        - "XMLHttpRequest / fetch (vanilla)"
+        - "Web Components / customElements"
+      boundary_notes: |
+        vs react/vue/angular: vanilla_dom uses no component framework;
+        the others use framework abstractions over the DOM.
+
+    - name: static_site
+      authoritative_source: "Jamstack Architecture (jamstack.org); Hugo/Jekyll/Gatsby documentation"
+      official_definition: |
+        Jamstack.org: "Jamstack is an architectural approach that decouples the web experience
+        layer from data and business logic... sites are pre-rendered and served directly from
+        a CDN."
+      operational_definition: |
+        Code using static site generators: Hugo templates, Jekyll/Liquid, Gatsby GraphQL
+        data layer, Astro components, 11ty/Eleventy, or SSG configuration and content pipelines.
+      signals:
+        - "Hugo / config.toml"
+        - "Jekyll / _config.yml / Liquid"
+        - "Gatsby / gatsby-config.js"
+        - "Astro / .astro files"
+        - "11ty / .eleventy.js"
+      boundary_notes: |
+        vs nextjs: static_site uses dedicated SSG tools;
+        nextjs is a React meta-framework with SSG as one feature.
+
+    - name: css_framework
+      authoritative_source: "Tailwind CSS Documentation; Bootstrap Documentation; CSS-in-JS (styled-components)"
+      official_definition: |
+        Tailwind: "A utility-first CSS framework packed with classes that can be composed to
+        build any design, directly in your markup."
+        Bootstrap: "The most popular HTML, CSS, and JS library in the world."
+      operational_definition: |
+        Work centered on CSS frameworks or design systems: Tailwind utility configuration,
+        Bootstrap component customization, CSS-in-JS libraries (styled-components, Emotion),
+        CSS Module setup, or design token systems.
+      signals:
+        - "tailwind.config.js"
+        - "Bootstrap classes"
+        - "styled-components / Emotion"
+        - "CSS Modules"
+        - "Material UI / Chakra UI"
+      boundary_notes: |
+        vs react/vue: css_framework is about styling infrastructure;
+        react/vue is about component logic. A task can combine both — pick the primary focus.
+
+    - name: other_js_framework
+      authoritative_source: "Stack Overflow 2019 Tag Clustering — Cluster #43 (Front-end JavaScript frameworks) which subsumes the long tail of UI frameworks beyond React/Vue/Angular/Svelte; Mithril.js / Solid.js / Preact / Lit / Alpine.js / Stimulus official docs"
+      official_definition: |
+        SO Cluster #43 groups all front-end JavaScript UI frameworks by tag co-occurrence,
+        regardless of popularity. Beyond the well-known React/Vue/Angular/Svelte, this cluster
+        includes Mithril.js, Solid.js, Preact, Lit (Web Components), Alpine.js, and Stimulus —
+        all of which provide component/template-based UI rendering on the browser.
+      operational_definition: |
+        Web front-end work using a JavaScript/TypeScript UI framework that is not React, Vue,
+        Angular, Svelte, or Next.js. Concretely covers Mithril.js (e.g., tutanota), Solid.js,
+        Preact, Lit / lit-html (Web Components), Alpine.js, Stimulus (Hotwire), Ember.js, and
+        any newer/long-tail framework with the same component-tree-rendering programming model.
+      signals:
+        - "import m from 'mithril' / m.mount / m.redraw"
+        - "import { createSignal } from 'solid-js'"
+        - "import { h } from 'preact'"
+        - "lit-html / LitElement"
+        - "Alpine.js / x-data / x-on"
+        - "Stimulus controller"
+      boundary_notes: |
+        vs react/vue/angular/svelte: other_js_framework is the catch-all for any JS UI
+        framework outside the big five. Pick the specific framework's L2 if it matches;
+        otherwise use this label.
+        vs vanilla_dom: other_js_framework still uses a framework abstraction;
+        vanilla_dom is hand-written direct DOM manipulation without any UI framework.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: mobile_dev
+# Framework: SO Tag Clustering Clusters #17 (Android) / #14 (iOS)
+# ═══════════════════════════════════════════════════════════════════════════════
+mobile_dev:
+  source_framework: "SO Blog 2019 Tag Clustering: Cluster #17 (Android), #14 (iOS)"
+  l2:
+    - name: react_native
+      authoritative_source: "React Native Official Documentation (reactnative.dev)"
+      official_definition: |
+        "React Native combines the best parts of native development with React, a best-in-class
+        JavaScript library for building user interfaces. You can use React Native today in your
+        existing Android and iOS projects."
+      operational_definition: |
+        Cross-platform mobile code using React Native: native modules, StyleSheet, navigation
+        (react-navigation), Expo managed workflow, or bridge/TurboModule development.
+      signals:
+        - "import { ... } from 'react-native'"
+        - "StyleSheet.create"
+        - "expo / eas"
+        - "react-navigation"
+        - "Metro bundler"
+      boundary_notes: |
+        vs react (web_frontend): react_native targets mobile platforms;
+        react targets web browsers.
+
+    - name: flutter
+      authoritative_source: "Flutter Official Documentation (flutter.dev)"
+      official_definition: |
+        "Flutter is Google's UI toolkit for building beautiful, natively compiled applications
+        for mobile, web, and desktop from a single codebase. Flutter uses the Dart language."
+      operational_definition: |
+        Cross-platform mobile/desktop code using Flutter/Dart: Widget tree composition,
+        StatefulWidget/StatelessWidget, pubspec.yaml dependencies, platform channels,
+        or Flutter-specific testing (widget tests).
+      signals:
+        - "Widget / StatefulWidget / StatelessWidget"
+        - "pubspec.yaml"
+        - "BuildContext"
+        - "MaterialApp / CupertinoApp"
+        - "flutter run / flutter build"
+      boundary_notes: |
+        vs react_native: flutter uses Dart and its own rendering engine;
+        react_native uses JavaScript and native platform views.
+
+    - name: native_android
+      authoritative_source: "Android Developer Documentation (developer.android.com)"
+      official_definition: |
+        "Android provides a rich application framework that allows you to build innovative apps
+        and games for mobile devices in a Java or Kotlin language environment."
+      operational_definition: |
+        Native Android development: Activities/Fragments, AndroidManifest.xml, Gradle build
+        system, Jetpack libraries (Compose, ViewModel, Room), or Android-specific platform APIs.
+      signals:
+        - "Activity / Fragment"
+        - "AndroidManifest.xml"
+        - "build.gradle (android)"
+        - "Jetpack Compose / @Composable"
+        - "ViewModel / LiveData / Room"
+      boundary_notes: |
+        vs flutter/react_native: native_android uses platform-native Android SDK;
+        cross-platform frameworks abstract away platform specifics.
+
+    - name: native_ios
+      authoritative_source: "Apple Developer Documentation (developer.apple.com)"
+      official_definition: |
+        "Build apps for iPhone and iPad using SwiftUI or UIKit frameworks... SwiftUI provides
+        views, controls, and layout structures for declaring your app's user interface."
+      operational_definition: |
+        Native iOS/iPadOS development: SwiftUI views, UIKit ViewControllers, Xcode project
+        configuration, Core Data, StoreKit, or Apple platform-specific frameworks.
+      signals:
+        - "SwiftUI / UIKit"
+        - "AppDelegate / SceneDelegate"
+        - ".storyboard / .xib"
+        - "Xcode project / .xcodeproj"
+        - "Core Data / StoreKit"
+      boundary_notes: |
+        vs flutter/react_native: native_ios uses Apple's native frameworks;
+        cross-platform frameworks target iOS as a build target.
+
+    - name: pwa
+      authoritative_source: "MDN: Progressive Web Apps (developer.mozilla.org/docs/Web/Progressive_web_apps)"
+      official_definition: |
+        MDN: "Progressive Web Apps (PWAs) are web apps that use service workers, manifests, and
+        other web-platform features in combination with progressive enhancement to give users
+        an experience on par with native apps."
+      operational_definition: |
+        Implement PWA features: Service Worker registration/lifecycle, web app manifest
+        (manifest.json), offline caching strategies (Workbox), push notifications, or
+        install prompt handling.
+      signals:
+        - "service-worker.js"
+        - "manifest.json (web app)"
+        - "Workbox / sw-precache"
+        - "offline-first strategy"
+        - "push notification (web)"
+      boundary_notes: |
+        vs web_frontend: pwa specifically implements offline/installable features;
+        web_frontend is general web UI without PWA capabilities.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: desktop_gui
+# Framework: SO Tag Clustering Clusters #36 (WPF/WinForms) / #19 (Qt)
+# ═══════════════════════════════════════════════════════════════════════════════
+desktop_gui:
+  source_framework: "SO Blog 2019 Tag Clustering: Cluster #36 (WPF/.NET), #19 (Qt/C++)"
+  l2:
+    - name: electron
+      authoritative_source: "Electron Official Documentation (electronjs.org)"
+      official_definition: |
+        "Electron is a framework for building desktop applications using JavaScript, HTML, and
+        CSS. By embedding Chromium and Node.js into its binary, Electron allows you to maintain
+        one JavaScript codebase."
+      operational_definition: |
+        Desktop apps using Electron: BrowserWindow management, IPC between main/renderer
+        processes, electron-builder packaging, or native module integration.
+      signals:
+        - "BrowserWindow"
+        - "ipcMain / ipcRenderer"
+        - "electron-builder"
+        - "preload.js"
+        - "app.whenReady()"
+      boundary_notes: |
+        vs tauri: electron uses Chromium + Node.js (larger binary);
+        tauri uses system webview + Rust (smaller binary).
+
+    - name: qt_cpp
+      authoritative_source: "Qt Official Documentation (doc.qt.io)"
+      official_definition: |
+        "Qt is a cross-platform application development framework for desktop, embedded and
+        mobile. Qt is used for developing applications that can run on various software and
+        hardware platforms."
+      operational_definition: |
+        Desktop apps using Qt framework: QWidget-based UIs, signal/slot mechanism, QML
+        declarative UI, Qt Creator integration, or MOC (Meta-Object Compiler) usage.
+      signals:
+        - "QWidget / QMainWindow"
+        - "Q_OBJECT / signals / slots"
+        - "QML / Qt Quick"
+        - ".ui file / Qt Designer"
+        - "qmake / CMake with Qt"
+      boundary_notes: |
+        vs gtk: qt_cpp is Qt framework (commercial+open source);
+        gtk is GTK toolkit (GNOME ecosystem, pure open source).
+
+    - name: wpf_winforms
+      authoritative_source: "Microsoft .NET Desktop Documentation (docs.microsoft.com)"
+      official_definition: |
+        Microsoft: "Windows Presentation Foundation (WPF) is a UI framework for building
+        Windows desktop applications. WPF uses XAML to provide a declarative model for
+        application programming."
+      operational_definition: |
+        Windows desktop apps using WPF or WinForms: XAML layouts and data binding, MVVM
+        pattern implementation, WinForms designer-generated code, or .NET desktop packaging.
+      signals:
+        - "XAML / Window / UserControl"
+        - "System.Windows / System.Windows.Forms"
+        - "DataBinding / DependencyProperty"
+        - "MVVM / INotifyPropertyChanged"
+        - ".csproj (WPF/WinForms)"
+      boundary_notes: |
+        vs electron: wpf_winforms is Windows-native .NET;
+        electron is cross-platform web-based.
+
+    - name: gtk
+      authoritative_source: "GTK Official Documentation (docs.gtk.org)"
+      official_definition: |
+        "GTK is a free and open-source cross-platform widget toolkit for creating graphical
+        user interfaces. It is used by the GNOME project and many other applications."
+      operational_definition: |
+        Desktop apps using GTK: GObject type system, Glade UI builder, GTK4/3 widgets,
+        Vala/Python/C GTK bindings, or Adwaita theming.
+      signals:
+        - "Gtk.Window / Gtk.Box"
+        - "GObject / g_signal_connect"
+        - ".glade / Gtk.Builder"
+        - "Adwaita / libadwaita"
+        - "GLib / GIO"
+      boundary_notes: |
+        vs qt_cpp: gtk is GNOME ecosystem; qt_cpp is Qt ecosystem.
+        Both are native desktop toolkits but different APIs and philosophies.
+
+    - name: tauri
+      authoritative_source: "Tauri Official Documentation (tauri.app)"
+      official_definition: |
+        "Tauri is a toolkit that helps developers make applications for the major desktop
+        platforms — using virtually any frontend framework. The core is built with Rust and
+        the CLI leverages Node.js."
+      operational_definition: |
+        Desktop apps using Tauri: Rust backend commands (#[tauri::command]), tauri.conf.json
+        configuration, frontend-to-backend invoke() calls, or Tauri plugin development.
+      signals:
+        - "#[tauri::command]"
+        - "tauri.conf.json"
+        - "invoke() / tauri.invoke()"
+        - "tauri::Builder"
+        - "Rust + Web frontend"
+      boundary_notes: |
+        vs electron: tauri uses system webview + Rust backend (smaller);
+        electron bundles Chromium + Node.js (larger).
+
+    - name: native_macos
+      authoritative_source: "Apple Developer Documentation: AppKit (developer.apple.com)"
+      official_definition: |
+        "AppKit provides all of the objects you need to implement the user interface for a macOS
+        app — windows, panels, buttons, menus, scrollers, and text fields."
+      operational_definition: |
+        macOS-native desktop apps: AppKit (NSWindow, NSViewController), SwiftUI for macOS,
+        Cocoa framework, or macOS-specific features (menu bar apps, Spotlight integration).
+      signals:
+        - "AppKit / NSWindow / NSView"
+        - "NSApplication"
+        - "SwiftUI (macOS target)"
+        - "Cocoa framework"
+        - ".app bundle / Info.plist"
+      boundary_notes: |
+        vs native_ios: native_macos targets macOS (AppKit);
+        native_ios targets iOS/iPadOS (UIKit/SwiftUI).
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: web_backend
+# Framework: SO Tag Clustering Clusters #33 (Spring), #25 (Django), #40 (Express), #9 (Laravel), #49 (Rails)
+# ═══════════════════════════════════════════════════════════════════════════════
+web_backend:
+  source_framework: "SO Blog 2019 Tag Clustering: Clusters #33/#25/#40/#9/#49 (Backend frameworks)"
+  l2:
+    - name: spring_java
+      authoritative_source: "Spring Framework Reference Documentation (spring.io/docs)"
+      official_definition: |
+        "The Spring Framework provides a comprehensive programming and configuration model for
+        modern Java-based enterprise applications... Spring Boot takes an opinionated view of
+        building production-ready Spring applications."
+      operational_definition: |
+        Java/Kotlin backend using Spring ecosystem: Spring Boot auto-configuration, Spring MVC
+        controllers, Spring Data repositories, Spring Security, or Spring Cloud microservices.
+      signals:
+        - "@SpringBootApplication"
+        - "@RestController / @GetMapping"
+        - "@Autowired / @Bean"
+        - "application.yml / application.properties"
+        - "Spring Data JPA / Repository"
+      boundary_notes: |
+        vs gin_go: spring_java is Java/Kotlin ecosystem;
+        gin_go is Go ecosystem. Both are backend frameworks.
+
+    - name: django_python
+      authoritative_source: "Django Documentation (docs.djangoproject.com); Flask / Pyramid / Bottle official docs"
+      official_definition: |
+        Django: "Django is a high-level Python web framework that encourages rapid development
+        and clean, pragmatic design." This L2 also covers similar Python synchronous web
+        frameworks (Flask, Pyramid, Bottle, Quart) which share the WSGI/sync programming
+        model and request/response idioms.
+      operational_definition: |
+        Python backend using Django or a similar Python sync web framework (Flask, Pyramid,
+        Bottle, Quart): ORM models, views/viewsets, URL routing, request/response handlers,
+        template rendering. Use this label whenever the framework is a Python sync micro- or
+        full-stack web framework that is not async-native FastAPI/Starlette.
+      signals:
+        - "django.conf / settings.py / models.py / views.py / urls.py"
+        - "Django REST Framework / serializers"
+        - "Flask / from flask import / @app.route"
+        - "Blueprint / register_blueprint"
+        - "Pyramid / Bottle / Quart"
+        - "manage.py / Django admin"
+      boundary_notes: |
+        vs fastapi_python: django_python (and Flask/Pyramid) are sync/WSGI;
+        fastapi_python is async-native with explicit type validation.
+
+    - name: express_node
+      authoritative_source: "Express.js Official (expressjs.com); NestJS / Koa / Fastify / Hapi official docs"
+      official_definition: |
+        Express: "A minimal and flexible Node.js web application framework that provides a
+        robust set of features for web and mobile applications." This L2 covers Express and
+        the family of Node.js HTTP server frameworks that share the middleware-and-route
+        idiom: NestJS (TypeScript, decorator-based), Koa (async middleware), Fastify
+        (high-performance), and Hapi (configuration-driven).
+      operational_definition: |
+        Node.js / TypeScript backend using Express, NestJS, Koa, Fastify, Hapi, or similar
+        Node HTTP server frameworks: middleware chains, route handlers, request/response
+        objects, decorators (NestJS), or controller modules. Includes self-hosted forum/CMS
+        platforms built on Node (e.g., NodeBB) where the framework substrate is Node-based.
+      signals:
+        - "express() / app.get() / app.post() / app.use()"
+        - "middleware / next()"
+        - "req, res, next"
+        - "@Controller / @Module / @Injectable (NestJS)"
+        - "Koa context / app.use(async ctx => ...)"
+        - "Fastify / fastify.register / Hapi server.route"
+      boundary_notes: |
+        vs nextjs (web_frontend): express_node and family are standalone Node servers;
+        nextjs is a React meta-framework with built-in API routes.
+
+    - name: fastapi_python
+      authoritative_source: "FastAPI Official Documentation (fastapi.tiangolo.com)"
+      official_definition: |
+        "FastAPI is a modern, fast (high-performance), web framework for building APIs with
+        Python 3.7+ based on standard Python type hints."
+      operational_definition: |
+        Python async backend using FastAPI/Starlette: Pydantic models for validation, async
+        endpoint functions, dependency injection (Depends), OpenAPI auto-generation, or
+        ASGI server configuration.
+      signals:
+        - "FastAPI() / app = FastAPI()"
+        - "Pydantic BaseModel"
+        - "async def / await"
+        - "Depends()"
+        - "@app.get / @app.post"
+      boundary_notes: |
+        vs django_python: fastapi_python is async-native with explicit type validation;
+        django_python is sync-first with ORM and admin.
+
+    - name: laravel_php
+      authoritative_source: "Laravel Official Documentation (laravel.com/docs)"
+      official_definition: |
+        "Laravel is a web application framework with expressive, elegant syntax... providing
+        tools needed for large, robust applications: dependency injection, expressive database
+        abstraction, queues, scheduled jobs, unit and integration testing."
+      operational_definition: |
+        PHP backend using Laravel framework: Eloquent ORM, Blade templates, Artisan CLI
+        commands, Laravel routing (Route::), or Laravel-specific packages (Sanctum, Horizon).
+      signals:
+        - "Route:: / web.php / api.php"
+        - "Eloquent / Model::where()"
+        - "artisan / php artisan"
+        - "Blade template / @extends"
+        - "composer.json (laravel)"
+      boundary_notes: |
+        vs cms_ecommerce.wordpress: laravel_php is custom PHP framework;
+        wordpress uses WordPress-specific APIs (add_action, etc.).
+
+    - name: rails_ruby
+      authoritative_source: "Ruby on Rails Guides (guides.rubyonrails.org)"
+      official_definition: |
+        "Ruby on Rails is a web-application framework that includes everything needed to create
+        database-backed web applications according to the Model-View-Controller (MVC) pattern."
+      operational_definition: |
+        Ruby backend using Rails: ActiveRecord models, Rails routing (routes.rb), ERB/Haml
+        templates, Rails generators, or Rails-specific conventions (convention over configuration).
+      signals:
+        - "ActiveRecord / has_many / belongs_to"
+        - "routes.rb / resources"
+        - "rails generate / rails db:migrate"
+        - "Gemfile"
+        - "erb / haml template"
+      boundary_notes: |
+        vs laravel_php: rails_ruby uses Ruby; laravel_php uses PHP.
+        Both follow MVC with batteries-included philosophy.
+
+    - name: gin_go
+      authoritative_source: "Gin Web Framework (gin-gonic.com)"
+      official_definition: |
+        "Gin is a web framework written in Go (Golang). It features a martini-like API with
+        performance that is up to 40 times faster thanks to httprouter."
+      operational_definition: |
+        Go backend using Gin, Echo, Fiber, or Chi: handler functions with gin.Context,
+        middleware registration, JSON serialization, or Go-idiomatic HTTP server patterns.
+      signals:
+        - "gin.Default() / gin.New()"
+        - "c.JSON / c.Bind"
+        - "gin.Context"
+        - "Echo / Fiber / Chi"
+        - "http.ListenAndServe"
+      boundary_notes: |
+        vs spring_java: gin_go is Go ecosystem (lightweight, compiled);
+        spring_java is Java ecosystem (enterprise, JVM).
+
+    - name: grpc_service
+      authoritative_source: "gRPC Official Documentation (grpc.io/docs)"
+      official_definition: |
+        "gRPC is a modern open source high performance Remote Procedure Call (RPC) framework...
+        It uses Protocol Buffers as its interface definition language and underlying message
+        interchange format."
+      operational_definition: |
+        Implement gRPC services: write .proto service definitions, generate client/server stubs,
+        implement RPC handlers, configure streaming, or set up gRPC middleware/interceptors.
+      signals:
+        - ".proto file / service definition"
+        - "protobuf / Protocol Buffers"
+        - "grpc.Server / grpc.Dial"
+        - "stub generation"
+        - "streaming RPC"
+      boundary_notes: |
+        vs graphql_service: grpc_service uses protobuf/HTTP2;
+        graphql_service uses schema/HTTP with query language.
+
+    - name: graphql_service
+      authoritative_source: "GraphQL Specification (spec.graphql.org)"
+      official_definition: |
+        "GraphQL is a query language for APIs and a runtime for fulfilling those queries with
+        your existing data. GraphQL provides a complete and understandable description of the
+        data in your API."
+      operational_definition: |
+        Implement GraphQL APIs: write schema definitions (SDL), implement resolvers, configure
+        Apollo Server/Yoga/Mercurius, handle subscriptions, or optimize with DataLoader.
+      signals:
+        - "type Query { ... }"
+        - "resolver function"
+        - "Apollo Server / graphql-yoga"
+        - "schema.graphql / .gql"
+        - "DataLoader / N+1 in GraphQL"
+      boundary_notes: |
+        vs grpc_service: graphql_service uses schema + query language over HTTP;
+        grpc_service uses protobuf + RPC over HTTP/2.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: database_storage
+# Framework: SO Tag Clustering Clusters #11 (SQL/MySQL) / #41 (NoSQL/MongoDB)
+# ═══════════════════════════════════════════════════════════════════════════════
+database_storage:
+  source_framework: "SO Blog 2019 Tag Clustering: Cluster #11 (SQL), #41 (NoSQL)"
+  l2:
+    - name: rdbms
+      authoritative_source: "ISO/IEC 9075 (SQL Standard); PostgreSQL/MySQL documentation"
+      official_definition: |
+        ISO 9075 defines SQL as: "a database language for defining data structures and querying,
+        manipulating, and managing data in relational database management systems."
+      operational_definition: |
+        Work with relational databases: write DDL (CREATE TABLE, ALTER), DML (SELECT, INSERT),
+        query optimization, stored procedures, or direct RDBMS administration for PostgreSQL,
+        MySQL, SQLite, or Oracle.
+      signals:
+        - "CREATE TABLE / ALTER TABLE"
+        - "SELECT / JOIN / WHERE"
+        - "PostgreSQL / MySQL / SQLite"
+        - "stored procedure / trigger"
+        - "EXPLAIN / query plan"
+      boundary_notes: |
+        vs orm_migration: rdbms is direct SQL/database administration;
+        orm_migration uses ORM abstraction layers.
+
+    - name: nosql_document
+      authoritative_source: "MongoDB Manual (docs.mongodb.com)"
+      official_definition: |
+        MongoDB: "A document database designed for ease of application development and scaling...
+        stores data in flexible, JSON-like documents."
+      operational_definition: |
+        Work with document-oriented NoSQL databases: MongoDB CRUD operations, aggregation
+        pipeline, index management, CouchDB/Firestore queries, or document schema design.
+      signals:
+        - "MongoDB / db.collection"
+        - "aggregate pipeline"
+        - "findOne / updateMany"
+        - "Firestore / CouchDB"
+        - "document schema design"
+      boundary_notes: |
+        vs rdbms: nosql_document is schemaless/document-oriented;
+        rdbms is structured/relational with SQL.
+
+    - name: cache_kv
+      authoritative_source: "Redis Official Documentation (redis.io/docs)"
+      official_definition: |
+        "Redis is an open source, in-memory data structure store, used as a database, cache,
+        message broker, and streaming engine."
+      operational_definition: |
+        Work with key-value stores or caching systems: Redis commands (SET/GET/EXPIRE),
+        Memcached operations, DynamoDB single-table design, or cache strategy configuration.
+      signals:
+        - "Redis / SET / GET / EXPIRE"
+        - "Memcached"
+        - "cache TTL"
+        - "DynamoDB / partition key"
+        - "pub/sub (Redis)"
+      boundary_notes: |
+        vs performance-fix.caching (Task Type): cache_kv is the domain;
+        performance-fix.caching is the task type. A task can be both.
+
+    - name: search_engine
+      authoritative_source: "Elasticsearch Official Documentation (elastic.co/guide)"
+      official_definition: |
+        "Elasticsearch is a distributed, RESTful search and analytics engine... It centrally
+        stores your data for lightning fast search, fine‑tuned relevancy, and powerful
+        analytics."
+      operational_definition: |
+        Work with search engines: Elasticsearch index mapping/queries, Solr configuration,
+        Meilisearch/Typesense setup, full-text search implementation, or relevance tuning.
+      signals:
+        - "Elasticsearch / index mapping"
+        - "full-text search"
+        - "Solr / Lucene"
+        - "Meilisearch / Typesense"
+        - "inverted index / analyzer"
+      boundary_notes: |
+        vs nosql_document: search_engine optimizes for search/retrieval;
+        nosql_document optimizes for general document storage.
+
+    - name: message_queue
+      authoritative_source: "Apache Kafka Documentation (kafka.apache.org/documentation); RabbitMQ Documentation"
+      official_definition: |
+        Kafka: "Apache Kafka is an open-source distributed event streaming platform used by
+        thousands of companies for high-performance data pipelines, streaming analytics, data
+        integration, and mission-critical applications."
+      operational_definition: |
+        Work with message brokers or event streaming: Kafka producer/consumer, RabbitMQ
+        exchanges/queues, SQS/SNS configuration, or message serialization/deserialization.
+      signals:
+        - "Kafka producer / consumer"
+        - "RabbitMQ exchange / queue"
+        - "SQS / SNS"
+        - "message broker"
+        - "consumer group / offset"
+      boundary_notes: |
+        vs data_engineering.stream_processing: message_queue is the infrastructure;
+        stream_processing uses it for data transformation.
+
+    - name: orm_migration
+      authoritative_source: "SQLAlchemy Documentation; TypeORM Documentation; Prisma Documentation"
+      official_definition: |
+        SQLAlchemy: "The Python SQL Toolkit and Object Relational Mapper... gives application
+        developers the full power and flexibility of SQL."
+        Prisma: "Next-generation Node.js and TypeScript ORM."
+      operational_definition: |
+        Work with ORM frameworks or database migrations: define/modify ORM model classes,
+        create migration files, configure database connections through ORM, or implement
+        query builders.
+      signals:
+        - "SQLAlchemy / Session / Base"
+        - "TypeORM / Entity / Repository"
+        - "Prisma / prisma migrate"
+        - "Alembic / migration file"
+        - "ActiveRecord (Rails)"
+      boundary_notes: |
+        vs rdbms: orm_migration works through ORM abstraction;
+        rdbms works with raw SQL directly.
+
+    - name: olap_timeseries_db
+      authoritative_source: "Inmon, W.H. (1992). Building the Data Warehouse — OLAP vs OLTP separation; Apache Druid Documentation (druid.apache.org); InfluxDB / TimescaleDB / ClickHouse / Prometheus TSDB official documentation"
+      official_definition: |
+        Inmon (1992) defined the OLAP/OLTP distinction: OLTP systems handle transactional
+        reads/writes optimized for low-latency single-row operations (rdbms); OLAP and time-
+        series systems are optimized for high-throughput analytical queries over large ranges
+        of mostly-immutable, time-stamped data. Apache Druid documents itself as "a real-time
+        analytics OLAP / time-series database" and is the canonical example. This category
+        also includes columnar analytical engines (ClickHouse) and dedicated time-series
+        databases (InfluxDB, TimescaleDB, Prometheus TSDB).
+      operational_definition: |
+        Work on OLAP / time-series / columnar analytical database engines: query planner /
+        execution, segment / chunk / shard management, ingestion pipelines, storage formats,
+        compaction, downsampling/retention, or distributed coordination. Concretely covers
+        Apache Druid, InfluxDB, TimescaleDB, ClickHouse, Pinot, Prometheus TSDB internals.
+      signals:
+        - "Apache Druid / segment / data source"
+        - "InfluxDB / measurement / retention policy"
+        - "TimescaleDB / hypertable"
+        - "ClickHouse / MergeTree"
+        - "Prometheus TSDB / WAL / memory snapshot"
+        - "downsampling / continuous aggregate"
+      boundary_notes: |
+        vs rdbms: olap_timeseries_db is for analytical / time-series workloads with
+        columnar / segment-based storage; rdbms is OLTP row-oriented.
+        vs nosql_document: nosql_document targets schemaless document workloads;
+        olap_timeseries_db targets time-stamped, columnar analytics.
+        vs message_queue: message queues stream events but do not provide query-time
+        analytical access.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: data_science (renamed from data_science_ml)
+# Framework: SO Tag Clustering Cluster #37 (Machine Learning) + scientific computing
+# ═══════════════════════════════════════════════════════════════════════════════
+data_science:
+  source_framework: "SO Blog 2019 Tag Clustering: Cluster #37 (Machine Learning / Data Science) + scientific/numerical computing (NumPy, SciPy, SymPy ecosystems)"
+  l2:
+    - name: model_training
+      authoritative_source: "PyTorch Documentation (pytorch.org/docs); TensorFlow Guide (tensorflow.org/guide)"
+      official_definition: |
+        PyTorch: "Training a model is an iterative process; in each iteration the model makes
+        a guess about the output, calculates the error (loss), collects the derivatives of the
+        error with respect to its parameters, and optimizes the parameters using gradient descent."
+      operational_definition: |
+        Implement or modify model training: define loss functions, configure optimizers,
+        implement training loops, set up distributed training (DDP/FSDP), or manage
+        training hyperparameters.
+      signals:
+        - "model.train() / model.fit()"
+        - "loss.backward() / optimizer.step()"
+        - "Trainer / TrainingArguments"
+        - "epoch / batch / learning_rate"
+        - "DDP / FSDP / DeepSpeed"
+      boundary_notes: |
+        vs inference_serving: model_training produces model weights;
+        inference_serving uses trained weights for prediction.
+
+    - name: inference_serving
+      authoritative_source: "TensorRT Documentation; ONNX Runtime; TF Serving Documentation"
+      official_definition: |
+        NVIDIA TensorRT: "An SDK for high-performance deep learning inference on NVIDIA GPUs...
+        optimizes neural network models trained in frameworks such as TensorFlow and PyTorch."
+      operational_definition: |
+        Deploy or optimize model inference: export models (ONNX, TorchScript), configure
+        inference engines (TensorRT, TF Serving, Triton), implement model APIs, or optimize
+        inference latency/throughput.
+      signals:
+        - "model.eval() / torch.no_grad()"
+        - "ONNX export / onnxruntime"
+        - "TensorRT / TF Serving"
+        - "Triton Inference Server"
+        - "model quantization / pruning"
+      boundary_notes: |
+        vs model_training: inference_serving consumes trained models;
+        model_training produces them.
+
+    - name: data_preprocessing
+      authoritative_source: "scikit-learn Preprocessing Documentation; Pandas Documentation"
+      official_definition: |
+        scikit-learn: "The sklearn.preprocessing module includes scaling, centering, normalization,
+        binarization methods... The sklearn.feature_extraction module can be used to extract
+        features in a format supported by machine learning algorithms."
+      operational_definition: |
+        Implement data preprocessing pipelines: feature engineering, data cleaning, normalization/
+        standardization, data augmentation, or dataset loading/transformation code.
+      signals:
+        - "pandas DataFrame manipulation"
+        - "sklearn.preprocessing"
+        - "data augmentation / transforms"
+        - "feature engineering"
+        - "data cleaning / imputation"
+      boundary_notes: |
+        vs data_engineering.etl_pipeline: data_preprocessing is ML-specific feature prep;
+        etl_pipeline is general data movement between systems.
+
+    - name: nlp
+      authoritative_source: "HuggingFace Transformers Documentation; spaCy Documentation"
+      official_definition: |
+        HuggingFace: "Transformers provides APIs and tools to easily download and train
+        state-of-the-art pretrained models... reducing compute costs and carbon footprint."
+        spaCy: "Industrial-strength Natural Language Processing in Python."
+      operational_definition: |
+        Natural language processing: tokenization, text classification, named entity recognition,
+        text generation, sentiment analysis, or custom NLP model development.
+      signals:
+        - "tokenizer / AutoTokenizer"
+        - "transformers / pipeline('text-classification')"
+        - "BERT / GPT / T5"
+        - "spaCy / nlp = spacy.load()"
+        - "NER / text classification"
+      boundary_notes: |
+        vs llm_app: nlp is model-level NLP work;
+        llm_app is application-level LLM orchestration (RAG, agents).
+
+    - name: cv
+      authoritative_source: "OpenCV Documentation (docs.opencv.org); torchvision Documentation"
+      official_definition: |
+        OpenCV: "Open Source Computer Vision Library... includes several hundreds of computer
+        vision algorithms."
+        torchvision: "consists of popular datasets, model architectures, and common image
+        transformations for computer vision."
+      operational_definition: |
+        Computer vision: image classification, object detection, segmentation, image generation,
+        video analysis, or custom vision model development.
+      signals:
+        - "cv2 / OpenCV"
+        - "torchvision / transforms"
+        - "YOLO / Detectron2"
+        - "image classification / detection"
+        - "segmentation model"
+      boundary_notes: |
+        vs media_graphics.image_processing: cv is ML-based vision;
+        image_processing is traditional pixel manipulation.
+
+    - name: llm_app
+      authoritative_source: "LangChain Documentation (python.langchain.com); LlamaIndex Documentation"
+      official_definition: |
+        LangChain: "A framework for developing applications powered by language models...
+        enables applications that are context-aware (connect to sources of context) and
+        reason (rely on a language model to reason)."
+      operational_definition: |
+        Build LLM-powered applications: RAG pipelines, agent frameworks, prompt engineering,
+        vector database integration, chain/pipeline construction, or LLM API orchestration.
+      signals:
+        - "LangChain / LlamaIndex"
+        - "RAG / retrieval augmented"
+        - "agent / tool calling"
+        - "embedding / vector store"
+        - "prompt template / chain"
+      boundary_notes: |
+        vs nlp: llm_app orchestrates LLMs at application level;
+        nlp trains/fine-tunes NLP models.
+
+    - name: mlops
+      authoritative_source: "MLflow Documentation (mlflow.org/docs); Kubeflow Documentation"
+      official_definition: |
+        MLflow: "An open source platform for managing the end-to-end machine learning lifecycle.
+        It tackles four primary functions: Tracking experiments, Packaging code, Managing models,
+        and Serving models."
+      operational_definition: |
+        ML operations infrastructure: experiment tracking, model registries, ML pipeline
+        orchestration, model monitoring/drift detection, or feature store management.
+      signals:
+        - "MLflow / mlflow.log_metric"
+        - "Kubeflow / KFP pipeline"
+        - "model registry"
+        - "experiment tracking"
+        - "W&B / Weights & Biases"
+      boundary_notes: |
+        vs model_training: mlops is infrastructure for managing ML;
+        model_training is the actual model development.
+
+    - name: rl
+      authoritative_source: "OpenAI Gymnasium Documentation (gymnasium.farama.org); Stable-Baselines3"
+      official_definition: |
+        Gymnasium: "A standard API for reinforcement learning, and a diverse set of reference
+        environments... The main Gymnasium API is the Env class which provides a standard
+        interface for RL environments (reset, step, render)."
+      operational_definition: |
+        Reinforcement learning: environment definition (Gymnasium/Env), reward function design,
+        policy training (PPO/DQN/SAC), replay buffers, or multi-agent RL systems.
+      signals:
+        - "gym.Env / gymnasium"
+        - "reward / done / info"
+        - "PPO / DQN / SAC"
+        - "replay buffer"
+        - "policy / value function"
+      boundary_notes: |
+        vs model_training: rl specifically uses reward-based learning loops;
+        model_training covers supervised/self-supervised training.
+
+    - name: scientific_numerical
+      authoritative_source: "ACM Computing Classification System 2012 — 'Mathematics of computing → Mathematical software' (parent class of symbolic computation, numerical analysis, and computer algebra); SciPy / NumPy / SymPy / AstroPy / xarray official documentation"
+      official_definition: |
+        ACM CCS classifies "Mathematical software" under "Mathematics of computing", spanning:
+        Symbolic computation and computer algebra (SymPy, Mathematica, Maxima); Numerical
+        analysis and linear algebra (NumPy, SciPy, BLAS/LAPACK wrappers); Mathematical
+        optimization software; Statistical software (statsmodels); N-D array / labeled-array
+        libraries (xarray); and Domain-specific scientific libraries (AstroPy for astronomy,
+        Biopython for bioinformatics, geometric libraries like S2). All share the property
+        of "implementing mathematics or domain-science computation as a library", distinct
+        from machine-learning model training/inference.
+      operational_definition: |
+        Work on scientific / numerical / symbolic / domain-science computing libraries —
+        anything where the primary nature of the code is mathematical or natural-science
+        computation rather than ML model training/inference. Concretely covers: symbolic
+        algebra and CAS work (SymPy); numerical algorithms, linear algebra, optimization
+        (NumPy, SciPy core); N-D array / labeled-array data structures (xarray, pandas
+        Index/MultiIndex internals); domain-specific scientific libraries (AstroPy
+        coordinate transforms, Biopython sequence algorithms, S2 geometry); ML evaluation
+        metrics that are pure mathematical functions rather than training/inference
+        (sklearn fowlkes_mallows_score, roc_curve internals).
+      signals:
+        - "SymPy / sympy.expand / sympy.solve"
+        - "NumPy / SciPy core algorithms (linalg, optimize, special)"
+        - "xarray Dataset / DataArray / Index"
+        - "AstroPy modeling / coordinates / units"
+        - "Biopython / scikit-image core"
+        - "geometric library (S2 geometry, Shapely)"
+        - "evaluation metric implementation (roc_curve, F-score, fowlkes_mallows)"
+      boundary_notes: |
+        vs model_training / inference_serving / nlp / cv / llm_app: those are ML-pipeline
+        labels (training a model, serving inference, transformer/LLM apps);
+        scientific_numerical is the underlying mathematical/scientific library work.
+        vs data_preprocessing: data_preprocessing is ML-feature engineering on top of
+        these libraries; scientific_numerical is the libraries' own internals.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: data_engineering
+# Framework: SO Tag Clustering Cluster #20 (Big Data / Hadoop / Spark)
+# ═══════════════════════════════════════════════════════════════════════════════
+data_engineering:
+  source_framework: "SO Blog 2019 Tag Clustering: Cluster #20 (Big Data / ETL)"
+  l2:
+    - name: etl_pipeline
+      authoritative_source: "Kimball, R. (1996). The Data Warehouse Toolkit. Wiley. Ch.1: ETL Overview"
+      official_definition: |
+        Kimball: "The ETL system extracts data from source systems, enforces data quality and
+        consistency standards, conforms data so that separate sources can be used together,
+        and delivers data in a presentation-ready format."
+      operational_definition: |
+        Implement data extraction, transformation, and loading pipelines: source connectors,
+        data transformation logic, target loading, error handling, and scheduling.
+      signals:
+        - "extract / transform / load"
+        - "ETL / ELT pipeline"
+        - "source connector"
+        - "data transformation"
+        - "data loading"
+      boundary_notes: |
+        vs stream_processing: etl_pipeline is typically batch-oriented;
+        stream_processing handles real-time event streams.
+
+    - name: stream_processing
+      authoritative_source: "Apache Kafka Streams Documentation; Apache Flink Documentation"
+      official_definition: |
+        Kafka Streams: "A client library for building applications and microservices, where the
+        input and output data are stored in Kafka clusters."
+        Flink: "A framework and distributed processing engine for stateful computations over
+        unbounded and bounded data streams."
+      operational_definition: |
+        Real-time/streaming data processing: Kafka Streams applications, Flink jobs, Spark
+        Structured Streaming, windowed aggregations, or event-time processing.
+      signals:
+        - "Kafka Streams / KStream"
+        - "Apache Flink / DataStream"
+        - "Spark Structured Streaming"
+        - "window / watermark"
+        - "event time processing"
+      boundary_notes: |
+        vs etl_pipeline: stream_processing is real-time/continuous;
+        etl_pipeline is batch/scheduled.
+
+    - name: data_warehouse
+      authoritative_source: "dbt Documentation (docs.getdbt.com); BigQuery/Redshift/Snowflake Documentation"
+      official_definition: |
+        dbt: "dbt (data build tool) enables analytics engineers to transform data in their
+        warehouses by simply writing select statements. dbt handles turning these select
+        statements into tables and views."
+      operational_definition: |
+        Work with data warehouses: dbt models and macros, BigQuery/Redshift/Snowflake SQL,
+        dimensional modeling (star/snowflake schema), materialized views, or warehouse
+        configuration.
+      signals:
+        - "dbt / models/ / macros/"
+        - "BigQuery / Redshift / Snowflake"
+        - "star schema / dimensional model"
+        - "materialized view"
+        - "OLAP query"
+      boundary_notes: |
+        vs rdbms (database_storage): data_warehouse is analytical (OLAP);
+        rdbms is transactional (OLTP).
+
+    - name: orchestration
+      authoritative_source: "Apache Airflow Documentation (airflow.apache.org); Prefect Documentation"
+      official_definition: |
+        Airflow: "Apache Airflow is a platform to programmatically author, schedule and monitor
+        workflows. It uses directed acyclic graphs (DAGs) of tasks."
+      operational_definition: |
+        Workflow orchestration: define Airflow DAGs, Prefect flows, Dagster assets, task
+        dependencies, scheduling configuration, or retry/failure handling policies.
+      signals:
+        - "Airflow DAG / @dag"
+        - "Prefect flow / @flow / @task"
+        - "Dagster / @asset"
+        - "task dependency / upstream"
+        - "schedule_interval / cron"
+      boundary_notes: |
+        vs devops_infra.ci_cd_pipeline: orchestration is data workflow scheduling;
+        ci_cd_pipeline is code build/test/deploy automation.
+
+    - name: data_quality
+      authoritative_source: "Great Expectations Documentation (docs.greatexpectations.io)"
+      official_definition: |
+        "Great Expectations helps data teams eliminate pipeline debt, through data testing,
+        documentation, and profiling... validate, document, and profile your data to maintain
+        quality and improve communication."
+      operational_definition: |
+        Implement data quality checks: define expectations/assertions on data, schema validation,
+        anomaly detection, data contracts, or data profiling/monitoring.
+      signals:
+        - "Great Expectations / expect_*"
+        - "data validation rule"
+        - "data contract"
+        - "schema validation"
+        - "data profiling / anomaly"
+      boundary_notes: |
+        vs enhancement.add_validation (Task Type): data_quality is the domain;
+        add_validation is the task type. A task can be both.
+
+    - name: data_lake
+      authoritative_source: "Delta Lake Documentation (delta.io); Apache Iceberg Specification"
+      official_definition: |
+        Delta Lake: "An open-source storage layer that brings ACID transactions to Apache Spark
+        and big data workloads."
+        Iceberg: "An open table format for huge analytic datasets... designed for huge tables
+        with time travel queries."
+      operational_definition: |
+        Work with data lake table formats: Delta Lake/Iceberg/Hudi table management, Parquet/ORC
+        file optimization, partition strategies, compaction, or time-travel queries.
+      signals:
+        - "Delta Lake / delta table"
+        - "Apache Iceberg / iceberg table"
+        - "Parquet / ORC"
+        - "table compaction"
+        - "time travel / version history"
+      boundary_notes: |
+        vs data_warehouse: data_lake uses open file formats on object storage;
+        data_warehouse uses proprietary managed storage.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: os_system
+# Framework: POSIX Standard (IEEE 1003.1-2017); Linux Kernel Documentation
+# ═══════════════════════════════════════════════════════════════════════════════
+os_system:
+  source_framework: "IEEE 1003.1-2017 (POSIX.1); Linux Kernel Documentation (kernel.org/doc)"
+  l2:
+    - name: kernel
+      authoritative_source: "Linux Kernel Documentation: Kernel Modules (kernel.org/doc/html/latest)"
+      official_definition: |
+        "Modules are pieces of code that can be loaded and unloaded into the kernel upon demand.
+        They extend the functionality of the kernel without the need to reboot the system."
+      operational_definition: |
+        Linux/OS kernel development: kernel module implementation, system call additions,
+        scheduler modifications, memory management subsystem, or kernel debugging.
+      signals:
+        - "module_init / module_exit"
+        - "printk / pr_info"
+        - "#include <linux/module.h>"
+        - "Kconfig / Makefile (kernel)"
+        - "system call implementation"
+      boundary_notes: |
+        vs iot_embedded.driver_firmware: kernel is OS-level kernel code;
+        driver_firmware is microcontroller/embedded HAL code.
+
+    - name: filesystem
+      authoritative_source: "POSIX.1 §2.9: File System; Linux VFS documentation"
+      official_definition: |
+        POSIX: "A collection of files organized in a hierarchical manner, together with all
+        necessary metadata and access methods."
+        Linux VFS: "The Virtual Filesystem is the software layer in the kernel that provides
+        the filesystem interface to userspace programs."
+      operational_definition: |
+        File system development: VFS layer implementation, filesystem drivers (ext4, btrfs, FUSE),
+        inode/dentry operations, or file I/O optimization at the kernel level.
+      signals:
+        - "struct inode / struct dentry"
+        - "vfs_read / vfs_write"
+        - "fuse_operations"
+        - "ext4 / btrfs / xfs"
+        - "file_operations struct"
+      boundary_notes: |
+        vs kernel: filesystem is a specific kernel subsystem;
+        kernel covers all kernel areas.
+
+    - name: process_mgmt
+      authoritative_source: "POSIX.1 §2.4: Process Management; Linux Scheduler Documentation"
+      official_definition: |
+        POSIX: "A process is an instance of a running program. Process management includes
+        creation (fork), execution (exec), termination, and inter-process communication."
+      operational_definition: |
+        Process/thread management: fork/exec patterns, signal handling, IPC mechanisms
+        (pipes, shared memory, semaphores), scheduler policies, or container cgroup management.
+      signals:
+        - "fork() / exec() / waitpid()"
+        - "signal handler / sigaction"
+        - "pthread_create / mutex"
+        - "pipe / shm / mqueue"
+        - "cgroup / namespace"
+      boundary_notes: |
+        vs network_stack: process_mgmt is local process lifecycle;
+        network_stack is network communication.
+
+    - name: network_stack
+      authoritative_source: "POSIX.1 §6: Network Interfaces; Linux Networking Documentation"
+      official_definition: |
+        POSIX Networking: "Socket interfaces provide access to the network layer... including
+        socket(), bind(), listen(), accept(), connect(), send(), recv()."
+      operational_definition: |
+        Network stack development: socket programming, protocol implementation (TCP/UDP custom),
+        packet filtering (netfilter/iptables/eBPF), network driver development, or routing logic.
+      signals:
+        - "socket() / bind() / listen()"
+        - "struct sk_buff"
+        - "netfilter / iptables / nftables"
+        - "eBPF / XDP"
+        - "network driver / NIC"
+      boundary_notes: |
+        vs devops_infra.networking: os_system.network_stack is kernel/low-level protocol;
+        devops_infra.networking is application-level (nginx, DNS, TLS config).
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: iot_embedded
+# Framework: Embedded Systems Domain Knowledge + FreeRTOS/Zephyr Documentation
+# ═══════════════════════════════════════════════════════════════════════════════
+iot_embedded:
+  source_framework: "FreeRTOS Documentation; Zephyr RTOS Documentation; MQTT/CoAP Standards"
+  l2:
+    - name: rtos
+      authoritative_source: "FreeRTOS Reference Manual; Zephyr Project Documentation (docs.zephyrproject.org)"
+      official_definition: |
+        FreeRTOS: "A market-leading real-time operating system (RTOS) for microcontrollers and
+        small microprocessors... provides methods for multiple threads or tasks, mutexes,
+        semaphores and software timers."
+      operational_definition: |
+        RTOS application development: task creation and scheduling, semaphore/mutex usage,
+        interrupt service routines, timer management, or RTOS configuration.
+      signals:
+        - "xTaskCreate / vTaskDelay"
+        - "xSemaphoreGive / xSemaphoreTake"
+        - "FreeRTOSConfig.h"
+        - "k_thread_create (Zephyr)"
+        - "ISR / interrupt handler"
+      boundary_notes: |
+        vs driver_firmware: rtos is OS-level task scheduling;
+        driver_firmware is hardware register manipulation.
+
+    - name: driver_firmware
+      authoritative_source: "ARM CMSIS Documentation; STM32 HAL Documentation"
+      official_definition: |
+        ARM CMSIS: "The Cortex Microcontroller Software Interface Standard (CMSIS) is a vendor-
+        independent abstraction layer for microcontrollers that are based on Arm Cortex processors."
+      operational_definition: |
+        Hardware abstraction layer and firmware: HAL driver implementation, register-level
+        programming, DMA configuration, interrupt vector setup, or bootloader development.
+      signals:
+        - "HAL_GPIO_Init / HAL_UART_Transmit"
+        - "register read/write"
+        - "DMA / DMA_HandleTypeDef"
+        - "interrupt vector / NVIC"
+        - "bootloader / flash programming"
+      boundary_notes: |
+        vs rtos: driver_firmware talks to hardware directly;
+        rtos manages software task scheduling.
+
+    - name: iot_protocol
+      authoritative_source: "MQTT v5.0 Specification (OASIS); CoAP RFC 7252; Bluetooth Core Specification"
+      official_definition: |
+        MQTT v5.0: "MQTT is a Client Server publish/subscribe messaging transport protocol. It
+        is light weight, open, simple, and designed so as to be easy to implement."
+        CoAP RFC 7252: "The Constrained Application Protocol (CoAP) is a specialized web transfer
+        protocol for use with constrained nodes and constrained networks."
+      operational_definition: |
+        IoT communication protocol implementation: MQTT client/broker, CoAP endpoints, BLE
+        GATT services/characteristics, Zigbee/LoRa integration, or protocol bridging.
+      signals:
+        - "MQTT publish / subscribe"
+        - "CoAP client / server"
+        - "BLE / GATT / characteristic"
+        - "Zigbee / Z-Wave"
+        - "LoRa / LoRaWAN"
+      boundary_notes: |
+        vs os_system.network_stack: iot_protocol is IoT-specific constrained protocols;
+        network_stack is general TCP/IP kernel implementation.
+
+    - name: peripheral_hw
+      authoritative_source: "I2C Specification (NXP); SPI Bus Standard; UART Standard (ITU-T V.24)"
+      official_definition: |
+        I2C Spec: "A multi-master, multi-slave, packet switched, single-ended, serial computer
+        bus protocol."
+        SPI: "A synchronous serial communication interface specification used for short-distance
+        communication between microcontrollers and peripheral devices."
+      operational_definition: |
+        Peripheral hardware interface programming: SPI/I2C/UART driver implementation, sensor
+        data reading (accelerometer, temperature, etc.), PWM control, ADC sampling, or GPIO
+        configuration.
+      signals:
+        - "SPI_Transfer / I2C_Read"
+        - "UART_Transmit / UART_Receive"
+        - "GPIO_SetPin / GPIO_ReadPin"
+        - "PWM / duty_cycle"
+        - "ADC_Read / sensor_read"
+      boundary_notes: |
+        vs driver_firmware: peripheral_hw is specific bus/sensor interfaces;
+        driver_firmware is the lower-level HAL/register access.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: devops_infra
+# Framework: SO Tag Clustering Clusters #34 (DevOps), #45 (AWS), #4 (Docker/K8s)
+# ═══════════════════════════════════════════════════════════════════════════════
+devops_infra:
+  source_framework: "SO Blog 2019 Tag Clustering: Clusters #34/#45/#4 (DevOps/Cloud/Containers)"
+  l2:
+    - name: ci_cd_pipeline
+      authoritative_source: "GitHub Actions Documentation; GitLab CI/CD Documentation; Jenkins Documentation"
+      official_definition: |
+        GitHub Actions: "GitHub Actions makes it easy to automate all your software workflows
+        with world-class CI/CD. Build, test, and deploy your code right from GitHub."
+      operational_definition: |
+        Build CI/CD pipeline configurations: GitHub Actions workflows, GitLab CI YAML,
+        Jenkinsfile pipelines, CircleCI orbs, or pipeline orchestration across stages.
+      signals:
+        - ".github/workflows/*.yml"
+        - ".gitlab-ci.yml"
+        - "Jenkinsfile / pipeline { }"
+        - "actions/checkout@v4"
+        - "CI stages / jobs"
+      boundary_notes: |
+        vs ci-fix (Task Type): devops_infra.ci_cd_pipeline is the domain;
+        ci-fix is the task type (fixing broken CI). Different dimensions.
+
+    - name: container_k8s
+      authoritative_source: "Kubernetes Documentation (kubernetes.io/docs); Docker Documentation"
+      official_definition: |
+        Kubernetes: "Kubernetes is an open-source system for automating deployment, scaling, and
+        management of containerized applications."
+        Docker: "Docker enables developers to build, share, and run applications in containers."
+      operational_definition: |
+        Container orchestration: write Dockerfiles, create K8s manifests (Deployment, Service,
+        Ingress, ConfigMap), configure Helm charts, or manage container networking/storage.
+      signals:
+        - "Dockerfile"
+        - "kubectl / k8s manifest"
+        - "Helm chart / values.yaml"
+        - "docker-compose.yml"
+        - "Pod / Deployment / Service"
+      boundary_notes: |
+        vs deployment.container_deploy (Task Type): container_k8s is the domain;
+        container_deploy is the task type. Different dimensions.
+
+    - name: iac_terraform
+      authoritative_source: "Terraform Documentation (developer.hashicorp.com/terraform)"
+      official_definition: |
+        "Terraform is an infrastructure as code tool that lets you define both cloud and on-prem
+        resources in human-readable configuration files that you can version, reuse, and share."
+      operational_definition: |
+        Infrastructure as Code: write Terraform .tf files, Ansible playbooks, Pulumi programs,
+        AWS CDK constructs, or CloudFormation templates for declarative resource management.
+      signals:
+        - ".tf file / terraform plan"
+        - "resource / provider block"
+        - "ansible-playbook / roles"
+        - "pulumi up / Pulumi.yaml"
+        - "AWS CDK / cdk deploy"
+      boundary_notes: |
+        vs config.infra_config (Task Type): iac_terraform is the domain;
+        infra_config is the task type. Different dimensions.
+
+    - name: monitoring_observability
+      authoritative_source: "Prometheus Documentation (prometheus.io/docs); OpenTelemetry Specification; NIST SP 800-137 — Information Security Continuous Monitoring (ISCM) for Federal Information Systems"
+      official_definition: |
+        Prometheus: "An open-source monitoring and alerting toolkit... collects and stores
+        metrics as time series data."
+        OpenTelemetry: "A collection of APIs, SDKs, and tools to instrument, generate, collect,
+        and export telemetry data (metrics, logs, and traces)."
+        NIST SP 800-137 defines ISCM as ongoing awareness of security state, vulnerabilities,
+        and threats — placing vulnerability scanners (Vuls, OpenVAS, Nessus, Trivy) under the
+        same continuous-monitoring umbrella as metrics/logs/traces.
+      operational_definition: |
+        Monitoring, observability, and continuous security-monitoring infrastructure:
+        Prometheus metrics/rules, Grafana dashboards, alerting configuration, OpenTelemetry
+        instrumentation, log aggregation (ELK/Loki), AND vulnerability/security scanners
+        (Vuls, OpenVAS, Trivy, Snyk-CLI when used as an operations scanner). Includes work
+        on the scanner's own engine code (host detection, advisory parsing, scanning logic).
+      signals:
+        - "prometheus / PromQL"
+        - "grafana dashboard"
+        - "alertmanager / alerting rules"
+        - "OpenTelemetry / OTLP"
+        - "ELK / Loki / Fluentd"
+        - "Vuls / OpenVAS / Nessus / Trivy / vulnerability scanner"
+        - "advisory / CVE feed processing"
+      boundary_notes: |
+        vs enhancement.add_logging (Task Type): monitoring_observability is the domain;
+        add_logging is the task type. Different dimensions.
+        vs security_auth.security_scanning: security_auth.security_scanning is for code-level
+        SAST/DAST inside CI; monitoring_observability covers operations-level continuous
+        scanners that watch deployed systems.
+
+    - name: cloud_aws
+      authoritative_source: "AWS Documentation (docs.aws.amazon.com)"
+      official_definition: |
+        "Amazon Web Services (AWS) is the world's most comprehensive and broadly adopted cloud
+        platform, offering over 200 fully featured services from data centers globally."
+      operational_definition: |
+        Work with AWS services: EC2/Lambda/ECS configuration, S3 bucket policies, IAM roles,
+        CloudFormation/CDK stacks, or AWS SDK usage (boto3, aws-sdk).
+      signals:
+        - "boto3 / aws-sdk"
+        - "CloudFormation / CDK"
+        - "Lambda / API Gateway"
+        - "S3 / DynamoDB / SQS"
+        - "IAM policy / role"
+      boundary_notes: |
+        vs cloud_gcp/cloud_azure: cloud_aws is AWS-specific services;
+        the others are their respective platforms.
+
+    - name: cloud_gcp
+      authoritative_source: "Google Cloud Documentation (cloud.google.com/docs)"
+      official_definition: |
+        "Google Cloud consists of a set of physical assets, such as computers and hard disk
+        drives, and virtual resources, such as virtual machines (VMs), that are contained in
+        Google's data centers around the globe."
+      operational_definition: |
+        Work with Google Cloud services: GKE, Cloud Run, BigQuery, Cloud Functions, Pub/Sub,
+        or GCP SDK usage (@google-cloud/* packages).
+      signals:
+        - "@google-cloud/* packages"
+        - "GKE / Cloud Run"
+        - "gcloud CLI"
+        - "Cloud Functions"
+        - "Pub/Sub / Firestore"
+      boundary_notes: |
+        vs cloud_aws: cloud_gcp is Google Cloud; cloud_aws is Amazon.
+
+    - name: cloud_azure
+      authoritative_source: "Azure Documentation (learn.microsoft.com/azure)"
+      official_definition: |
+        "Microsoft Azure is a cloud computing platform with an ever-expanding set of services...
+        It offers tools for managing and monitoring cloud solutions."
+      operational_definition: |
+        Work with Microsoft Azure services: AKS, Azure Functions, ARM/Bicep templates,
+        Azure DevOps, or Azure SDK usage (@azure/* packages).
+      signals:
+        - "@azure/* SDK packages"
+        - "ARM template / Bicep"
+        - "Azure Functions"
+        - "AKS / Azure Kubernetes"
+        - "az CLI"
+      boundary_notes: |
+        vs cloud_aws/cloud_gcp: cloud_azure is Microsoft Azure;
+        the others are their respective platforms.
+
+    - name: networking
+      authoritative_source: "Nginx Documentation (nginx.org/en/docs); Let's Encrypt/ACME Protocol (RFC 8555)"
+      official_definition: |
+        Nginx: "A free, open-source, high-performance HTTP server and reverse proxy."
+        RFC 8555 (ACME): "The protocol used by a CA and an applicant to automate the process
+        of certificate issuance and management."
+      operational_definition: |
+        Application-level networking configuration: Nginx/Apache reverse proxy, load balancer
+        setup, DNS configuration, TLS/SSL certificate management, or CDN configuration.
+      signals:
+        - "nginx.conf / proxy_pass"
+        - "DNS record / A / CNAME"
+        - "TLS / SSL / certbot"
+        - "load balancer configuration"
+        - "CDN / Cloudflare"
+      boundary_notes: |
+        vs os_system.network_stack: devops_infra.networking is application/infrastructure layer;
+        os_system.network_stack is kernel/protocol implementation layer.
+
+    - name: platform_app_logic
+      authoritative_source: "SO Blog 2019 Tag Clustering: DevOps cluster includes platform development; Bass, Weber & Zhu (2015). DevOps: A Software Architect's Perspective, Ch.3 — distinguishes 'building the platform' from 'using the platform'"
+      official_definition: |
+        Bass et al. (2015) distinguish building deployment infrastructure (the platform itself)
+        from using it (CI/CD configs, IaC files). The code that implements the platform's core
+        business logic — evaluators, executors, engines — falls under platform development.
+      operational_definition: |
+        Core application/business logic of a DevOps or infrastructure platform: the Go/Python/Rust
+        code that IS the platform product. Covers: feature-flag evaluation engines (Flipt evaluator,
+        LaunchDarkly SDK core), IT-automation module executors and plugin frameworks (Ansible module
+        utils, connection plugins, strategy plugins), release-engineering tool core (GoReleaser
+        build logic), mobile-CI platform core (Fastlane actions/runners), and config-management
+        template engines (ytt templating). Use this when modifying the platform's own source code
+        rather than writing configs/playbooks/manifests consumed by the platform.
+      signals:
+        - "flag evaluation / variant / constraint logic"
+        - "module_utils / action_plugin / connection_plugin (Ansible internals)"
+        - "GRPC service implementation for platform API"
+        - "platform's own Go/Python/Rust backend code"
+        - "release pipeline tool's core logic (not its configs)"
+      boundary_notes: |
+        vs iac_terraform: iac_terraform is WRITING playbooks/manifests/configs consumed by tools;
+        platform_app_logic is BUILDING the tool that consumes those configs.
+        vs monitoring_observability: monitoring_observability is metrics/alerting/scanning systems;
+        platform_app_logic is non-monitoring DevOps platforms (feature flags, automation engines).
+        vs web_backend: if the repo's PRIMARY product is a DevOps platform (not a generic web API),
+        use devops_infra.platform_app_logic even though it happens to be a Go/Python server.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: media_graphics
+# Framework: Media Processing Library Documentation
+# ═══════════════════════════════════════════════════════════════════════════════
+media_graphics:
+  source_framework: "OpenCV/FFmpeg/Three.js/D3.js Official Documentation"
+  l2:
+    - name: image_processing
+      authoritative_source: "OpenCV Documentation (docs.opencv.org); Pillow Documentation"
+      official_definition: |
+        OpenCV: "Open Source Computer Vision Library. It has C++, Python, Java and MATLAB
+        interfaces and supports Windows, Linux, Mac OS, iOS and Android."
+        Pillow: "The friendly PIL fork. Adds image processing capabilities to your Python
+        interpreter."
+      operational_definition: |
+        Traditional (non-ML) image manipulation: filtering, resizing, format conversion,
+        color space transformation, histogram operations, or batch image processing.
+      signals:
+        - "PIL / Image.open()"
+        - "cv2.imread / cv2.resize"
+        - "ImageMagick convert"
+        - "image filter / blur / sharpen"
+        - "format conversion (PNG/JPEG/WebP)"
+      boundary_notes: |
+        vs data_science.cv: image_processing is pixel-level manipulation;
+        cv uses ML models for understanding/classification.
+
+    - name: video_audio
+      authoritative_source: "FFmpeg Documentation (ffmpeg.org/documentation); GStreamer Documentation; Web Audio API (W3C)"
+      official_definition: |
+        FFmpeg: "A complete, cross-platform solution to record, convert and stream audio and
+        video."
+        Web Audio API (W3C): "A high-level Web API for processing and synthesizing audio in
+        web applications."
+      operational_definition: |
+        Audio/video processing: encoding/decoding, transcoding, streaming server configuration,
+        audio synthesis/analysis, or media player implementation.
+      signals:
+        - "ffmpeg / libav"
+        - "GStreamer pipeline"
+        - "Web Audio API / AudioContext"
+        - "librosa / soundfile"
+        - "video encoding / HLS / DASH"
+      boundary_notes: |
+        vs image_processing: video_audio handles temporal media (video/audio streams);
+        image_processing handles static images.
+
+    - name: 3d_rendering
+      authoritative_source: "Three.js Documentation (threejs.org/docs); OpenGL Specification (Khronos); Vulkan Specification"
+      official_definition: |
+        Three.js: "A cross-browser JavaScript library/API used to create and display animated
+        3D computer graphics in a web browser using WebGL."
+        OpenGL: "The industry's most widely used 2D and 3D graphics API."
+      operational_definition: |
+        3D graphics rendering: Three.js scenes/meshes, WebGL shaders, OpenGL/Vulkan rendering
+        pipelines, 3D model loading (glTF/OBJ), or ray tracing implementation.
+      signals:
+        - "Three.js / THREE.Scene"
+        - "WebGL / gl.drawArrays"
+        - "OpenGL / Vulkan"
+        - "shader / GLSL"
+        - "mesh / geometry / material"
+      boundary_notes: |
+        vs game_dev: 3d_rendering is graphics rendering technology;
+        game_dev uses it for game-specific purposes (with game logic).
+
+    - name: data_visualization
+      authoritative_source: "D3.js Documentation (d3js.org); Matplotlib Documentation; ECharts Documentation"
+      official_definition: |
+        D3.js: "A JavaScript library for manipulating documents based on data... helps bring
+        data to life using HTML, SVG, and CSS."
+        Matplotlib: "A comprehensive library for creating static, animated, and interactive
+        visualizations in Python."
+      operational_definition: |
+        Data visualization: chart libraries (D3, ECharts, Chart.js), scientific plotting
+        (matplotlib, seaborn), dashboard creation, or custom visualization components.
+      signals:
+        - "D3.js / d3.select"
+        - "matplotlib.pyplot / plt.plot"
+        - "ECharts / option = { }"
+        - "Chart.js / canvas chart"
+        - "seaborn / plotly"
+      boundary_notes: |
+        vs web_frontend: data_visualization focuses on data representation;
+        web_frontend is general UI (which may include charts as one element).
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: game_dev
+# Framework: Game Engine Official Documentation
+# ═══════════════════════════════════════════════════════════════════════════════
+game_dev:
+  source_framework: "Unity/Unreal/Godot Official Documentation"
+  l2:
+    - name: unity
+      authoritative_source: "Unity Documentation (docs.unity3d.com)"
+      official_definition: |
+        "Unity is a cross-platform game engine. The engine offers a primary scripting API in
+        C#... components are attached to GameObjects to define their behavior."
+      operational_definition: |
+        Game development using Unity: MonoBehaviour scripts, Unity Editor workflow, asset
+        management, scene/prefab configuration, or Unity-specific APIs (Physics, UI, etc.).
+      signals:
+        - "MonoBehaviour / Start() / Update()"
+        - "GameObject / Transform"
+        - ".unity / .prefab / .asset"
+        - "Unity Editor / Inspector"
+        - "Rigidbody / Collider"
+      boundary_notes: |
+        vs unreal: unity uses C# and component-based architecture;
+        unreal uses C++ and Actor/Component model with Blueprint visual scripting.
+
+    - name: unreal
+      authoritative_source: "Unreal Engine Documentation (docs.unrealengine.com)"
+      official_definition: |
+        "Unreal Engine is a complete suite of creation tools designed to meet ambitious artistic
+        visions... It features C++ source code access and the Blueprint visual scripting system."
+      operational_definition: |
+        Game development using Unreal Engine: C++ Actor/Component classes, Blueprint visual
+        scripting, Unreal Editor workflow, or UE-specific systems (Niagara, Lumen, Nanite).
+      signals:
+        - "UCLASS / UPROPERTY / UFUNCTION"
+        - "ACharacter / AActor"
+        - "Blueprint / EventGraph"
+        - ".uproject / .uasset"
+        - "Unreal Editor"
+      boundary_notes: |
+        vs unity: unreal uses C++ with reflection macros and Blueprint;
+        unity uses C# with MonoBehaviour.
+
+    - name: godot
+      authoritative_source: "Godot Documentation (docs.godotengine.org)"
+      official_definition: |
+        "Godot provides a huge set of common tools... the scene system is the game engine,
+        while the editor provides all the tools needed to manage a game project."
+      operational_definition: |
+        Game development using Godot: GDScript/C# scripts, scene tree and node system,
+        .tscn/.tres resource files, or Godot-specific APIs (signals, groups, autoloads).
+      signals:
+        - "GDScript / extends Node2D"
+        - ".tscn / .tres files"
+        - "func _ready() / _process()"
+        - "Godot signals / connect()"
+        - "Godot Editor"
+      boundary_notes: |
+        vs unity/unreal: godot is open-source with GDScript;
+        unity/unreal are commercial engines with C#/C++.
+
+    - name: web_game
+      authoritative_source: "HTML5 Canvas API (W3C); Phaser Documentation (phaser.io)"
+      official_definition: |
+        W3C Canvas: "The canvas element provides scripts with a resolution-dependent bitmap
+        canvas, which can be used for rendering graphs, game graphics, art, or other visual
+        images on the fly."
+        Phaser: "A fast, fun and free open source HTML5 game framework for Canvas and WebGL."
+      operational_definition: |
+        Browser-based game development: HTML5 Canvas 2D, WebGL game rendering, Phaser/PixiJS
+        framework usage, game loop implementation, or browser game deployment.
+      signals:
+        - "Canvas / getContext('2d')"
+        - "WebGL / requestAnimationFrame"
+        - "Phaser.Game / Phaser.Scene"
+        - "PixiJS / PIXI.Application"
+        - "game loop / delta time"
+      boundary_notes: |
+        vs 3d_rendering: web_game is game-focused browser development;
+        3d_rendering is general graphics rendering (may not be game).
+
+    - name: game_logic
+      authoritative_source: "Nystrom, R. (2014). Game Programming Patterns. Genever Benning."
+      official_definition: |
+        Nystrom describes patterns for: "Game Loop, Update Method, Component, Type Object, State,
+        Bytecode, Command, Flyweight, Observer, Prototype, Singleton, Double Buffer, Spatial
+        Partition, Object Pool..."
+      operational_definition: |
+        Game systems and logic independent of engine: physics simulation, AI behavior trees,
+        pathfinding (A*), state machines, ECS architecture, networking/netcode, or
+        procedural generation.
+      signals:
+        - "physics engine / collision"
+        - "pathfinding / A* / NavMesh"
+        - "state machine / FSM"
+        - "ECS / Entity Component System"
+        - "netcode / game networking"
+      boundary_notes: |
+        vs unity/unreal/godot: game_logic is engine-agnostic systems;
+        the engine-specific L2s focus on that engine's APIs.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: devtools_test
+# Framework: Development Tooling Ecosystem Documentation
+# ═══════════════════════════════════════════════════════════════════════════════
+devtools_test:
+  source_framework: "ESLint/Webpack/Jest/Pytest Official Documentation"
+  l2:
+    - name: linter_formatter
+      authoritative_source: "ESLint Documentation (eslint.org/docs); Ruff Documentation; Prettier Documentation"
+      official_definition: |
+        ESLint: "ESLint statically analyzes your code to quickly find problems... Many problems
+        ESLint finds can be automatically fixed."
+        Prettier: "An opinionated code formatter... removes all original styling and ensures
+        that all outputted code conforms to a consistent style."
+      operational_definition: |
+        Build or extend linting/formatting tools: implement custom lint rules, AST visitor
+        patterns for static analysis, formatter plugins, or linter configuration infrastructure.
+      signals:
+        - "ESLint rule / create()"
+        - "AST visitor pattern"
+        - "ruff / black plugin"
+        - "prettier plugin"
+        - "lint rule implementation"
+      boundary_notes: |
+        vs style (Task Type): devtools_test.linter_formatter is BUILDING linting tools;
+        style (task type) is USING them to format code.
+
+    - name: test_framework
+      authoritative_source: "Jest Documentation (jestjs.io/docs); Pytest Documentation (docs.pytest.org)"
+      official_definition: |
+        Jest: "A delightful JavaScript Testing Framework with a focus on simplicity."
+        Pytest: "The pytest framework makes it easy to write small, readable tests, and can
+        scale to support complex functional testing."
+      operational_definition: |
+        Build or extend test frameworks: implement test runners, custom assertion libraries,
+        reporter plugins, test discovery mechanisms, or test infrastructure tooling.
+      signals:
+        - "custom test runner"
+        - "pytest plugin / conftest.py hook"
+        - "jest preset / testRunner"
+        - "assertion library"
+        - "test reporter implementation"
+      boundary_notes: |
+        vs test-add (Task Type): devtools_test.test_framework builds the testing infrastructure;
+        test-add writes tests using those frameworks.
+
+    - name: build_tool
+      authoritative_source: "Webpack Documentation (webpack.js.org); Vite Documentation; esbuild Documentation"
+      official_definition: |
+        Webpack: "A static module bundler for modern JavaScript applications. It builds a
+        dependency graph from entry points and bundles into optimized assets."
+        Vite: "Next Generation Frontend Tooling... leverages native ES modules for a dev server
+        with extremely fast Hot Module Replacement."
+      operational_definition: |
+        Build or extend build tools: implement webpack/vite/rollup plugins, custom loaders/
+        transformers, build optimization, or build system architecture.
+      signals:
+        - "webpack plugin / loader"
+        - "vite plugin / transformIndexHtml"
+        - "esbuild plugin"
+        - "rollup plugin"
+        - "bundler implementation"
+      boundary_notes: |
+        vs build-fix (Task Type): devtools_test.build_tool builds/extends the tools;
+        build-fix fixes configuration of those tools.
+
+    - name: debugger_profiler
+      authoritative_source: "Chrome DevTools Protocol; Go pprof Documentation; Linux perf Documentation"
+      official_definition: |
+        CDP: "The Chrome DevTools Protocol allows for tools to instrument, inspect, debug and
+        profile Chromium, Chrome and other Blink-based browsers."
+        pprof: "A tool for visualization and analysis of profiling data."
+      operational_definition: |
+        Build or extend debugging/profiling tools: debugger implementations, profiler
+        instrumentation, flamegraph generation, memory analysis tools, or DevTools extensions.
+      signals:
+        - "Chrome DevTools Protocol"
+        - "pprof / flamegraph"
+        - "debugger implementation"
+        - "profiling instrumentation"
+        - "memory analyzer"
+      boundary_notes: |
+        vs debug-support (Task Type): devtools_test.debugger_profiler builds debugging tools;
+        debug-support adds debugging hooks to application code.
+
+    - name: code_generation_tool
+      authoritative_source: "Krueger, C.W. (1992). Software Reuse. ACM Computing Surveys 24(2), §4 'Code Generators'; JSR 269 — Pluggable Annotation Processing API; Faker / FactoryBot / Lombok official docs"
+      official_definition: |
+        Krueger (1992) defines code generators as "tools that produce source or executable code
+        from higher-level specifications" — covering test-data generators, parser generators,
+        annotation processors, and template-based scaffolding tools. JSR 269 standardizes the
+        Java annotation-processor model that Lombok, MapStruct, and similar tools use.
+      operational_definition: |
+        Build or extend code-generation / data-generation developer tooling: test data
+        generators (Faker, FactoryBot, mimesis, factory_bot), annotation processors and
+        compile-time code generators (Lombok, MapStruct, Java APT, Babel macros, derive
+        macros in Rust), template-based scaffolding tools, AND project-internal developer
+        utilities like custom function-to-CLI adapters / boilerplate generators.
+      signals:
+        - "Faker / FactoryBot / mimesis / factory_bot"
+        - "Lombok / MapStruct / @AnnotationProcessor"
+        - "Babel macro / Rust derive macro"
+        - "JSR 269 / javax.annotation.processing"
+        - "function-to-CLI adapter / scaffolding utility"
+      boundary_notes: |
+        vs build_tool: build_tool builds/bundles user code (Webpack, Vite);
+        code_generation_tool produces/transforms code from specifications.
+        vs linter_formatter: linter_formatter analyzes/reformats existing code;
+        code_generation_tool emits new code.
+        vs test_framework: test_framework runs tests; code_generation_tool produces
+        test fixtures/data consumed by those tests.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: lang_runtime
+# Framework: Programming Language Implementation Theory
+# ═══════════════════════════════════════════════════════════════════════════════
+lang_runtime:
+  source_framework: "Aho et al. (2006). Compilers: Principles, Techniques, and Tools (Dragon Book); LLVM Documentation"
+  l2:
+    - name: compiler_frontend
+      authoritative_source: "Dragon Book Ch.2-4: Lexical Analysis, Syntax Analysis, Semantic Analysis"
+      official_definition: |
+        Dragon Book: "The front end of a compiler consists of those phases that depend primarily
+        on the source language: lexical analysis, syntax analysis, semantic analysis, and
+        intermediate code generation."
+      operational_definition: |
+        Compiler/interpreter frontend: lexer/tokenizer implementation, parser (recursive descent,
+        PEG, LR), AST construction, type checking, or semantic analysis passes.
+      signals:
+        - "lexer / tokenizer"
+        - "parser / grammar"
+        - "AST node / syntax tree"
+        - "type checker / type inference"
+        - "semantic analysis"
+      boundary_notes: |
+        vs compiler_backend: frontend produces AST/IR from source text;
+        backend generates machine code from IR.
+
+    - name: compiler_backend
+      authoritative_source: "Dragon Book Ch.8-9: Code Generation, Machine-Independent Optimizations; LLVM Language Reference"
+      official_definition: |
+        Dragon Book: "The back end of a compiler includes code optimization and code generation
+        phases that depend on the target machine."
+        LLVM: "LLVM is a collection of modular and reusable compiler and toolchain technologies."
+      operational_definition: |
+        Compiler backend: intermediate representation (IR) optimization passes, code generation
+        for target architectures, register allocation, instruction selection, or LLVM pass
+        development.
+      signals:
+        - "IR / intermediate representation"
+        - "LLVM pass / llvm::Function"
+        - "code generation / codegen"
+        - "register allocation"
+        - "instruction selection / lowering"
+      boundary_notes: |
+        vs compiler_frontend: backend works on IR/machine code;
+        frontend works on source text → AST → IR.
+
+    - name: interpreter_vm
+      authoritative_source: "CPython Internals (devguide.python.org); V8 Design (v8.dev/blog)"
+      official_definition: |
+        CPython: "CPython compiles Python source code into bytecode, and then interprets the
+        bytecode in a virtual machine."
+        V8: "V8 compiles and executes JavaScript source code, handles memory allocation for
+        objects, and garbage collects objects it no longer needs."
+      operational_definition: |
+        Interpreter or virtual machine development: bytecode design/execution, JIT compilation,
+        garbage collector implementation, runtime object model, or memory management.
+      signals:
+        - "bytecode / opcode"
+        - "JIT compilation"
+        - "garbage collection / GC"
+        - "VM / virtual machine"
+        - "interpreter loop / eval"
+      boundary_notes: |
+        vs compiler_frontend/backend: interpreter_vm executes code at runtime;
+        compiler produces static output before execution.
+
+    - name: language_tooling
+      authoritative_source: "Language Server Protocol Specification (microsoft.github.io/language-server-protocol)"
+      official_definition: |
+        LSP: "The Language Server Protocol (LSP) defines the protocol used between an editor
+        or IDE and a language server that provides language features like auto complete,
+        go to definition, find all references etc."
+      operational_definition: |
+        Language developer tooling: LSP server implementation, code completion engines, refactoring
+        tools, syntax highlighting (TextMate grammars), or language extensions for IDEs.
+      signals:
+        - "LSP / textDocument/completion"
+        - "language server"
+        - "code completion engine"
+        - "go-to-definition"
+        - "TextMate grammar / syntax"
+      boundary_notes: |
+        vs devtools_test: lang_runtime.language_tooling is language-specific IDE features;
+        devtools_test covers general build/test/lint tools.
+
+    - name: ecosystem_library
+      authoritative_source: "Krueger, C. W. (1992). Software Reuse. ACM Computing Surveys 24(2), §3.2 — classifies 'library reuse' as a distinct form; L1 prompt definition explicitly enumerates: 'HTTP client libraries, formatting/serialization libraries, datetime/timezone libraries, collection/data-structure libraries, async/concurrency runtimes, parser/schema libraries, and functional-programming type utilities'"
+      official_definition: |
+        Krueger 1992 defines software libraries as "collections of reusable software components
+        organized for ease of use." The lang_runtime L1 definition explicitly scopes these:
+        "foundational language ecosystem libraries that extend or complement the standard library."
+      operational_definition: |
+        Foundational user-space libraries that extend or complement a language's standard library.
+        Covers: HTTP client libraries (requests, httpx, axios, ofetch), serialization/formatting
+        libraries (fmtlib, Gson, nlohmann-json, SuperJSON, cattrs, mashumaro), datetime/timezone
+        libraries (Carbon, dateutil), persistent/immutable collection libraries (immutable-js),
+        async/concurrency runtimes (Tokio, RxJava), schema/validation/parser libraries (valibot,
+        etree, tomlkit), dependency injection frameworks (awilix), reactive/functional-programming
+        utilities (Effect-TS, true-myth, dry-python/returns), and CRDT/collaborative libraries (Yjs).
+      signals:
+        - "import requests / httpx / axios"
+        - "fmt::format / Gson / nlohmann::json"
+        - "Carbon::parse / dateutil"
+        - "tokio::spawn / RxJava Observable"
+        - "immutable.Map / List"
+        - "library extends stdlib without compiler/VM changes"
+      boundary_notes: |
+        vs compiler_frontend/backend: ecosystem_library does NOT parse or generate code;
+        it provides runtime functionality at the application layer.
+        vs interpreter_vm: ecosystem_library does NOT implement bytecode execution, GC,
+        or JIT; it runs ON TOP of the VM/interpreter.
+        vs language_tooling: ecosystem_library is not IDE/LSP/refactoring;
+        it is a general-purpose library consumed by application code.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: pkg_manager_cli
+# Framework: SO Tag Clustering (Package management); POSIX Utility Conventions
+# ═══════════════════════════════════════════════════════════════════════════════
+pkg_manager_cli:
+  source_framework: "SO Tag Clustering; POSIX.1 §12 Utility Conventions"
+  l2:
+    - name: npm_ecosystem
+      authoritative_source: "npm Documentation (docs.npmjs.com)"
+      official_definition: |
+        "npm is the world's largest software registry... developers use npm to share and borrow
+        packages, and many organizations use npm to manage private development as well."
+      operational_definition: |
+        Work on npm/yarn/pnpm package management: registry interactions, workspace configuration,
+        monorepo tooling, package resolution algorithms, or npm CLI tool development.
+      signals:
+        - "package.json"
+        - "yarn / pnpm workspace"
+        - "node_modules resolution"
+        - "npm registry interaction"
+        - "monorepo tooling (Turborepo, Lerna)"
+      boundary_notes: |
+        vs pip_ecosystem: npm_ecosystem is JavaScript/Node.js;
+        pip_ecosystem is Python.
+
+    - name: pip_ecosystem
+      authoritative_source: "PyPA Packaging User Guide (packaging.python.org); pip Documentation"
+      official_definition: |
+        "The Python Packaging Authority (PyPA) is a working group that maintains projects used
+        in Python packaging... pip is the package installer for Python."
+      operational_definition: |
+        Work on Python package management: pip/Poetry/pipenv configuration, virtual environment
+        management, setuptools/flit build backends, or Python package resolution.
+      signals:
+        - "pip install / requirements.txt"
+        - "pyproject.toml"
+        - "Poetry / poetry.lock"
+        - "virtualenv / venv"
+        - "setuptools / flit"
+      boundary_notes: |
+        vs npm_ecosystem: pip_ecosystem is Python; npm_ecosystem is JavaScript.
+
+    - name: cargo_rust
+      authoritative_source: "The Cargo Book (doc.rust-lang.org/cargo)"
+      official_definition: |
+        "Cargo is the Rust package manager. Cargo downloads your Rust project's dependencies,
+        compiles your project, makes distributable packages, and uploads them to crates.io."
+      operational_definition: |
+        Work on Rust/Cargo package management: Cargo.toml configuration, feature flags, crate
+        publishing, workspace management, or custom cargo subcommands.
+      signals:
+        - "Cargo.toml / Cargo.lock"
+        - "crate / crates.io"
+        - "cargo build / cargo test"
+        - "features = []"
+        - "workspace members"
+      boundary_notes: |
+        vs npm_ecosystem/pip_ecosystem: cargo_rust is Rust-specific;
+        each language has its own ecosystem.
+
+    - name: maven_gradle
+      authoritative_source: "Maven Documentation (maven.apache.org); Gradle User Guide (docs.gradle.org)"
+      official_definition: |
+        Maven: "A software project management and comprehension tool... manages a project's
+        build, reporting and documentation from a central piece of information (POM)."
+        Gradle: "A build automation tool for multi-language software development."
+      operational_definition: |
+        Work on JVM build/package management: Maven POM configuration, Gradle build scripts,
+        dependency management, repository configuration, or custom Gradle plugins.
+      signals:
+        - "pom.xml / dependencies"
+        - "build.gradle / plugins { }"
+        - "Maven Central / Nexus"
+        - "mvn install / gradle build"
+        - "dependency { } block"
+      boundary_notes: |
+        vs spring_java (web_backend): maven_gradle manages the build system;
+        spring_java uses the built artifacts as runtime framework.
+
+    - name: cli_app
+      authoritative_source: "POSIX.1 §12: Utility Conventions; cobra (Go); click (Python); clap (Rust)"
+      official_definition: |
+        POSIX: "A utility is called with: utility_name[-option...][operand...]"
+        cobra: "A library for creating powerful modern CLI applications."
+        click: "A Python package for creating beautiful command line interfaces in a composable way."
+      operational_definition: |
+        Build CLI applications: argument parsing, subcommand architecture, interactive prompts,
+        output formatting (tables, colors), or terminal UI (TUI) frameworks.
+      signals:
+        - "argparse / click / typer"
+        - "cobra.Command / rootCmd"
+        - "clap / #[command]"
+        - "commander.js"
+        - "terminal output formatting"
+      boundary_notes: |
+        vs feature.new_command (Task Type): pkg_manager_cli.cli_app is the domain;
+        new_command is the task type. Different dimensions.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: cms_ecommerce
+# Framework: CMS/E-commerce Platform Official Documentation
+# ═══════════════════════════════════════════════════════════════════════════════
+cms_ecommerce:
+  source_framework: "WordPress/Shopify/Contentful Official Documentation"
+  l2:
+    - name: wordpress
+      authoritative_source: "WordPress Developer Resources (developer.wordpress.org)"
+      official_definition: |
+        "WordPress is a free and open-source content management system written in PHP...
+        Features include a plugin architecture and a template system, referred to as 'Themes'."
+      operational_definition: |
+        WordPress development: theme/plugin development, WordPress hooks (add_action/add_filter),
+        WP_Query, Gutenberg blocks, REST API customization, or WordPress site configuration.
+      signals:
+        - "wp_ prefix functions"
+        - "add_action / add_filter"
+        - "functions.php"
+        - "WP_Query / get_posts"
+        - "Gutenberg block"
+      boundary_notes: |
+        vs laravel_php (web_backend): wordpress uses WordPress-specific APIs;
+        laravel_php uses Laravel framework APIs.
+
+    - name: shopify
+      authoritative_source: "Shopify Developer Documentation (shopify.dev)"
+      official_definition: |
+        "Shopify is a commerce platform that allows anyone to set up an online store and sell
+        their products... Developers can build apps and themes that extend Shopify's capabilities."
+      operational_definition: |
+        Shopify development: Liquid template syntax, Shopify API/Admin API, custom apps
+        (App Bridge), theme customization, or Shopify CLI/tooling.
+      signals:
+        - "Liquid template {{ }}"
+        - "Shopify Admin API"
+        - "shopify.app.toml"
+        - "Polaris components"
+        - "Shopify CLI / theme dev"
+      boundary_notes: |
+        vs wordpress: shopify is hosted e-commerce platform;
+        wordpress is self-hosted CMS.
+
+    - name: headless_cms
+      authoritative_source: "Contentful Documentation (contentful.com/developers); Strapi Documentation"
+      official_definition: |
+        Contentful: "A content platform that lets you create, manage and distribute content
+        to any platform... API-first approach separates content from presentation."
+        Strapi: "The leading open-source headless CMS. It's 100% JavaScript, fully customizable
+        and developer-first."
+      operational_definition: |
+        Headless CMS development: content modeling, API-based content delivery, webhook
+        configuration, or custom field types/plugins for Contentful/Strapi/Sanity.
+      signals:
+        - "Contentful / contentful.js"
+        - "Strapi / strapi generate"
+        - "Sanity / sanity.io"
+        - "content API / content model"
+        - "webhook / content delivery"
+      boundary_notes: |
+        vs wordpress: headless_cms is API-only (no frontend rendering);
+        wordpress includes frontend rendering via themes.
+
+    - name: ecommerce_platform
+      authoritative_source: "Magento Documentation; WooCommerce Documentation; Medusa Documentation"
+      official_definition: |
+        Magento: "A flexible and scalable commerce platform that can be customized to meet
+        the unique needs of any business."
+        WooCommerce: "A customizable, open-source eCommerce platform built on WordPress."
+      operational_definition: |
+        E-commerce platform development: product catalog management, shopping cart logic,
+        checkout flows, payment gateway integration, or order management systems.
+      signals:
+        - "Magento / Magento 2"
+        - "WooCommerce / wc_"
+        - "product / cart / checkout"
+        - "payment gateway"
+        - "order management"
+      boundary_notes: |
+        vs shopify: ecommerce_platform is self-hosted solutions (Magento/WooCommerce);
+        shopify is Shopify's hosted platform.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: blockchain_web3
+# Framework: Ethereum/Solana Ecosystem Documentation
+# ═══════════════════════════════════════════════════════════════════════════════
+blockchain_web3:
+  source_framework: "Ethereum Yellow Paper; Solidity Documentation; Web3.js Documentation"
+  l2:
+    - name: smart_contract
+      authoritative_source: "Solidity Documentation (docs.soliditylang.org); OpenZeppelin Contracts"
+      official_definition: |
+        Solidity Docs: "Solidity is an object-oriented, high-level language for implementing
+        smart contracts. Smart contracts are programs which govern the behaviour of accounts
+        within the Ethereum state."
+      operational_definition: |
+        Smart contract development: Solidity/Vyper contract writing, ERC standard implementation
+        (ERC-20, ERC-721, ERC-1155), Hardhat/Foundry testing, or contract security auditing.
+      signals:
+        - "contract / pragma solidity"
+        - "ERC-20 / ERC-721 / ERC-1155"
+        - "OpenZeppelin"
+        - "Hardhat / Foundry / Truffle"
+        - "deploy script / migration"
+      boundary_notes: |
+        vs dapp_frontend: smart_contract is on-chain logic;
+        dapp_frontend is off-chain UI that interacts with contracts.
+
+    - name: dapp_frontend
+      authoritative_source: "ethers.js Documentation; wagmi Documentation; Web3.js Documentation"
+      official_definition: |
+        ethers.js: "A complete Ethereum wallet implementation and utilities in JavaScript
+        (and TypeScript)."
+        wagmi: "A collection of React Hooks for Ethereum."
+      operational_definition: |
+        DApp frontend development: wallet connection (MetaMask/WalletConnect), transaction
+        signing, contract interaction from UI, or blockchain data display.
+      signals:
+        - "ethers.js / Web3.js"
+        - "wagmi / useAccount / useContractWrite"
+        - "MetaMask / connectWallet"
+        - "transaction signing"
+        - "contract.read / contract.write"
+      boundary_notes: |
+        vs web_frontend: dapp_frontend specifically interacts with blockchain;
+        web_frontend is general web UI without blockchain.
+
+    - name: blockchain_node
+      authoritative_source: "go-ethereum (Geth) Documentation; Solana Validator Documentation"
+      official_definition: |
+        Geth: "The official Go implementation of the Ethereum protocol. It is one of the three
+        original implementations (along with C++ and Python)."
+      operational_definition: |
+        Blockchain node operation/development: node software (Geth, Reth, Solana validator),
+        consensus mechanism implementation, RPC endpoint configuration, or chain indexing.
+      signals:
+        - "geth / execution client"
+        - "validator / consensus"
+        - "RPC endpoint / JSON-RPC"
+        - "block sync / state sync"
+        - "chain indexer"
+      boundary_notes: |
+        vs smart_contract: blockchain_node is the infrastructure layer;
+        smart_contract is application logic running on that infrastructure.
+
+    - name: defi_protocol
+      authoritative_source: "Uniswap v3 Whitepaper; Aave Protocol Documentation; Compound Finance Documentation"
+      official_definition: |
+        Uniswap: "An automated market maker (AMM) protocol for decentralized exchange of
+        Ethereum tokens... implements x*y=k market-making formula."
+        Aave: "An open source and non-custodial liquidity protocol for earning interest on
+        deposits and borrowing assets."
+      operational_definition: |
+        DeFi protocol development: AMM/DEX logic, lending/borrowing protocols, yield farming
+        strategies, liquidity pool management, or DeFi protocol integration.
+      signals:
+        - "AMM / liquidity pool"
+        - "swap / addLiquidity"
+        - "lending / borrowing"
+        - "yield / farming"
+        - "Uniswap / Aave / Compound"
+      boundary_notes: |
+        vs smart_contract: defi_protocol is a specific DeFi application;
+        smart_contract is general contract development.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: security_auth
+# Framework: OWASP + CWE + NIST Security Standards
+# ═══════════════════════════════════════════════════════════════════════════════
+security_auth:
+  source_framework: "OWASP Foundation; CWE; NIST SP 800 Series"
+  l2:
+    - name: oauth_oidc
+      authoritative_source: "RFC 6749: OAuth 2.0; OpenID Connect Core 1.0"
+      official_definition: |
+        RFC 6749: "The OAuth 2.0 authorization framework enables a third-party application to
+        obtain limited access to an HTTP service."
+        OIDC: "OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol."
+      operational_definition: |
+        Build OAuth/OIDC infrastructure: authorization server implementation, token endpoint,
+        client registration, SSO integration, or identity provider configuration.
+      signals:
+        - "authorization server"
+        - "token endpoint / /oauth/token"
+        - "OIDC provider"
+        - "SSO / Single Sign-On"
+        - "client_id / client_secret"
+      boundary_notes: |
+        vs auth.oauth_oidc (Task Type): security_auth domain is building auth INFRASTRUCTURE;
+        auth task type is making CHANGES to auth features.
+
+    - name: rbac_acl
+      authoritative_source: "NIST INCITS 359-2004: Role Based Access Control; XACML (OASIS)"
+      official_definition: |
+        NIST: "In RBAC, permissions are associated with roles, and users are made members of
+        appropriate roles, thereby acquiring the roles' permissions."
+        XACML: "An OASIS standard XML-based language for access control policies."
+      operational_definition: |
+        Build access control systems: role hierarchy design, permission assignment engines,
+        ABAC policy engines (OPA, Casbin), or ACL infrastructure.
+      signals:
+        - "role / permission engine"
+        - "OPA / Open Policy Agent"
+        - "Casbin / policy model"
+        - "ACL / access control list"
+        - "XACML / ABAC engine"
+      boundary_notes: |
+        vs auth.rbac_abac (Task Type): security_auth.rbac_acl is the domain (building the system);
+        auth.rbac_abac is the task type (making changes to it).
+
+    - name: crypto_impl
+      authoritative_source: "NIST FIPS 140-3; RFC 5246 (TLS); OpenSSL Documentation"
+      official_definition: |
+        FIPS 140-3: "Security Requirements for Cryptographic Modules... specifies the security
+        requirements that are to be satisfied by a cryptographic module utilized within a
+        security system."
+      operational_definition: |
+        Cryptographic implementation: encryption/decryption routines, digital signature
+        implementation, key derivation functions, TLS/SSL library usage, or cryptographic
+        protocol implementation.
+      signals:
+        - "AES / RSA / ECDSA"
+        - "SHA-256 / HMAC"
+        - "key derivation / PBKDF2"
+        - "OpenSSL / libsodium"
+        - "TLS / certificate"
+      boundary_notes: |
+        vs security-fix.crypto_weakness (Task Type): crypto_impl is the domain (crypto work);
+        crypto_weakness is fixing vulnerabilities in crypto code.
+
+    - name: security_scanning
+      authoritative_source: "OWASP DAST/SAST Guide; Snyk Documentation; NIST SP 800-53"
+      official_definition: |
+        OWASP: "SAST analyzes source code for security vulnerabilities without executing the
+        application. DAST tests the running application for vulnerabilities."
+        Snyk: "Developer security platform... finds and fixes vulnerabilities in code,
+        dependencies, containers, and infrastructure as code."
+      operational_definition: |
+        Security scanning infrastructure: SAST/DAST tool configuration, dependency vulnerability
+        scanning (Snyk, Dependabot), container scanning, or custom security rule development.
+      signals:
+        - "Snyk / Dependabot"
+        - "SAST / DAST configuration"
+        - "CVE scanning"
+        - "container security scan"
+        - "security rule / policy"
+      boundary_notes: |
+        vs devtools_test: security_scanning is security-specific tooling;
+        devtools_test is general development tooling.
+
+    - name: waf_firewall
+      authoritative_source: "OWASP ModSecurity Core Rule Set; Cloudflare WAF Documentation"
+      official_definition: |
+        OWASP CRS: "The OWASP ModSecurity Core Rule Set (CRS) is a set of generic attack
+        detection rules for use with ModSecurity or compatible web application firewalls."
+      operational_definition: |
+        Web application firewall and network security: WAF rule configuration, rate limiting
+        implementation, IP blocking/allowlisting, DDoS mitigation, or firewall policy management.
+      signals:
+        - "WAF rules / ModSecurity"
+        - "rate limiting / throttle"
+        - "IP blacklist / allowlist"
+        - "DDoS mitigation"
+        - "Cloudflare / AWS WAF"
+      boundary_notes: |
+        vs devops_infra.networking: waf_firewall is security-focused filtering;
+        networking is general connectivity configuration.
+
+    - name: identity_lifecycle
+      authoritative_source: "NIST SP 800-63 series — Digital Identity Guidelines: SP 800-63A (Enrollment & Identity Proofing), SP 800-63B (Authentication & Lifecycle), SP 800-63C (Federation); NIST SP 800-207 — Zero Trust Architecture (device trust); RFC 8705 — Mutual-TLS Client Authentication"
+      official_definition: |
+        NIST SP 800-63B §5 ("Authenticator Lifecycle") defines a unified framework spanning
+        authenticator binding, renewal, loss/theft, expiration, and revocation. NIST SP 800-63C
+        adds the corresponding federation/session lifecycle. NIST SP 800-207 §3 introduces
+        device-trust as part of identity context. Together these standards treat MFA management,
+        session lifecycle, mTLS certificate rotation, and device enrollment as one integrated
+        identity-lifecycle subsystem (distinct from the issuance flow itself, which is
+        oauth_oidc).
+      operational_definition: |
+        Work on identity / authenticator / session / device-trust lifecycle management within a
+        product whose core mission includes identity (e.g., Teleport, Keycloak admin, Okta-like).
+        Concretely covers: MFA device enrollment / removal / recovery (NIST 800-63B §5);
+        session creation, renewal, traits-update, revocation (NIST 800-63C); mTLS / X.509 client
+        certificate issuance, rotation, revocation (RFC 8705); device-trust enrollment, attestation,
+        limit enforcement (NIST 800-207); proxy-routed / cluster-internal authentication paths.
+      signals:
+        - "MFA device add / remove / list"
+        - "session refresh / renew / revoke"
+        - "user traits / claims update"
+        - "client certificate issuance / rotation"
+        - "device enrollment / device trust / attestation"
+        - "trust bundle / cluster auth"
+      boundary_notes: |
+        vs oauth_oidc: oauth_oidc is the *issuance* flow (auth-code grant, token exchange,
+        federation handshake); identity_lifecycle is the *post-issuance* management of those
+        identities, sessions, and trust artifacts.
+        vs rbac_acl: identity_lifecycle is "who you are and for how long";
+        rbac_acl is "what you may do" (permissions/policy).
+        vs crypto_impl: crypto_impl is the underlying primitives (AES/RSA/HMAC);
+        identity_lifecycle uses those primitives at the identity-management layer.
+
+    - name: access_infra
+      authoritative_source: "NIST SP 800-207 — Zero Trust Architecture, §3-4 (distinguishes 'policy enforcement point infrastructure' from 'policy decision logic'); Yee, K. P. (2004). Aligning Security and Usability. IEEE S&P — separates transport/connectivity infrastructure from access-control policy"
+      official_definition: |
+        NIST SP 800-207 §3 defines the Zero Trust Architecture with separate components:
+        Policy Engine (decides access), Policy Administrator (establishes sessions), and
+        Policy Enforcement Point (enables/terminates connections). The PEP infrastructure —
+        proxying, tunneling, routing, HA — is architecturally distinct from policy logic.
+      operational_definition: |
+        Non-auth infrastructure of an identity/access platform: reverse tunnel / proxy relay
+        implementation, high-availability and failover logic, connection routing and multiplexing,
+        node discovery and cluster topology, performance optimization and caching, protocol
+        adapters (SSH, RDP, K8s API, database wire protocol), and resource serving that enables
+        secure access without itself being authentication or authorization logic.
+        Example: Teleport's reverse tunnel, proxy peering, HA heartbeat, and desktop streaming
+        are access_infra; its MFA enrollment and RBAC engine are identity_lifecycle / rbac_acl.
+      signals:
+        - "reverse tunnel / proxy relay"
+        - "HA / failover / heartbeat / cluster join"
+        - "connection routing / multiplexing"
+        - "node discovery / inventory sync"
+        - "protocol adapter (SSH/RDP/K8s/DB proxy)"
+        - "session recording / audit streaming infrastructure"
+      boundary_notes: |
+        vs identity_lifecycle: identity_lifecycle is managing WHO can access and their credentials;
+        access_infra is the plumbing that CARRIES the connections once access is granted.
+        vs rbac_acl: rbac_acl decides WHAT is allowed; access_infra routes/proxies traffic.
+        vs devops_infra.networking: devops_infra.networking is general infra (Nginx/DNS/CDN);
+        access_infra is specifically within a security/access platform product.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: docs_knowledge
+# Framework: IEEE Documentation Engineering; Write the Docs community taxonomy
+# ═══════════════════════════════════════════════════════════════════════════════
+docs_knowledge:
+  source_framework: "IEEE Std 1063-2001 (Software User Documentation); Write the Docs community taxonomy of documentation tooling"
+  l2:
+    - name: doc_generator
+      authoritative_source: "IEEE Std 1063-2001 — Standard for Software User Documentation; Sphinx Documentation (sphinx-doc.org); Hugo Documentation (gohugo.io); Docusaurus Documentation (docusaurus.io)"
+      official_definition: |
+        IEEE 1063-2001 defines documentation tools as software that "automate the production
+        of user documentation from source inputs." Sphinx: "Sphinx is a tool that makes it easy
+        to create intelligent and beautiful documentation." Hugo: "The world's fastest framework
+        for building websites."
+      operational_definition: |
+        Development of documentation generators, static-site generators, and their plugin/extension
+        ecosystems. Covers: Sphinx core engine, directives, domains, builders, and extensions;
+        Hugo templating, shortcodes, and module system; Docusaurus plugins, themes, and MDX
+        processing; Jekyll plugins, converters, and Liquid extensions; MkDocs plugins and themes;
+        any tool whose PRIMARY product is transforming markup/content into publishable documentation.
+      signals:
+        - "Sphinx directive / domain / builder"
+        - "Hugo template / shortcode / .Site"
+        - "Docusaurus plugin / @docusaurus/*"
+        - "Jekyll converter / Liquid filter"
+        - "reStructuredText / .rst processing"
+        - "static site generation / content pipeline"
+      boundary_notes: |
+        vs devtools_test: doc_generator is specifically documentation/content tools;
+        devtools_test covers build/test/lint tools for code.
+        vs web_frontend: if the work is on the doc tool's ENGINE (how it processes content),
+        it's doc_generator; if it's on a React-based doc SITE's custom components, it could
+        be web_frontend depending on whether the repo IS Docusaurus (doc_generator) or USES it.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: non_coding — No L2
+# ═══════════════════════════════════════════════════════════════════════════════
+non_coding:
+  source_framework: "N/A"
+  l2: null
+  rationale: |
+    Non-coding tasks (pure discussion, planning, conceptual explanation) are inherently
+    diverse and low-volume. Further subdivision would not provide meaningful signal for
+    RL training data stratification.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# L1: other — No L2
+# ═══════════════════════════════════════════════════════════════════════════════
+other:
+  source_framework: "N/A — Catch-all"
+  l2: null
+  rationale: |
+    The 'other' label is a catch-all for tasks not fitting any defined domain. By definition,
+    it cannot have stable L2 subdivisions.

@@ -1,0 +1,8 @@
+secondary: "质量管理"
+document_type_label: "质量管理报告"
+reading_hints: |
+  质量管理文档通常包含：质量目标与标准、检验与控制点、不良分析（如鱼骨/8D）、
+  纠正预防措施、体系与审核。关注不良归因与措施（具体数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:不良率|缺陷率|返工率|报废率)\\s*(?:为|达|约|超)?\\s*\\d+(?:\\.\\d+)?\\s*%"
+    label: "质量不良率数值"

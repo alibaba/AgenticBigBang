@@ -1,0 +1,10 @@
+secondary: "质量报告"
+document_type_label: "汽车质量报告/质量分析"
+reading_hints: |
+  质量报告文档通常包含：质量数据总览、主要缺陷类别与分布分析、
+  重大质量问题剖析（5Why分析）、改进措施与效果验证、
+  质量目标与下期计划。
+  关注：不同缺陷等级（A/B/C类或严重/一般/轻微）的定义区分（数值只进入key_numbers）。
+extra_anti_leakage_patterns:
+  - pattern: "(?:缺陷率|不良率|PPM|返修率)\\s*(?:为|达到|约)\\s*\\d+"
+    label: "质量缺陷率数值"

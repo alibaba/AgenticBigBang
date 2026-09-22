@@ -1,0 +1,113 @@
+config_id: initial_rl_C
+model_architecture: dense_27b
+data_manifest: data/manifests/initial_rl_training_records.csv
+category: C
+parameters:
+  seed: 42
+  rollout_batch_size: 128
+  num_return_sequences_in_group: 8
+  sequence_length: 131072
+  max_actions_per_traj: 150
+  max_tokens_per_step: 12288
+  max_steps: 1000
+  enable_dynamic_sampling: false
+  dynamic_sampling_success_threshold: 8
+  dynamic_sampling_check_window: 8
+  enable_no_replacement_sampling: false
+  enable_epoch_no_replacement_sampling: true
+  async_generation_ratio: 1
+  adv_estimator: grpo
+  ratio_type: token
+  ppo_epochs: 1
+  dual_clip_loss: true
+  whiten_advantages: false
+  entropy_loss_coef: 0.0
+  pg_clip: 0.2
+  use_kl_loss: false
+  kl_loss_coef: 0.03
+  add_token_level_kl: true
+  kl_penalty: kl
+  init_kl_coef: 0.001
+  max_grad_norm: 20
+  loss_agg_mode: seq-mean-segment-sum
+  filter_trajectories_by_stop_reason: false
+  cap_reward_for_non_submit: false
+  skip_mock_system_prompt: true
+  enable_thinking: true
+reward_normalization:
+  grouping: traj_group_id
+  norm_mean_type: rloo
+  norm_std_type: null
+actor_train:
+  model_args:
+    flash_attn: sdpa
+    attn_implementation: sdpa
+    disable_gradient_checkpointing: false
+    dtype: bf16
+    freeze_module_prefix: vision_model
+  training_args:
+    learning_rate: 3.0e-07
+    weight_decay: 0.01
+    per_device_train_batch_size: 1
+    gradient_accumulation_steps: 64
+    warmup_steps: 20
+    lr_scheduler_type: cosine
+  execution_parameters:
+    sequence_parallel: true
+    tensor_model_parallel_size: 8
+    context_parallel_size: 2
+    pipeline_model_parallel_size: 1
+    use_distributed_optimizer: true
+    recompute_granularity: full
+    bias_activation_fusion: true
+    apply_rope_fusion: true
+    bf16: true
+actor_infer:
+  model_args:
+    flash_attn: fa2
+    attn_implementation: fa2
+    disable_gradient_checkpointing: true
+    dtype: bf16
+  generating_args:
+    max_new_tokens: 12288
+    top_p: 0.95
+    top_k: 20
+    num_beams: 1
+    temperature: 1.0
+    num_return_sequences: 8
+    stop_strings:
+    - </tool_call>
+  execution_parameters:
+    max_model_len: 131072
+    gpu_memory_utilization: 0.6
+    max_num_batched_tokens: 32768
+    block_size: 16
+    tensor_parallel_size: 4
+    optimization_level: 1
+reference:
+  model_args:
+    flash_attn: sdpa
+    attn_implementation: sdpa
+    disable_gradient_checkpointing: true
+    dtype: bf16
+  execution_parameters:
+    sequence_parallel: true
+    tensor_model_parallel_size: 8
+    context_parallel_size: 2
+    pipeline_model_parallel_size: 1
+    use_distributed_optimizer: true
+    recompute_granularity: full
+    bias_activation_fusion: true
+    apply_rope_fusion: true
+    bf16: true
+training_environment:
+  max_steps: 150
+  max_tokens_per_step: 12288
+  max_reset_retry_times: 20
+  format_penalty: 0.0
+  max_env_time: 9600
+  sandbox_memory: 16g
+  sandbox_cpus: 4
+  git_cleanup_level: medium
+  git_remove_tags: after_base
+  strict_eval_new_sandbox: true
