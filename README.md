@@ -15,6 +15,19 @@ data processing, evaluation, and post-training across two domains:
 This is a shared research repository. Each work has its own documentation,
 artifacts, and release scope; reusable tools live alongside the paper packages.
 
+## Release Timeline
+
+Public releases are listed newest first. Dates are in UTC; future papers,
+models, datasets, and tools will be added as they become available.
+
+| Date | Area | Milestone | Links |
+| --- | --- | --- | --- |
+| 2026-09-22 | SWE · Cowork | Published the Agentic Bigbang research packages and tools | [RRE–MOPD artifacts](papers/rre_mopd/README.md) · [SWE Labeler](swe_labeler/README.md) · [Logics-PPT overview](papers/logics_ppt/README.md) · [PPTSynth](pptsynth/README.md) |
+| 2026-09-21 | SWE · Dataset | Released 2,553 task instances with environment references | [Logics-SWE-Env-2.5K](https://huggingface.co/datasets/Logics-MLLM/Logics-SWE-Env-2.5K) · [Usage guide](papers/rre_mopd/instance_environment/README.md) |
+| 2026-09-20 | SWE · Paper | Published *One to More, More to One* | [arXiv:2609.23377](https://arxiv.org/abs/2609.23377) |
+| 2026-09-20 | Cowork · Models | Released four Logics-PPT SFT and RL checkpoints | [27B SFT](https://huggingface.co/Logics-MLLM/Logics-PPT-Qwen3.6-27B-SFT) · [27B RL](https://huggingface.co/Logics-MLLM/Logics-PPT-Qwen3.6-27B-RL) · [35B-A3B SFT](https://huggingface.co/Logics-MLLM/Logics-PPT-Qwen3.6-35B-A3B-SFT) · [35B-A3B RL](https://huggingface.co/Logics-MLLM/Logics-PPT-Qwen3.6-35B-A3B-RL) |
+| 2026-09-18 | SWE · Model | Released the single-policy Logics-SWE-Qwen3.6-27B | [Model and card](https://huggingface.co/Logics-MLLM/Logics-SWE-Qwen3.6-27B) |
+
 | Domain | Work or component | Entry point |
 | --- | --- | --- |
 | SWE | **RRE–MOPD:** category-aware expert development and policy integration | [📄 Paper](https://arxiv.org/abs/2609.23377) · [Research artifacts](papers/rre_mopd/README.md) · [🤗 Model](https://huggingface.co/Logics-MLLM/Logics-SWE-Qwen3.6-27B) · [🤗 Data & environments](https://huggingface.co/datasets/Logics-MLLM/Logics-SWE-Env-2.5K) · [Model card](papers/rre_mopd/MODEL_CARD.md) |
