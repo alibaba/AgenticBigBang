@@ -7,6 +7,7 @@ general-domain documents to their appropriate synthesis profile.
 
 PPTSynth is the public task and rubric synthesis component of the
 [Logics-PPT presentation-intelligence research](../papers/logics_ppt/README.md).
+See the [paper](https://arxiv.org/abs/2610.30888) for the complete research.
 The [repository overview](../README.md#cowork-research) links the released
 SFT and RL model checkpoints separately.
 

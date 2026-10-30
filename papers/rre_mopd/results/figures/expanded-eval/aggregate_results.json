@@ -1,0 +1,12 @@
+{
+  "description": "Three evaluation rounds; each entry contains confirmed passes per round and the fixed number of tasks per round.",
+  "source_snapshot_sha256": "598e82fad4bf1af2d3828b4580860419c224d1b2550025fe57ae90ed1b33ea4d",
+  "benchmarks": [
+    {"name": "SWE-bench Pro V2", "tasks": 642, "passes": [[531, 517, 524], [559, 552, 549], [467, 467, 478], [502, 488, 493]]},
+    {"name": "Pro V2 Hard-51", "tasks": 51, "passes": [[20, 18, 19], [22, 22, 21], [12, 17, 14], [18, 19, 15]]},
+    {"name": "SWE-bench Multilingual", "tasks": 300, "passes": [[202, 205, 204], [219, 214, 213], [187, 191, 193], [198, 199, 201]]},
+    {"name": "SWE-bench Pro", "tasks": 731, "passes": [[381, 389, 391], [414, 413, 410], [351, 357, 361], [373, 375, 373]]},
+    {"name": "LiveCodeBench v6", "tasks": 175, "passes": [[143, 145, 145], [147, 149, 148], [134, 135, 135], [138, 136, 136]]}
+  ],
+  "model_order": ["Qwen3.6-27B", "Logics-SWE-Qwen3.6-27B", "Qwen3.6-35B-A3B", "Logics-SWE-Qwen3.6-35B-A3B"]
+}

@@ -1,9 +1,8 @@
-# Towards Presentation Intelligence
+# Building Presentation Intelligence for High-Quality Slide Generation
 
-**High-Quality Data Synthesis, Guided Distillation and Verifiable Rewards**
+[![arXiv](https://img.shields.io/badge/arXiv-2610.30888-b31b1b.svg)](https://arxiv.org/abs/2610.30888)
 
-> Technical report under review. **arXiv preprint coming very soon.**
-
+[Paper](https://arxiv.org/abs/2610.30888) ·
 [Project homepage](../../README.md#cowork-research) ·
 [Released models](#released-models) ·
 [PPTSynth code](../../pptsynth/README.md)
@@ -103,7 +102,7 @@ browser-rendering loop.
 
 The SFT and RL variants serve different research questions. The RL stage
 optimizes the five visual rewards; readers interested in overall benchmark
-quality should consult the corresponding model card and eventual public paper
+quality should consult the corresponding model card and [paper](https://arxiv.org/abs/2610.30888)
 before choosing a checkpoint.
 
 ## What is available here
@@ -126,3 +125,17 @@ technical report without visual regeneration. The method overview uses three
 AI-generated illustration components; its scientific labels, arrows, and
 captions were composed separately as editable SVG elements. See the
 [figure source notes](figures/README.md) for the prompts and rendering details.
+
+## Citation
+
+```bibtex
+@misc{xie2026buildingpresentationintelligencehighquality,
+  title={Building Presentation Intelligence for High-Quality Slide Generation},
+  author={Yuhang Xie and Cheng Li and Chenliang Li and Mingyu Xu and Mingwei Sun and Suhang Zheng and Ming Yan and Xiaoxiao Xu and Lin Qu},
+  year={2026},
+  eprint={2610.30888},
+  archivePrefix={arXiv},
+  primaryClass={cs.LG},
+  url={https://arxiv.org/abs/2610.30888}
+}
+```

@@ -15,6 +15,42 @@ data processing, evaluation, and post-training across two domains:
 This is a shared research repository. Each work has its own documentation,
 artifacts, and release scope; reusable tools live alongside the paper packages.
 
+## Latest SWE Results
+
+**Two Logics-SWE models, one set of three category experts.** Our 27B and
+35B-A3B students bring category-specific expertise into single-model coding
+agents through multi-teacher on-policy distillation (MOPD).
+
+| Model | SWE-bench Pro V2 | SWE-bench Multilingual |
+| --- | ---: | ---: |
+| [Logics-SWE-Qwen3.6-27B](https://huggingface.co/Logics-MLLM/Logics-SWE-Qwen3.6-27B) | **86.19%** · +4.57 pp | **71.78%** · +3.89 pp |
+| [Logics-SWE-Qwen3.6-35B-A3B](https://huggingface.co/Logics-MLLM/Logics-SWE-Qwen3.6-35B-A3B) | **77.00%** · +3.69 pp | **66.44%** · +3.00 pp |
+
+Improvements are over the corresponding Qwen3.6 base model.
+
+![Logics-SWE benchmark comparison for the 27B and 35B-A3B models](papers/rre_mopd/results/figures/expanded-eval/model_benchmark_comparison.png)
+
+<details>
+<summary>See all benchmark scores</summary>
+
+| Evaluation | Qwen3.6-27B | Logics-SWE-Qwen3.6-27B | Qwen3.6-35B-A3B | Logics-SWE-Qwen3.6-35B-A3B |
+| --- | ---: | ---: | ---: | ---: |
+| SWE-bench Pro V2 | 81.62 | **86.19** (+4.57) | 73.31 | **77.00** (+3.69) |
+| Pro V2 Hard-51 | 37.25 | **42.48** (+5.23) | 28.10 | **33.99** (+5.88) |
+| SWE-bench Multilingual | 67.89 | **71.78** (+3.89) | 63.44 | **66.44** (+3.00) |
+| SWE-bench Pro | 52.94 | **56.41** (+3.47) | 48.75 | **51.12** (+2.37) |
+| LiveCodeBench v6 | 82.48 | **84.57** (+2.10) | 76.95 | **78.10** (+1.14) |
+
+Scores are percentages; gains are in percentage points.
+
+</details>
+
+[Paper](https://arxiv.org/abs/2609.23377) ·
+[27B model](https://huggingface.co/Logics-MLLM/Logics-SWE-Qwen3.6-27B) ·
+[35B-A3B model](https://huggingface.co/Logics-MLLM/Logics-SWE-Qwen3.6-35B-A3B) ·
+[Training data and environments](https://huggingface.co/datasets/Logics-MLLM/Logics-SWE-Env-2.5K) ·
+[How it works](#swe-research-rre-mopd)
+
 ## Release Timeline
 
 Public releases are listed newest first. Dates are in UTC; future papers,
@@ -22,6 +58,9 @@ models, datasets, and tools will be added as they become available.
 
 | Date | Area | Milestone | Links |
 | --- | --- | --- | --- |
+| 2026-10-30 | SWE · Paper | Submitted the expanded RRE–MOPD paper as arXiv v2, adding broader evaluations and teacher reuse across student architectures | [Paper](https://arxiv.org/abs/2609.23377) |
+| 2026-10-30 | SWE · Model | Released **Logics-SWE-Qwen3.6-35B-A3B**, an MoE student distilled from the same three 27B category experts | [🤗 Model](https://huggingface.co/Logics-MLLM/Logics-SWE-Qwen3.6-35B-A3B) · [Model card](papers/rre_mopd/MODEL_CARD_35B_A3B.md) |
+| 2026-10-22 | Cowork · Paper | Published *Building Presentation Intelligence for High-Quality Slide Generation* | [arXiv:2610.30888](https://arxiv.org/abs/2610.30888) · [Logics-PPT overview](papers/logics_ppt/README.md) |
 | 2026-09-22 | SWE · Cowork | Published the Agentic Bigbang research packages and tools | [RRE–MOPD artifacts](papers/rre_mopd/README.md) · [SWE Labeler](swe_labeler/README.md) · [Logics-PPT overview](papers/logics_ppt/README.md) · [PPTSynth](pptsynth/README.md) |
 | 2026-09-21 | SWE · Dataset | Released 2,553 task instances with environment references | [Logics-SWE-Env-2.5K](https://huggingface.co/datasets/Logics-MLLM/Logics-SWE-Env-2.5K) · [Usage guide](papers/rre_mopd/instance_environment/README.md) |
 | 2026-09-20 | SWE · Paper | Published *One to More, More to One* | [arXiv:2609.23377](https://arxiv.org/abs/2609.23377) |
@@ -32,7 +71,7 @@ models, datasets, and tools will be added as they become available.
 | --- | --- | --- |
 | SWE | **RRE–MOPD:** category-aware expert development and policy integration | [📄 Paper](https://arxiv.org/abs/2609.23377) · [Research artifacts](papers/rre_mopd/README.md) · [🤗 Model](https://huggingface.co/Logics-MLLM/Logics-SWE-Qwen3.6-27B) · [🤗 Data & environments](https://huggingface.co/datasets/Logics-MLLM/Logics-SWE-Env-2.5K) · [Model card](papers/rre_mopd/MODEL_CARD.md) |
 | SWE | **SWE Labeler:** hierarchical task and trajectory annotation | [Code and usage](swe_labeler/README.md) |
-| Cowork | **Logics-PPT:** data synthesis, guided distillation, and verifiable rewards for presentation generation | [Research overview](papers/logics_ppt/README.md) · [🤗 SFT & RL models](#released-logics-ppt-models) · [ModelScope](#released-logics-ppt-models) |
+| Cowork | **Logics-PPT:** data synthesis, guided distillation, and verifiable rewards for presentation generation | [📄 Paper](https://arxiv.org/abs/2610.30888) · [Research overview](papers/logics_ppt/README.md) · [🤗 SFT & RL models](#released-logics-ppt-models) · [ModelScope](#released-logics-ppt-models) |
 | Cowork | **PPTSynth:** document-grounded slide-task and rubric synthesis | [Code and usage](pptsynth/README.md) |
 
 ## SWE Research: RRE-MOPD
@@ -110,28 +149,31 @@ be used independently of the RRE–MOPD training pipeline.
 [Taxonomy definitions](swe_labeler/definition/) ·
 [Benchmark annotations](papers/rre_mopd/data/labeling/README.md)
 
-#### Main results
+#### Logics-SWE models
 
-Task resolution (%) is reported as **mean ± population standard deviation
-over three evaluation rounds**, with one candidate patch per task per round.
+Our Logics-SWE family brings category-aware expertise into single-model coding
+agents. Both students learn from the **same three 27B RRE experts**, covering
+service, data and security; user-facing applications; and systems, tooling and
+runtimes. MOPD transfers their task-specific strengths through on-policy
+distillation, so the resulting agents do not need teacher routing at inference.
 
-| Model | Pro-618 | SWE-bench Multilingual |
-| --- | ---: | ---: |
-| Base | 52.64 ± 0.28 | 56.22 ± 0.68 |
-| Pooled RL | 55.50 ± 0.46 | 55.56 ± 0.83 |
-| Balanced RL | 55.34 ± 0.92 | 57.00 ± 1.19 |
-| **RRE–MOPD (Logics-SWE-Qwen3.6-27B)** | **58.04 ± 0.20** | **59.00 ± 0.47** |
+- **[Logics-SWE-Qwen3.6-27B](https://huggingface.co/Logics-MLLM/Logics-SWE-Qwen3.6-27B)**
+  is our dense 27B student, initialized from Qwen3.6-27B.
+- **[Logics-SWE-Qwen3.6-35B-A3B](https://huggingface.co/Logics-MLLM/Logics-SWE-Qwen3.6-35B-A3B)**
+  is our MoE student, initialized from Qwen3.6-35B-A3B and trained with the same
+  27B teachers. It extends the approach to a different student architecture.
+  [Model card](papers/rre_mopd/MODEL_CARD_35B_A3B.md).
 
-The final policy improves mean resolution over pooled / balanced RL by
-**2.54 / 2.70 percentage points on Pro-618** and **3.44 / 2.00 points on
-SWE-bench Multilingual**. It also achieves higher mean resolution in each
-A/B/C category than both joint-training baselines on both benchmarks.
+The expanded evaluation measures task resolution over three rounds. See the
+[benchmark overview](#latest-swe-results) for results across four evaluations
+and the Pro V2 Hard-51 subset.
 
-Pro-618 is a documented **618-task subset** of SWE-bench Pro, not the full
-benchmark. Multilingual results cover all **300 tasks**. Scores describe the
-complete model-and-agent setups; see the [model card](papers/rre_mopd/MODEL_CARD.md)
-for evaluation scope and limitations, and the
-[aggregate results](papers/rre_mopd/results/aggregate/evaluation_model_scores.csv)
+#### Pro-618 in the original paper
+
+The original paper reports **58.04 ± 0.20%** for Logics-SWE-Qwen3.6-27B and
+**52.64 ± 0.28%** for Qwen3.6-27B on Pro-618, a 618-task subset of SWE-bench
+Pro. Values are the mean ± population standard deviation over three
+evaluation rounds. See the [aggregate results](papers/rre_mopd/results/aggregate/evaluation_model_scores.csv)
 for the underlying table.
 
 #### Explore the work
@@ -153,9 +195,9 @@ for the underlying table.
 
 ## Cowork Research
 
-### Towards Presentation Intelligence: High-Quality Data Synthesis, Guided Distillation and Verifiable Rewards
+### Building Presentation Intelligence for High-Quality Slide Generation
 
-**Technical report: arXiv preprint coming very soon.**
+[Paper](https://arxiv.org/abs/2610.30888) ·
 [Research overview & case studies](papers/logics_ppt/README.md) ·
 [PPTSynth code](pptsynth/README.md) ·
 [Released models](#released-logics-ppt-models)
@@ -227,16 +269,16 @@ finance/economics reports, and Chinese general-domain documents. See the
   [RRE–MOPD research package](papers/rre_mopd/README.md), and the
   [Logics-PPT overview and figures](papers/logics_ppt/README.md).
 - **Models:** [Logics-SWE-Qwen3.6-27B](https://huggingface.co/Logics-MLLM/Logics-SWE-Qwen3.6-27B)
-  on Hugging Face, and four [Logics-PPT SFT and RL checkpoints](#released-logics-ppt-models)
+  and [Logics-SWE-Qwen3.6-35B-A3B](https://huggingface.co/Logics-MLLM/Logics-SWE-Qwen3.6-35B-A3B)
+  and four [Logics-PPT SFT and RL checkpoints](#released-logics-ppt-models)
   on Hugging Face and ModelScope. Each model card gives its license and usage
   details.
 - **Data and environments:** [Logics-SWE-Env-2.5K](https://huggingface.co/datasets/Logics-MLLM/Logics-SWE-Env-2.5K)
   provides 2,553 instance records with matching environment-image references
   and a documented execution protocol.
-- **Papers:** The [RRE–MOPD paper](https://arxiv.org/abs/2609.23377) is on
-  arXiv. The Logics-PPT technical report, *Towards Presentation Intelligence:
-  High-Quality Data Synthesis, Guided Distillation and Verifiable Rewards*,
-  has an arXiv preprint coming very soon.
+- **Papers:** [One to More, More to One](https://arxiv.org/abs/2609.23377)
+  and [Building Presentation Intelligence for High-Quality Slide Generation](https://arxiv.org/abs/2610.30888)
+  are available on arXiv.
 - **Not included:** complete SWE training data and execution trajectories,
   or Logics-PPT source documents, generated tasks, full training trajectories,
   and unpublished training or reward services. The anonymous SWE manifests

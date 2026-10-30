@@ -1,23 +1,36 @@
 ---
+base_model:
+- Qwen/Qwen3.6-27B
+datasets:
+- Logics-MLLM/Logics-SWE-Env-2.5K
 license: apache-2.0
+library_name: transformers
 pipeline_tag: text-generation
 tags:
-  - code
-  - software-engineering
-  - reinforcement-learning
-  - on-policy-distillation
-  - agentic-post-training
-# Add the exact base_model Hub ID when confirmed.
+- code
+- software-engineering
+- on-policy-distillation
+- reinforcement-learning
+- agentic-post-training
 ---
 
 # Logics-SWE-Qwen3.6-27B
 
-> Model card for Logics-SWE-Qwen3.6-27B. The technical report is in preparation.
+[![arXiv](https://img.shields.io/badge/arXiv-2609.23377-b31b1b.svg)](https://arxiv.org/abs/2609.23377)
+[![GitHub](https://img.shields.io/badge/GitHub-AgenticBigBang-181717.svg?logo=github)](https://github.com/alibaba/AgenticBigBang)
+
+Official model release for
+[_One to More, More to One: Category-Aware Iterative Expert Training for Software Engineering Agents_](https://arxiv.org/abs/2609.23377).
+
+[📄 Paper](https://arxiv.org/abs/2609.23377) ·
+[🤗 Dataset: Logics-SWE-Env-2.5K](https://huggingface.co/datasets/Logics-MLLM/Logics-SWE-Env-2.5K) ·
+[💻 GitHub: AgenticBigBang](https://github.com/alibaba/AgenticBigBang)
 
 ## 📰 News
 
+- **[2026.10.30]** Submitted the expanded paper as arXiv v2 and added results on Pro V2, Hard-51, Multilingual, SWE-bench Pro, and LiveCodeBench v6. We also report a 35B-A3B student trained with the same three 27B category experts.
+- **[2026.09.20]** Released the [RRE–MOPD paper](https://arxiv.org/abs/2609.23377) on arXiv.
 - **[2026.09.18]** Released **Logics-SWE-Qwen3.6-27B** under the Apache-2.0 license.
-- The technical report is in preparation. A link will be added when available.
 
 ## 🔎 Overview
 
@@ -68,38 +81,32 @@ long-horizon post-training, expert development, and policy distillation.
 
 ## 📊 Experimental Results
 
-Values are mean task resolution (%) ± population standard deviation across
-three evaluation rounds, with one candidate patch per task per round.
+### Expanded evaluation
 
-| Model | Pro-618 | SWE-bench Multilingual |
-| --- | ---: | ---: |
-| Base | 52.64 ± 0.28 | 56.22 ± 0.68 |
-| Pooled RL | 55.50 ± 0.46 | 55.56 ± 0.83 |
-| Balanced RL | 55.34 ± 0.92 | 57.00 ± 1.19 |
-| **Logics-SWE-Qwen3.6-27B** | **58.04 ± 0.20** | **59.00 ± 0.47** |
+Logics-SWE-Qwen3.6-27B improves on Qwen3.6-27B across four
+software-engineering and coding evaluations. Scores are three-round means (%);
+gains are in percentage points.
 
-Compared with the base model, Logics-SWE-Qwen3.6-27B improves mean task
-resolution from **52.64% to 58.04%** on Pro-618 (**+5.40 percentage points**)
-and from **56.22% to 59.00%** on SWE-bench Multilingual
-(**+2.78 percentage points**).
+![Logics-SWE benchmark results](results/figures/expanded-eval/model_benchmark_comparison.png)
 
-| Final model category | Pro-618 | SWE-bench Multilingual |
-| --- | ---: | ---: |
-| A | 58.07 ± 1.13 | 51.39 ± 1.13 |
-| B | 59.37 ± 1.02 | 64.00 ± 3.27 |
-| C | 56.63 ± 1.10 | 61.74 ± 0.27 |
+| Evaluation | Tasks per round | Qwen3.6-27B | Logics-SWE-Qwen3.6-27B | Gain |
+| --- | ---: | ---: | ---: | ---: |
+| SWE-bench Pro V2 | 642 | 81.62 | **86.19** | **+4.57** |
+| Pro V2 Hard-51 | 51 | 37.25 | **42.48** | **+5.23** |
+| SWE-bench Multilingual | 300 | 67.89 | **71.78** | **+3.89** |
+| SWE-bench Pro | 731 | 52.94 | **56.41** | **+3.47** |
+| LiveCodeBench v6 | 175 | 82.48 | **84.57** | **+2.10** |
 
-### Evaluation scope
+The figure also shows a Qwen3.6-35B-A3B student distilled using the same
+three 27B category experts. Qwen baseline scores are from our own evaluations
+under the same settings as Logics-SWE.
 
-- **Pro-618** retains 618 of 731 SWE-bench Pro tasks using documented public
-  audit findings. Its A/B/C counts are 221/201/196. These are subset results,
-  not full SWE-bench Pro scores.
-- **SWE-bench Multilingual** includes all 300 tasks. A/B/C contain 72/25/176
-  tasks; 27 unrouted tasks remain in the Full denominator.
-- Scores measure the complete agent setup, not standalone text generation.
-  Pro uses the study's R2E-Gym-based setup; Multilingual uses a SWE-agent
-  setup. Absolute scores across the two scaffolds are not directly comparable.
-- Unsuccessful or missing evaluations remain in the fixed task denominator.
+### Pro-618 in the original paper
+
+The original paper reports **58.04 ± 0.20%** for Logics-SWE-Qwen3.6-27B and
+**52.64 ± 0.28%** for Qwen3.6-27B on Pro-618, a 618-task subset of SWE-bench
+Pro. Values are the mean ± population standard deviation over three
+evaluation rounds.
 
 
 ## 🚀 Quickstart
@@ -155,17 +162,32 @@ automatically outside an isolated, permission-controlled environment.
 
 ## 📦 Training Data and Release Scope
 
-Alongside the released model weights, we plan to make the following resources
-publicly available:
+The public [Logics-SWE-Env-2.5K](https://huggingface.co/datasets/Logics-MLLM/Logics-SWE-Env-2.5K)
+release provides 2,553 software-engineering task instances and their matching
+environment-image references. It is a curated subset of the training tasks
+used in the paper; it does not contain the complete training corpus or agent
+trajectories.
 
-- A curated subset of instance-level training data, subject to approval.
-- The label taxonomy, annotation guidelines, and SWE Labeler code.
-- Anonymous training manifests, benchmark outcomes, aggregate results, and
-  training and evaluation configuration specifications.
+The [AgenticBigBang GitHub repository](https://github.com/alibaba/AgenticBigBang)
+additionally provides the label
+taxonomy, SWE Labeler code, anonymous training manifests, benchmark outcomes,
+aggregate results, and training and evaluation configuration specifications.
 
 ## 📚 Citation
 
-The technical report is in preparation. Citation information will be added upon release.
+If you use this model, please cite:
+
+```bibtex
+@misc{zhao2026onetomoremoretoone,
+  title         = {One to More, More to One: Category-Aware Iterative Expert Training for Software Engineering Agents},
+  author        = {Jie Zhao and Ziyu Jiang and Suhang Zheng and Minghui Shan and Xiaoxiao Xu and Lin Qu},
+  year          = {2026},
+  eprint        = {2609.23377},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.SE},
+  url           = {https://arxiv.org/abs/2609.23377}
+}
+```
 
 ## 🙏 Acknowledgements
 
