@@ -1,5 +1,9 @@
 # Benchmark evaluation parameter specifications
 
+The specifications below describe the original-paper evaluation. The expanded
+results and their evaluation setups are indexed in
+[results/expanded_evaluation](../../results/expanded_evaluation/README.md).
+
 Two shared parameter specifications cover Pro-618 and SWE-bench Multilingual.
 Model roles and evaluation rounds do not require separate copies when their
 evaluation settings are identical. The task manifest is relative to the paper

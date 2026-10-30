@@ -13,10 +13,12 @@ RRE–MOPD is the SWE research work in [Agentic Bigbang](../../README.md). Read
 the paper on [arXiv](https://arxiv.org/abs/2609.23377).
 It develops category experts through Refresh–Repair–Expand, then integrates
 their behaviors into a single student with multi-teacher on-policy distillation.
-The integrated model, [Logics-SWE-Qwen3.6-27B](https://huggingface.co/Logics-MLLM/Logics-SWE-Qwen3.6-27B),
-is available on Hugging Face under Apache-2.0.
+The integrated models, [Logics-SWE-Qwen3.6-27B](https://huggingface.co/Logics-MLLM/Logics-SWE-Qwen3.6-27B)
+and [Logics-SWE-Qwen3.6-35B-A3B](https://huggingface.co/Logics-MLLM/Logics-SWE-Qwen3.6-35B-A3B),
+are available on Hugging Face under Apache-2.0.
 See the [project overview and main results](../../README.md#swe-research-rre-mopd)
-and the [model card](MODEL_CARD.md) for the research summary and model usage.
+and the model cards for [27B](MODEL_CARD.md) and [35B-A3B](MODEL_CARD_35B_A3B.md)
+for the research summary and model usage.
 This page focuses on the artifact package and local reproduction.
 
 ## Open dataset and execution environments
@@ -70,14 +72,17 @@ The shared labeling implementation is available in [SWE Labeler](../../swe_label
 | [data/schemas](data/schemas/) | Field definitions and manifest schemas. |
 | [results/per_instance](results/per_instance/) | Training mastery and benchmark outcomes. |
 | [results/aggregate](results/aggregate/) | Derived round/category and model/category scores. |
+| [results/expanded_evaluation](results/expanded_evaluation/README.md) | New benchmark scores and task-level results for the two Logics-SWE models and Qwen baselines. |
 | [results/curves](results/curves/README.md) | Pooled category dynamics, MOPD training metrics, and RRE training scores. |
 | [results/figures](results/figures/README.md) | All 10 full-manuscript figure assets, their hashes, and reproduced plots. |
 | [data/taxonomy](data/taxonomy/README.md) | Frozen definitions for the taxonomy figures. |
 | [data/labeling](data/labeling/README.md) | 1,531 existing benchmark annotations and structural-audit reproduction. |
 | [scripts](scripts/) | Manifest checks, evaluation aggregation, and plotting. |
 
-Benchmark metadata covers 918 tasks and 60 runs, with three rounds per model
-within each benchmark. Training mastery and curve replicates are separate tables;
+The original-paper benchmark metadata covers 918 tasks and 60 runs, with three
+rounds per model within each benchmark. The expanded evaluation is documented
+separately in [results/expanded_evaluation](results/expanded_evaluation/README.md).
+Training mastery and curve replicates are separate tables;
 see their field descriptions rather than treating them as additional benchmark runs.
 Training task content and execution trajectories are not included.
 

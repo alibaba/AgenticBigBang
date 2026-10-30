@@ -49,6 +49,7 @@ Scores are percentages; gains are in percentage points.
 [27B model](https://huggingface.co/Logics-MLLM/Logics-SWE-Qwen3.6-27B) ·
 [35B-A3B model](https://huggingface.co/Logics-MLLM/Logics-SWE-Qwen3.6-35B-A3B) ·
 [Training data and environments](https://huggingface.co/datasets/Logics-MLLM/Logics-SWE-Env-2.5K) ·
+[Evaluation data](papers/rre_mopd/results/expanded_evaluation/README.md) ·
 [How it works](#swe-research-rre-mopd)
 
 ## Release Timeline

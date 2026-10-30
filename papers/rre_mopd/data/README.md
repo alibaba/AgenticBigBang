@@ -64,6 +64,9 @@ common identifier-leak patterns. It does not reproduce model training.
 
 ## Evaluation data
 
+For the expanded evaluation, see [benchmark scores and task-level results](../results/expanded_evaluation/README.md).
+The tables below describe the original-paper evaluation package.
+
 `manifests/evaluation_tasks.csv` lists 918 tasks across two benchmarks.
 `manifests/evaluation_runs.csv` contains 60 runs: each model has three rounds
 within its benchmark. The 33,264 outcomes are in

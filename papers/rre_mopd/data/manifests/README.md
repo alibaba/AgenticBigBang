@@ -6,6 +6,7 @@ unchanged. Counts describe the current package snapshot.
 
 ## Where to start
 
+- For the expanded evaluation, see [new scores and task-level results](../../results/expanded_evaluation/README.md).
 - To identify training data: read the record manifest for the relevant stage.
 - To reproduce benchmark scores: join `evaluation_tasks.csv` and
   `evaluation_runs.csv` to [evaluation_outcomes.csv](../../results/per_instance/evaluation_outcomes.csv).
